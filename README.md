@@ -61,3 +61,42 @@ $ yarn start:prod
 $ yarn test:e2e
 ```
 
+# Instalar Docker Linux
+
+Caso não tenha o docker em sua máquina, instale com os seguintes comandos:
+
+```bash title="install_docker.sh"
+chmod +x ./install_docker.sh
+./install_docker.sh
+```
+
+# Configurando docker no Linux
+
+```bash
+sudo groupadd docker
+sudo usermod -aG docker $USER
+```
+Após executar os comando acima, reinicie sua máquina!
+
+# Instalar Docker Windows
+
+preencher... (obs: instale linux logo cara)
+
+# Configurando arquivo `docker-compose`
+
+Para executar o conteiner corretamente, primeiramente realize a cópia do arquivo `.env.postgres.example`, renomeando o mesmo para `.env.postgres`.
+
+```bash
+cp .env.postgres.example .env.postgres
+```
+
+Após isso, abra o arquivo e preencha o campo `POSTGRES_PASSWORD` com a senha que deseja utilizar.
+
+# Rodar Container do Banco de Dados
+
+Basta executar o seguinte compando em seu terminal:
+
+```bash
+docker-compose up -d --build
+```
+
