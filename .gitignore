@@ -39,6 +39,7 @@ lerna-debug.log*
 
 # dotfiles
 .env
+.env.postgres
 
 # Yarn with Zero-install
 .yarn/*
