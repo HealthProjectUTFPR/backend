@@ -1,7 +1,7 @@
 ---
-name: Issue Back-end
+name: Template Issue Back-end
 about: Issue padrão para back-end
-title: Issue Back-end
+title: Rota para listar blablabla
 labels: ''
 assignees: ''
 
