@@ -1,14 +1,15 @@
 import { BaseEntity } from 'src/common/entities/base.entity';
 import { Column, Entity, ManyToMany } from 'typeorm';
+import { Category } from '../../category/entities/category.entity';
 import { Evaluation } from '../../evaluation/entities/evaluation.entity';
 import { TestBatteries } from '../../test-batteries/entities/test-batteries.entity';
 
 export enum DataType {
-    dt_int     = 'int',
-    dt_string  = 'string',
-    dt_float   = 'float',
-    dt_boolean = 'boolean',
-    dt_date    = 'date',
+    Dt_int     = "int",
+    Dt_string  = "string",
+    Dt_float   = "float",
+    Dt_boolean = "boolean",
+    Dt_date    = "date",
 }
 
 @Entity()
@@ -16,15 +17,15 @@ export class Field extends BaseEntity {
     @Column()
     name: string;
 
-    @Column()
+    @Column({default: ""})
     value: string;
 
     @Column({
-        type: 'enum',
+        type: "enum",
         enum: DataType,
-        default: DataType.dt_string,
+        default: DataType.Dt_string
     })
-    role: DataType;
+    dataType: DataType;
 
     @ManyToMany(() => Evaluation, evaluation => evaluation.fields)
     evaluations: Evaluation[];
