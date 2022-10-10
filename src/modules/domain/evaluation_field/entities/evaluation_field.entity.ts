@@ -5,5 +5,4 @@ import { Column, Entity } from 'typeorm';
 export class EvaluationField extends BaseEntity {
     @Column()
     value: string;
-
 }

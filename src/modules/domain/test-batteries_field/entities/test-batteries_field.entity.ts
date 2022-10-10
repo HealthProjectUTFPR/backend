@@ -5,5 +5,4 @@ import { Column, Entity } from 'typeorm';
 export class TestBatteriesField extends BaseEntity {
     @Column()
     value: string;
-
 }

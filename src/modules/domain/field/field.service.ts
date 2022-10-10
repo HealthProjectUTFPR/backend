@@ -1,4 +1,4 @@
-import { ForbiddenException, Injectable } from "@nestjs/common";
+import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { PaginationParams, PaginationResult } from "src/common/interfaces/pagination.interface";
 import { Repository } from "typeorm";
@@ -16,6 +16,8 @@ export class FieldService {
     ): Promise<Field> {
         const newField = this.fieldsRepository.create({
             ...createFieldDto,
+            evaluationField: { id: createFieldDto.evaluationFieldId },
+            testBatteriesField: { id: createFieldDto.testBatteriesFieldId },
         });
         return await this.fieldsRepository.save(newField);
     }
@@ -26,6 +28,7 @@ export class FieldService {
         const fields = await this.fieldsRepository.findAndCount({
             skip: (paginationParams.page - 1) * paginationParams.limit,
             take: paginationParams.limit,
+            relations : ["evaluationField", "testBatteriesField"],
         });
 
         const meta = {
@@ -41,6 +44,13 @@ export class FieldService {
         };
     }
 
+    async findOne(id: string): Promise<Field> {
+        const field = await this.fieldsRepository.findOne({
+            where: { id: id },
+        });
+        return field;
+    }
+
     async update(
         id: string,
         updateFieldDto: UpdateFieldDto,
@@ -54,6 +64,12 @@ export class FieldService {
         return field;
     }
 
-
+    async remove(id: string): Promise<Field> {
+        const field = await this.fieldsRepository.findOne({
+            where: { id: id },
+        });
+        await this.fieldsRepository.delete(id);
+        return field;
+    }
 
 }

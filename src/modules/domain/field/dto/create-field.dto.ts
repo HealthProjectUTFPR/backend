@@ -13,8 +13,11 @@ export class CreateFieldDto {
   @JoiSchema(['CREATE'], Joi.string().valid(...Object.values(DataType)).required())
   dataType: DataType;
 
-  // @JoiSchema(['CREATE'], Joi.string().uuid().required())
-  // fieldId: string;
+  @JoiSchema(['CREATE'], Joi.string().optional())
+  evaluationFieldId: string;
+
+  @JoiSchema(['CREATE'], Joi.string().optional())
+  testBatteriesFieldId: string;
 
   @JoiSchema(['CREATE'], Joi.forbidden())
   createdBy: User;

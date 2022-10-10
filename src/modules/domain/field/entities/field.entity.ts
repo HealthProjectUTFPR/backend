@@ -1,6 +1,5 @@
 import { BaseEntity } from 'src/common/entities/base.entity';
-import { Column, Entity, ManyToMany } from 'typeorm';
-import { Category } from '../../category/entities/category.entity';
+import { Column, Entity, ManyToMany, ManyToOne } from 'typeorm';
 import { Evaluation } from '../../evaluation/entities/evaluation.entity';
 import { TestBatteries } from '../../test-batteries/entities/test-batteries.entity';
 
@@ -27,9 +26,9 @@ export class Field extends BaseEntity {
     })
     dataType: DataType;
 
-    @ManyToMany(() => Evaluation, evaluation => evaluation.fields)
-    evaluations: Evaluation[];
+    @ManyToOne(() => Evaluation, evaluation => evaluation.fields)
+    evaluationField: Evaluation;
 
-    @ManyToMany(() => TestBatteries, testBatteries => testBatteries.fields)
-    testBatteries: TestBatteries[];
+    @ManyToOne(() => TestBatteries, testBatteries => testBatteries.fields)
+    testBatteriesField: TestBatteries;
 }

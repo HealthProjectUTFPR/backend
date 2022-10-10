@@ -6,9 +6,12 @@ import { Field } from "./entities/field.entity";
 import { Evaluation } from "../evaluation/entities/evaluation.entity";
 import { User } from "src/modules/infrastructure/user/entities/user.entity";
 import { TestBatteries } from "../test-batteries/entities/test-batteries.entity";
+import { TestBatteriesField } from "../test-batteries_field/entities/test-batteries_field.entity";
+import { EvaluationField } from "../evaluation_field/entities/evaluation_field.entity";
+
 
 @Module({
-    imports: [TypeOrmModule.forFeature([Field, Evaluation, TestBatteries, User])],
+    imports: [TypeOrmModule.forFeature([Field, Evaluation, TestBatteries, User, TestBatteriesField, EvaluationField])],
     controllers: [FieldController],
     providers: [FieldService],
     exports: [TypeOrmModule],

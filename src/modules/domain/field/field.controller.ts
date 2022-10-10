@@ -1,10 +1,8 @@
-import { Body, Controller, ForbiddenException, Get, Param, Patch, Post, UseGuards } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, Patch, Post, UseGuards } from "@nestjs/common";
 import { JoiPipe } from "nestjs-joi";
 import { CreateFieldDto } from "./dto/create-field.dto";
 import { UpdateFieldDto } from "./dto/update-field.dto";
 import { FieldService } from "./field.service";
-import { User } from "src/modules/infrastructure/user/entities/user.entity";
-import { AuthUser } from "src/common/decorators/auth-user.decorator";
 import { JwtAuthGuard } from "src/modules/infrastructure/auth/auth.guard";
 import { Field } from "./entities/field.entity";
 import { Pagination } from "src/common/decorators/pagination.decorator";
@@ -18,7 +16,6 @@ export class FieldController {
 
     @Post("create")
     async create(
-        @AuthUser() user: User,
         @Body(new JoiPipe({ group: "CREATE" }))
         createFieldDto: CreateFieldDto,
     ): Promise<Field> {
@@ -27,7 +24,6 @@ export class FieldController {
 
     @Get("list")
     async findAll(
-        @AuthUser() user: User,
         @Pagination() paginationParams: PaginationParams,
     ): Promise<PaginationResponseDto<Field>> {
         return new PaginationResponseDto<Field>(
@@ -35,13 +31,24 @@ export class FieldController {
         );
     }
 
+    @Get("get/:id")
+    async findOne(@Param("id") id: string): Promise<Field> {
+        return await this.fieldService.findOne(id);
+    }
+
     @Patch("update/:id")
     async update(
-        @AuthUser() user: User,
         @Param("id") id: string,
         @Body(new JoiPipe({ group: "UPDATE" }))
         updateFieldDto: UpdateFieldDto,
     ): Promise<Field> {
         return await this.fieldService.update(id, updateFieldDto);
+    }
+
+    @Delete("delete/:id")
+    async remove(
+        @Param("id") id: string,
+    ): Promise<Field> {
+        return await this.fieldService.remove(id);
     }
 }

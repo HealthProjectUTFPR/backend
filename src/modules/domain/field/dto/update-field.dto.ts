@@ -13,9 +13,6 @@ export class UpdateFieldDto {
   @JoiSchema(['UPDATE'], Joi.string().optional())
   type: DataType;
 
-  @JoiSchema(['UPDATE'], Joi.string().uuid().optional())
-  fieldId: string;
-
   @JoiSchema(['UPDATE'], Joi.forbidden())
   createdBy: User;
 }
