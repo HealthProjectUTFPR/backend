@@ -5,6 +5,9 @@ import { JoiSchema, JoiSchemaOptions } from 'nestjs-joi';
   allowUnknown: false,
 })
 export class UserDto {
+  @JoiSchema(['REGISTER'], Joi.string().required())
+  name: string;
+
   @JoiSchema(['REGISTER', 'LOGIN'], Joi.string().email().required())
   email: string;
 
