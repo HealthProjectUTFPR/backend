@@ -5,12 +5,12 @@ import { Field } from '../../field/entities/field.entity';
 
 @Entity()
 export class TestBatteries extends BaseEntity {
-    @Column()
-    name: string;
+  @Column()
+  name: string;
 
-    @OneToMany(() => Field, field => field.testBatteriesField)
-    fields: Field[];
+  @OneToMany(() => Field, (field) => field.testBatteriesField)
+  fields: Field[];
 
-    @ManyToMany(() => Evaluation, evaluation => evaluation.testBatteries)
-    evaluations: Evaluation[];
+  @ManyToMany(() => Evaluation, (evaluation) => evaluation.testBatteries)
+  evaluations: Evaluation[];
 }

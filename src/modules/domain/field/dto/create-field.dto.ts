@@ -10,7 +10,12 @@ export class CreateFieldDto {
   @JoiSchema(['CREATE'], Joi.string().optional())
   value: string;
 
-  @JoiSchema(['CREATE'], Joi.string().valid(...Object.values(DataType)).required())
+  @JoiSchema(
+    ['CREATE'],
+    Joi.string()
+      .valid(...Object.values(DataType))
+      .required(),
+  )
   dataType: DataType;
 
   @JoiSchema(['CREATE'], Joi.string().optional())

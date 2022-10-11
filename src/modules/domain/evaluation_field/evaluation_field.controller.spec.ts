@@ -11,7 +11,9 @@ describe('EvaluationFieldController', () => {
       providers: [EvaluationFieldService],
     }).compile();
 
-    controller = module.get<EvaluationFieldController>(EvaluationFieldController);
+    controller = module.get<EvaluationFieldController>(
+      EvaluationFieldController,
+    );
   });
 
   it('should be defined', () => {

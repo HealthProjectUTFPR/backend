@@ -3,6 +3,6 @@ import { Column, Entity } from 'typeorm';
 
 @Entity()
 export class TestBatteriesField extends BaseEntity {
-    @Column()
-    value: string;
+  @Column()
+  value: string;
 }
