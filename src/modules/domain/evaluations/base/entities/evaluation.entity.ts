@@ -14,7 +14,7 @@ export class Evaluation extends BaseEntity {
   @OneToMany(() => Field, (field) => field.evaluationField)
   fields: Field[];
 
-  @ManyToMany(() => TestBatteries, (testBatteries) => testBatteries.evaluations)
+  @OneToMany(() => TestBatteries, (testBatteries) => testBatteries.evaluations)
   @JoinTable()
-  testBatteries: TestBatteries[];
+  testBatteries: TestBatteries;
 }

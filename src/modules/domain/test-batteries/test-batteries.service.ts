@@ -16,6 +16,7 @@ export class TestBatteriesService {
     ): Promise<TestBatteries> {
         const testBatteries =  this.testBatteriesRepository.create({
             ...createTestBatteriesDto,
+            evaluations: { id: createTestBatteriesDto.evaluationsId },
         });
         await this.testBatteriesRepository.save(testBatteries);
         return testBatteries;
@@ -44,6 +45,13 @@ export class TestBatteriesService {
         };
     }
 
+    async findOne(id: string): Promise<TestBatteries> {
+        const testBatteries = await this.testBatteriesRepository.findOne({
+            where: { id: id },
+        });
+        return testBatteries;
+    }
+
     async update(
         id: string,
         updateTestBatteriesDto: CreateTestBatteriesDto,
@@ -55,9 +63,5 @@ export class TestBatteriesService {
         testBatteries = await this.testBatteriesRepository.findOneBy({ id: id });
 
         return testBatteries;
-    }
-
-    async remove(id: string): Promise<void> {
-        await this.testBatteriesRepository.delete(id);
     }
 }

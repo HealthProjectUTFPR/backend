@@ -4,7 +4,7 @@ import { TestBatteriesController } from "./test-batteries.controller";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { TestBatteries } from "./entities/test-batteries.entity";
 import { Field } from "../field/entities/field.entity";
-import { Evaluation } from "../evaluation/entities/evaluation.entity";
+import { Evaluation } from "../evaluations/base/entities/evaluation.entity";
 import { User } from "src/modules/infrastructure/user/entities/user.entity";
 import { TestBatteriesField } from "../test-batteries_field/entities/test-batteries_field.entity";
 

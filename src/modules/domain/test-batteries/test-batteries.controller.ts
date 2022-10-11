@@ -18,7 +18,6 @@ export class TestBatteriesController {
 
     @Post("create")
     async create(
-        @AuthUser() user: User,
         @Body(new JoiPipe({ group: "CREATE" }))
         createTestBatteriesDto: CreateTestBatteriesDto,
     ): Promise<TestBatteries> {
@@ -27,7 +26,6 @@ export class TestBatteriesController {
 
     @Get("list")
     async findAll(
-        @AuthUser() user: User,
         @Pagination() paginationParams: PaginationParams,
     ): Promise<PaginationResponseDto<TestBatteries>> {
         return new PaginationResponseDto<TestBatteries>(
@@ -35,9 +33,16 @@ export class TestBatteriesController {
         );
     }
 
+    @Get("get/:id")
+    async findOne(
+        @Param("id") 
+        id: string
+        ): Promise<TestBatteries> {
+        return await this.testBatteriesService.findOne(id);
+    }
+
     @Patch("update/:id")
     async update(
-        @AuthUser() user: User,
         @Param("id") id: string,
         @Body(new JoiPipe({ group: "UPDATE" }))
         updateTestBatteriesDto: UpdateTestBatteriesDto,

@@ -6,6 +6,9 @@ export class CreateTestBatteriesDto {
   @JoiSchema(['CREATE'], Joi.string().required())
   name: string;
 
+  @JoiSchema(['CREATE'], Joi.string().optional())
+  evaluationsId: string;
+
   @JoiSchema(['CREATE'], Joi.forbidden())
   createdBy: User;
 }

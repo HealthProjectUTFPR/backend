@@ -53,9 +53,4 @@ export class FieldController {
   ): Promise<Field> {
     return await this.fieldService.update(id, updateFieldDto);
   }
-
-  @Delete('delete/:id')
-  async remove(@Param('id') id: string): Promise<Field> {
-    return await this.fieldService.remove(id);
-  }
 }

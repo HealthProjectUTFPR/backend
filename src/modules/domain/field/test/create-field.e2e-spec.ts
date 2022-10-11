@@ -8,6 +8,7 @@ import { FieldModule } from '../field.module';
 let app: INestApplication;
 let appRequest: request.SuperTest<request.Test>;
 let token1: string;
+let testBatteriesId: string;
 
 beforeAll(async () => {
   const module = await Test.createTestingModule({
@@ -31,7 +32,18 @@ beforeAll(async () => {
       })
       .expect(200);
 
-    token1 = login1.text;
+  token1 = login1.text;
+
+  const postTestBatteries1 = await appRequest
+    .post('/test-batteries/create')
+    .set('Authorization', `Bearer ${token1}`)
+    .send({
+      name: 'Test Batteries 1',
+    })
+    .expect(201);
+
+  testBatteriesId = postTestBatteries1.body.id;
+
 });
 
 afterAll(async () => {
@@ -46,6 +58,7 @@ describe('Create Field', () => {
         name: 'field integer 1',
         value:'0',
         dataType: 'int',
+        testBatteriesId: testBatteriesId,
       })
       .expect(403);
   });
@@ -57,6 +70,7 @@ describe('Create Field', () => {
       .send({
         value:'0',
         dataType: 'int',
+        testBatteriesId: testBatteriesId,
       })
       .expect(400);
   });
@@ -69,6 +83,20 @@ describe('Create Field', () => {
         name: 'field integer 1',
         value:'0',
         dataType: 'INTEGER',
+        testBatteriesId: testBatteriesId,
+      })
+      .expect(400);
+  });
+
+  it('/create (POST) - Fail (random string in testBatteriesId)', async () => {
+    return await appRequest
+      .post('/field/create')
+      .set('Authorization', `Bearer ${token1}`)
+      .send({
+        name: 'field integer 1',
+        value:'0',
+        dataType: 'int',
+        testBatteriesId: 'testBatteriesId',
       })
       .expect(400);
   });
@@ -80,6 +108,7 @@ describe('Create Field', () => {
         name: 'field integer 1',
         value:'0',
         dataType: 'int',
+        testBatteriesId: testBatteriesId,
       })
       .set('Authorization', `Bearer ${token1}`)
       .expect(201);
