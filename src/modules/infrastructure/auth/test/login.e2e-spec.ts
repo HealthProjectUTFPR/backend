@@ -21,6 +21,7 @@ beforeAll(async () => {
     .post('/auth/register')
     .send({
       email: 'test@test.com',
+      name: 'Isaac',
       password: '12345678',
     })
     .expect(201);
