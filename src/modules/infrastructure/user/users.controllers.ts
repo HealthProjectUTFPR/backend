@@ -1,10 +1,6 @@
 import {
     Body,
     Controller,
-    HttpCode,
-    HttpStatus,
-    Inject,
-    Post,
     Delete,
     Param,
     Get,
@@ -13,13 +9,8 @@ import {
   } from '@nestjs/common';
   import { JoiPipe } from 'nestjs-joi';
   import { User } from '../user/entities/user.entity';
-  import { AuthUser } from 'src/common/decorators/auth-user.decorator';
-  import { AuthService } from '../auth/auth.service';
-  import { UserDto } from '../auth/dto/user.dto';
-  import { InjectRepository } from '@nestjs/typeorm';
   import { UpdateUserDto} from '../user/dto/update-user.dto';
   import { UsersService } from './user.service';
-  import { GetUser } from '../auth/decorator';
   import { JwtAuthGuard } from 'src/modules/infrastructure/auth/auth.guard';
 
 @Controller("users")

@@ -1,14 +1,9 @@
 import {
-    HttpException,
-    HttpStatus,
     Injectable,
-    UnauthorizedException,
-    NotFoundException,
   } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from '../user/entities/user.entity';
-import { UserDto } from '../auth/dto/user.dto';
 import {UpdateUserDto} from '../user/dto/update-user.dto';
 
 
@@ -33,7 +28,6 @@ export class UsersService {
         user.name = name? name : user.name;
         user.email = email? email : user.email;
         user.password = password? password : user.password;
-
 
         return await this.usersRepository.save(user);
     }
