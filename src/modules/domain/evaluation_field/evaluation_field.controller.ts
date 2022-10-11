@@ -3,5 +3,7 @@ import { EvaluationFieldService } from './evaluation_field.service';
 
 @Controller('evaluation-field')
 export class EvaluationFieldController {
-  constructor(private readonly evaluationFieldService: EvaluationFieldService) {}
+  constructor(
+    private readonly evaluationFieldService: EvaluationFieldService,
+  ) {}
 }
