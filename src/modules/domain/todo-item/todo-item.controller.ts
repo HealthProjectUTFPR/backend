@@ -64,12 +64,4 @@ export class TodoItemController {
   ): Promise<TodoItem> {
     return await this.todoItemService.update(id, updateTodoItemDto, user);
   }
-
-  @Delete('delete/:id')
-  async remove(
-    @AuthUser() user: User,
-    @Param('id') id: string,
-  ): Promise<TodoItem> {
-    return await this.todoItemService.remove(id, user);
-  }
 }

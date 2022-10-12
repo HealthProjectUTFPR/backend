@@ -19,12 +19,12 @@ export class Field extends BaseEntity {
   @Column({ default: '' })
   value: string;
 
-  @Column({
-    type: 'enum',
-    enum: DataType,
-    default: DataType.Dt_string,
-  })
-  dataType: DataType;
+  // @Column({
+  //   type: 'enum',
+  //   enum: DataType,
+  //   default: DataType.Dt_string,
+  // })
+  // dataType: DataType;
 
   @ManyToOne(() => Evaluation, (evaluation) => evaluation.fields)
   evaluationField: Evaluation;

@@ -1,5 +1,5 @@
 import { BaseEntity } from 'src/common/entities/base.entity';
-import { Column, Entity, ManyToMany, OneToMany } from 'typeorm';
+import { Column, Entity, ManyToOne, OneToMany } from 'typeorm';
 import { Evaluation } from '../../evaluations/base/entities/evaluation.entity';
 import { Field } from '../../field/entities/field.entity';
 
@@ -11,6 +11,6 @@ export class TestBatteries extends BaseEntity {
   @OneToMany(() => Field, (field) => field.testBatteriesField)
   fields: Field[];
 
-  @ManyToMany(() => Evaluation, (evaluation) => evaluation.testBatteries)
-  evaluations: Evaluation[];
+  @ManyToOne(() => Evaluation, (evaluation) => evaluation.testBatteries)
+  evaluations: Evaluation;
 }

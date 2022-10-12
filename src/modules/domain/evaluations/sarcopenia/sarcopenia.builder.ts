@@ -18,7 +18,7 @@ export class SarcopeniaBuilder implements ISarcopeniaBuilder {
   produceFields(fields: Field[]): void {
     const typedFields = fields.map((field) => ({
       ...field,
-      value: parseType(field.dataType, field.value),
+      value: parseType(field.value),
     }));
 
     this.sarcopenia.fields = typedFields;

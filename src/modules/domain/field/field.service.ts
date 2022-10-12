@@ -61,12 +61,4 @@ export class FieldService {
 
     return field;
   }
-
-  async remove(id: string): Promise<Field> {
-    const field = await this.fieldsRepository.findOne({
-      where: { id: id },
-    });
-    await this.fieldsRepository.delete(id);
-    return field;
-  }
 }

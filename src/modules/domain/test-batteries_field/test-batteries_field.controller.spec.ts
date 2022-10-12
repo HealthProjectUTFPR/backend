@@ -11,7 +11,9 @@ describe('TestBatteriesFieldController', () => {
       providers: [TestBatteriesFieldService],
     }).compile();
 
-    controller = module.get<TestBatteriesFieldController>(TestBatteriesFieldController);
+    controller = module.get<TestBatteriesFieldController>(
+      TestBatteriesFieldController,
+    );
   });
 
   it('should be defined', () => {

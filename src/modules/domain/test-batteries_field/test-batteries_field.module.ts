@@ -9,6 +9,6 @@ import { TestBatteriesFieldController } from './test-batteries_field.controller'
   imports: [TypeOrmModule.forFeature([Field, TestBatteries])],
   controllers: [TestBatteriesFieldController],
   providers: [TestBatteriesFieldService],
-  exports: [TypeOrmModule]
+  exports: [TypeOrmModule],
 })
 export class TestBatteriesFieldModule {}
