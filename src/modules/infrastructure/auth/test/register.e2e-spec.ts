@@ -36,6 +36,7 @@ describe('Register (e2e)', () => {
       .post('/auth/register')
       .send({
         email: 'test@test.com',
+        name:'Isaac',
         password: '1234',
       })
       .expect(400);
@@ -46,6 +47,7 @@ describe('Register (e2e)', () => {
       .post('/auth/register')
       .send({
         email: 'test@test.com',
+        name: 'Isaac',
         password: '12345678',
       })
       .expect(201);
@@ -56,6 +58,7 @@ describe('Register (e2e)', () => {
       .post('/auth/register')
       .send({
         email: 'test@test.com',
+        name: 'Isaac',
         password: '12345678',
       })
       .expect(409);

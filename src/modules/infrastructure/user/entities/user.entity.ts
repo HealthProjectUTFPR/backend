@@ -3,7 +3,6 @@ import { generateHash } from 'src/common/utils/hash.util';
 import { TodoItem } from 'src/modules/domain/todo-item/entities/todo-item.entity';
 import { BeforeInsert, BeforeUpdate, Column, Entity, OneToMany, CreateDateColumn } from 'typeorm';
 
-
 @Entity()
 export class User extends BaseEntity {
   @Column()
@@ -11,6 +10,9 @@ export class User extends BaseEntity {
 
   @Column({ unique: true })
   email: string;
+
+  @Column()
+  name: string;
 
   @Column()
   password: string;
