@@ -4,6 +4,7 @@ import {
     NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { StringSchema } from 'joi';
 import {
   PaginationParams,
   PaginationResult,
@@ -26,6 +27,7 @@ export class EvaluationService {
     ): Promise<Evaluation> {
     const evaluation = this.evaluationsRepository.create({
       ...createEvaluationDto,
+      createdBy: user,
     });
 
     return await this.evaluationsRepository.save(evaluation);
@@ -33,8 +35,10 @@ export class EvaluationService {
 
   async findAll(
     paginationParams: PaginationParams,
+    user: User,
     ): Promise<PaginationResult<Evaluation>> {
     const evaluations = await this.evaluationsRepository.findAndCount({
+      where: { createdBy: { id: user.id } },
       skip: (paginationParams.page - 1) * paginationParams.limit,
       take: paginationParams.limit,
       relations: ['fields', 'testBatteries'],
@@ -56,6 +60,7 @@ export class EvaluationService {
   async findOne(id: string): Promise<Evaluation> {
       const evaluation = await this.evaluationsRepository.findOne({
           where: { id: id },
+          relations: ['createdBy'],
       });
       if (!evaluation) throw new NotFoundException();
       return evaluation;
@@ -64,9 +69,11 @@ export class EvaluationService {
   async update(
       id: string,
       updateEvaluationDto: UpdateEvaluationDto,
+      user: User,
   ): Promise<Evaluation> {
       const evaluation = await this.evaluationsRepository.findOne({
         where: { id: id },
+        relations: ['createdBy'],
       });
       if (!evaluation) throw new NotFoundException();
       await this.evaluationsRepository.update(id, updateEvaluationDto);

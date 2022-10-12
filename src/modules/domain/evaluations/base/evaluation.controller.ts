@@ -28,10 +28,11 @@ export class EvaluationController {
   
   @Get('list')
   async findAll(
+    @AuthUser() user: User,
     @Pagination() paginationParams: PaginationParams,
   ): Promise<PaginationResponseDto<Evaluation>> {
     return new PaginationResponseDto<Evaluation>(
-      await this.evaluationService.findAll(paginationParams),
+      await this.evaluationService.findAll(paginationParams, user),
     );
   }
 
@@ -44,11 +45,12 @@ export class EvaluationController {
 
   @Patch('update/:id')
   async update(
+    @AuthUser() user: User,
     @Param('id') id: string,
     @Body(new JoiPipe({ group: 'UPDATE' }))
     updateEvaluationDto: CreateEvaluationDto,
   ): Promise<Evaluation> {
-    return await this.evaluationService.update(id, updateEvaluationDto);
+    return await this.evaluationService.update(id, updateEvaluationDto, user);
   }
   
 }
