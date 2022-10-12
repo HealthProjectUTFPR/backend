@@ -5,6 +5,9 @@ import { BeforeInsert, BeforeUpdate, Column, Entity, OneToMany, CreateDateColumn
 
 @Entity()
 export class User extends BaseEntity {
+  @Column()
+  name: string;
+
   @Column({ unique: true })
   email: string;
 
