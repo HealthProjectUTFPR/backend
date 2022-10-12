@@ -1,7 +1,11 @@
-import { Evaluation } from '../../base/entities/evaluation.entity';
+interface IFieldSarcopenia {
+  value: number | string | boolean | Date;
+}
 
-export class Sarcopenia extends Evaluation {
-  constructor() {
-    super();
-  }
+export interface ISarcopenia {
+  name: string;
+
+  result: boolean;
+
+  fields: IFieldSarcopenia[];
 }

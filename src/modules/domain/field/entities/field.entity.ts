@@ -1,6 +1,6 @@
 import { BaseEntity } from 'src/common/entities/base.entity';
 import { Column, Entity, ManyToOne } from 'typeorm';
-import { Evaluation } from '../../evaluation/entities/evaluation.entity';
+import { Evaluation } from '../../evaluations/base/entities/evaluation.entity';
 import { TestBatteries } from '../../test-batteries/entities/test-batteries.entity';
 
 export enum DataType {
@@ -17,7 +17,7 @@ export class Field extends BaseEntity {
   name: string;
 
   @Column({ default: '' })
-  value: string;
+  value: any;
 
   @Column({
     type: 'enum',

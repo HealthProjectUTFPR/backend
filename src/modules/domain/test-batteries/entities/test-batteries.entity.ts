@@ -1,6 +1,6 @@
 import { BaseEntity } from 'src/common/entities/base.entity';
 import { Column, Entity, ManyToMany, OneToMany } from 'typeorm';
-import { Evaluation } from '../../evaluation/entities/evaluation.entity';
+import { Evaluation } from '../../evaluations/base/entities/evaluation.entity';
 import { Field } from '../../field/entities/field.entity';
 
 @Entity()

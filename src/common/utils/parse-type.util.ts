@@ -1,5 +1,4 @@
 import { DataType } from 'src/modules/domain/field/entities/field.entity';
-import { FieldType } from '../enums/field-type';
 
 export const parseType = (type: DataType, value: any) => {
   switch (type) {

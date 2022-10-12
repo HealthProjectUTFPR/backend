@@ -1,32 +1,26 @@
 import { parseType } from 'src/common/utils/parse-type.util';
 import { Field } from '../../field/entities/field.entity';
-import { TestBatteries } from '../../test-batteries/entities/test-batteries.entity';
-import { EvaluationBuilder } from '../base/interfaces/evaluation.builder.interface';
-import { Sarcopenia } from './entities/sarcopenia.entity';
+import { ISarcopenia } from './entities/sarcopenia.entity';
+import { ISarcopeniaBuilder } from './interfaces/sarcopenia.builder.interface';
 
-export class SarcopeniaBuilder implements EvaluationBuilder {
-  private sarcopenia: Sarcopenia;
+export class SarcopeniaBuilder implements ISarcopeniaBuilder {
+  private sarcopenia: ISarcopenia;
 
   constructor() {
-    this.sarcopenia = new Sarcopenia();
+    this.sarcopenia = <ISarcopenia>{};
   }
-  produceBatteryTests(batteryTests: TestBatteries): void {
-    throw new Error('Method not implemented.');
-  }
-  produceEvaluation(sarcopeniaEvaluation: Sarcopenia): void {
-    throw new Error('Method not implemented.');
+
+  produceEvaluation(name: string, result: boolean): void {
+    this.sarcopenia.name = name;
+    this.sarcopenia.result = result;
   }
 
   produceFields(fields: Field[]): void {
-    this.sarcopenia.fields = fields.map((field) => ({
+    const typedFields = fields.map((field) => ({
       ...field,
       value: parseType(field.dataType, field.value),
     }));
-  }
 
-  produceBatteryTests(batteryTests: TestBatteries): void {
-    this.sarcopenia.batteryTests = batteryTests;
+    this.sarcopenia.fields = typedFields;
   }
-
-  produceEvaluation(sarcopeniaEvaluation: Sarcopenia): void {}
 }
