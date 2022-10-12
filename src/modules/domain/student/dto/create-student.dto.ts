@@ -1,5 +1,6 @@
 import * as Joi from 'joi';
 import { JoiSchema } from 'nestjs-joi';
+import { User } from 'src/modules/infrastructure/user/entities/user.entity';
 
 export class CreateStudentDto {
   @JoiSchema(['CREATE'], Joi.string().required())
@@ -25,4 +26,10 @@ export class CreateStudentDto {
 
   @JoiSchema(['CREATE'], Joi.string().required())
   address: string;
+
+  @JoiSchema(['CREATE'], Joi.boolean().required())
+  flag: boolean;
+
+  @JoiSchema(['CREATE'], Joi.forbidden())
+  user: User;
 }

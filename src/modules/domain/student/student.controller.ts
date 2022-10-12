@@ -1,45 +1,45 @@
 import {
   Body,
   Controller,
-  Delete,
-  Get,
+  // Delete,
+  // Get,
   Param,
   Patch,
   Post,
   UseGuards,
 } from '@nestjs/common';
-// import { JwtAuthGuard } from 'src/modules/infrastructure/auth/auth.guard';
+import { JoiPipe } from 'nestjs-joi';
 import { StudentService } from './student.service';
 import { CreateStudentDto } from './dto/create-student.dto';
+import { JwtAuthGuard } from 'src/modules/infrastructure/auth/auth.guard';
+import { User } from '../../infrastructure/user/entities/user.entity';
+import { AuthUser } from 'src/common/decorators/auth-user.decorator';
+import { Student } from './entities/student.entity';
 import { UpdateStudentDto } from './dto/update-student.dto';
 
 @Controller('student')
-// @UseGuards(JwtAuthGuard)
+@UseGuards(JwtAuthGuard)
 export class StudentController {
   constructor(private readonly studentService: StudentService) {}
 
   @Post('create')
-  create(@Body() createStudentDto: CreateStudentDto) {
-    return this.studentService.create(createStudentDto);
+  async create(
+    @AuthUser() user: User,
+    @Body(new JoiPipe({ group: 'CREATE' }))
+    createStudentDto: CreateStudentDto,
+  ): Promise<Student> {
+    // if (!user) throw new ForbiddenException('User not logged in');
+
+    return this.studentService.create(createStudentDto, user);
   }
 
-  // @Get('get')
-  // findAll() {
-  //   return this.prePosService.findAll();
-  // }
-
-  // @Get('get/:id')
-  // findOne(@Param('id') id: string) {
-  //   return this.prePosService.findOne(id);
-  // }
-
-  // @Patch('update/:id')
-  // update(@Param('id') id: string, @Body() updatePrePosDto: UpdatePrePosDto) {
-  //   return this.prePosService.update(id, updatePrePosDto);
-  // }
-
-  // @Delete('delete/:id')
-  // remove(@Param('id') id: string) {
-  //   return this.prePosService.remove(id);
-  // }
+  @Patch('delete/:id')
+  async update(
+    @AuthUser() user: User,
+    @Param('id') id: string,
+    @Body(new JoiPipe({ group: 'UPDATE' }))
+    updateStudentDto: UpdateStudentDto,
+  ): Promise<Student> {
+    return await this.studentService.update(id, updateStudentDto, user);
+  }
 }

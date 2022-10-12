@@ -28,6 +28,9 @@ export class Student extends BaseEntity {
   @Column()
   address: string;
 
+  @Column()
+  flag: boolean;
+
   @ManyToOne(() => User, (user) => user.students)
   user: User;
 }
