@@ -11,8 +11,8 @@ export class CreateStudentDto {
   @JoiSchema(['CREATE'], Joi.string().required())
   breed: string;
 
-  @JoiSchema(['CREATE'], Joi.string().required())
-  stature: string;
+  @JoiSchema(['CREATE'], Joi.number().required())
+  stature: number;
 
   @JoiSchema(['CREATE'], Joi.string().required())
   contact: string;

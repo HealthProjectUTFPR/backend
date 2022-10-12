@@ -1,5 +1,4 @@
 import { BaseEntity } from 'src/common/entities/base.entity';
-import { TodoItem } from 'src/modules/domain/todo-item/entities/todo-item.entity';
 import { Column, Entity, OneToMany } from 'typeorm';
 
 @Entity()
@@ -14,7 +13,7 @@ export class Student extends BaseEntity {
   breed: string;
 
   @Column()
-  stature: string;
+  stature: number;
 
   @Column()
   contact: string;
@@ -27,7 +26,4 @@ export class Student extends BaseEntity {
 
   @Column()
   address: string;
-
-  @OneToMany(() => TodoItem, (todoItem) => todoItem.createdBy)
-  todoItems: TodoItem[];
 }
