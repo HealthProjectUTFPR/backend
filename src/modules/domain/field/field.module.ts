@@ -3,7 +3,7 @@ import { FieldService } from './field.service';
 import { FieldController } from './field.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Field } from './entities/field.entity';
-import { Evaluation } from '../evaluation/entities/evaluation.entity';
+import { Evaluation } from '../evaluations/base/entities/evaluation.entity';
 import { User } from 'src/modules/infrastructure/user/entities/user.entity';
 import { TestBatteries } from '../test-batteries/entities/test-batteries.entity';
 import { TestBatteriesField } from '../test-batteries_field/entities/test-batteries_field.entity';
