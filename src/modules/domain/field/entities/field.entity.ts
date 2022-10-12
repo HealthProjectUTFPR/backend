@@ -17,7 +17,7 @@ export class Field extends BaseEntity {
   name: string;
 
   @Column({ default: '' })
-  value: any;
+  value: string;
 
   @Column({
     type: 'enum',
