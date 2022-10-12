@@ -15,7 +15,7 @@ export class TodoItem extends BaseEntity {
   @Column({ default: false })
   status: boolean;
 
-  @ManyToOne(() => User, (user) => user.todoItems)
+  // @ManyToOne(() => User, (user) => user.todoItems)
   @JoinColumn()
   @Exclude()
   createdBy: User;

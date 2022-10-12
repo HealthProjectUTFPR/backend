@@ -1,6 +1,6 @@
 import { BaseEntity } from 'src/common/entities/base.entity';
 import { generateHash } from 'src/common/utils/hash.util';
-import { TodoItem } from 'src/modules/domain/todo-item/entities/todo-item.entity';
+import { Student } from 'src/modules/domain/student/entities/student.entity';
 import { BeforeInsert, BeforeUpdate, Column, Entity, OneToMany } from 'typeorm';
 
 @Entity()
@@ -14,8 +14,8 @@ export class User extends BaseEntity {
   @Column()
   password: string;
 
-  @OneToMany(() => TodoItem, (todoItem) => todoItem.createdBy)
-  todoItems: TodoItem[];
+  @OneToMany(() => Student, (student) => student.user)
+  students: Student[];
 
   @BeforeInsert()
   @BeforeUpdate()
