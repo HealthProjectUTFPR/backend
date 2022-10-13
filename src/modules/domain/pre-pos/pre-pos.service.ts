@@ -36,7 +36,7 @@ export class PrePosService {
     prePos.glicemiaPre = updatePrePosDto.glicemiaPre
     prePos.horarioTreino = updatePrePosDto.horarioTreino
     prePos.pseEPre = updatePrePosDto.pseEPre
-    prePos.pseEPro = updatePrePosDto.pseEPro
+    prePos.pseEPos = updatePrePosDto.pseEPos
     prePos.observacao = updatePrePosDto.observacao
     return await this.prePosRepository.save(prePos);
   }
