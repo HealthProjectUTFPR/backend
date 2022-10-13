@@ -34,8 +34,11 @@ export class PrePos extends BaseEntity {
   horarioTreino: number;
 
   @Column()
-  pseE: number;
+  pseEPre: number;
 
+  @Column()
+  pseEPro: number;
+  
   @Column()
   observacao: string;
 

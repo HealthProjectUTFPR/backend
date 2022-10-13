@@ -33,7 +33,10 @@ export class UpdatePrePosDto {
   horarioTreino: number;
 
   @JoiSchema(['UPDATE'], Joi.number().optional())
-  pseE: number;
+  pseEPre: number;
+
+  @JoiSchema(['UPDATE'], Joi.number().optional())
+  pseEPos: number;
 
   @JoiSchema(['UPDATE'], Joi.string().optional())
   observacao: string;

@@ -32,8 +32,12 @@ export class CreatePrePosDto{
   @JoiSchema(['CREATE'], Joi.number().optional())
   horarioTreino: number;
 
-  @JoiSchema(['CREATE'], Joi.number().optional())
-  pseE: number;
+  @JoiSchema(['UPDATE'], Joi.number().optional())
+  pseEPre: number;
+
+  @JoiSchema(['UPDATE'], Joi.number().optional())
+  pseEPos: number;
+
 
   @JoiSchema(['CREATE'], Joi.string().optional())
   observacao: string;
