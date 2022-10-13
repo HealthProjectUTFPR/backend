@@ -15,19 +15,19 @@ export class CreatePrePosDto{
   pasPre: number;
 
   @JoiSchema(['CREATE'], Joi.number().optional())
-  pasPro: number;
+  pasPos: number;
 
   @JoiSchema(['CREATE'], Joi.number().optional())
   padPre: number;
 
   @JoiSchema(['CREATE'], Joi.number().optional())
-  padPro: number;
+  padPos: number;
 
   @JoiSchema(['CREATE'], Joi.number().optional())
   glicemiaPre: number;
 
   @JoiSchema(['CREATE'], Joi.number().optional())
-  glicemiaPro: number;
+  glicemiaPos: number;
 
   @JoiSchema(['CREATE'], Joi.number().optional())
   horarioTreino: number;

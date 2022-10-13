@@ -1,8 +1,5 @@
-import { Exclude } from 'class-transformer';
 import { BaseEntity } from 'src/common/entities/base.entity';
-import { User } from 'src/modules/infrastructure/user/entities/user.entity';
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { Category } from '../../category/entities/category.entity';
+import { Column, Entity } from 'typeorm';
 
 @Entity()
 export class PrePos extends BaseEntity {
@@ -19,19 +16,19 @@ export class PrePos extends BaseEntity {
   pasPre: number;
  
   @Column()
-  pasPro: number;
+  pasPos: number;
 
   @Column()
   padPre: number;
  
   @Column()
-  padPro: number;
+  padPos: number;
 
   @Column()
   glicemiaPre: number;
  
   @Column()
-  glicemiaPro: number;
+  glicemiaPos: number;
 
   @Column()
   horarioTreino: number;

@@ -15,19 +15,19 @@ export class UpdatePrePosDto {
   pasPre: number;
 
   @JoiSchema(['UPDATE'], Joi.number().optional())
-  pasPro: number;
+  pasPos: number;
 
   @JoiSchema(['UPDATE'], Joi.number().optional())
   padPre: number;
 
   @JoiSchema(['UPDATE'], Joi.number().optional())
-  padPro: number;
+  padPos: number;
 
   @JoiSchema(['UPDATE'], Joi.number().optional())
   glicemiaPre: number;
 
   @JoiSchema(['UPDATE'], Joi.number().optional())
-  glicemiaPro: number;
+  glicemiaPos: number;
 
   @JoiSchema(['UPDATE'], Joi.number().optional())
   horarioTreino: number;

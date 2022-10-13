@@ -29,10 +29,10 @@ export class PrePosService {
     prePos.horarioPos = updatePrePosDto.horarioPos
     prePos.horarioPre = updatePrePosDto.horarioPre
     prePos.pasPre = updatePrePosDto.pasPre
-    prePos.pasPro = updatePrePosDto.pasPro
+    prePos.pasPos = updatePrePosDto.pasPos
     prePos.padPre = updatePrePosDto.padPre
-    prePos.padPro = updatePrePosDto.padPro
-    prePos.glicemiaPro = updatePrePosDto.glicemiaPro
+    prePos.padPos = updatePrePosDto.padPos
+    prePos.glicemiaPos = updatePrePosDto.glicemiaPos
     prePos.glicemiaPre = updatePrePosDto.glicemiaPre
     prePos.horarioTreino = updatePrePosDto.horarioTreino
     prePos.pseE = updatePrePosDto.pseE
