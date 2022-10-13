@@ -38,7 +38,6 @@ export class CreatePrePosDto{
   @JoiSchema(['UPDATE'], Joi.number().optional())
   pseEPos: number;
 
-
   @JoiSchema(['CREATE'], Joi.string().optional())
   observacao: string;
 }
