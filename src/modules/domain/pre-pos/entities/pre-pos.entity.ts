@@ -1,6 +1,5 @@
 import { BaseEntity } from 'src/common/entities/base.entity';
 import { Column, Entity } from 'typeorm';
-import * as moment from 'moment';
 
 @Entity()
 export class PrePos extends BaseEntity {
