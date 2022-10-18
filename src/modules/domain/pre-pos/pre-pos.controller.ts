@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Delete,
+  ForbiddenException,
   Get,
   Param,
   Patch,
@@ -12,6 +13,14 @@ import { JwtAuthGuard } from 'src/modules/infrastructure/auth/auth.guard';
 import { PrePosService } from './pre-pos.service';
 import { CreatePrePosDto } from './dto/create-pre_pos.dto';
 import { UpdatePrePosDto } from './dto/update-pre_pos.dto';
+import { AuthUser } from 'src/common/decorators/auth-user.decorator';
+import { User } from 'src/modules/infrastructure/user/entities/user.entity';
+import { JoiPipe } from 'nestjs-joi';
+import { PrePos } from './entities/pre-pos.entity';
+import { StringSchema } from 'joi';
+import { Pagination } from 'src/common/decorators/pagination.decorator';
+import { PaginationParams } from 'src/common/interfaces/pagination.interface';
+import { PaginationResponseDto } from 'src/common/dtos/pagination.dto';
 
 @Controller('prepos')
 @UseGuards(JwtAuthGuard)
@@ -19,30 +28,49 @@ export class PrePosController {
   constructor(private readonly prePosService: PrePosService) {}
 
   @Post('create')
-  create(@Body() createPrePosDto: CreatePrePosDto) {
-    return this.prePosService.create(createPrePosDto);
+  async create(
+    @AuthUser() user: User,
+    @Body(new JoiPipe({group:'CREATE'})) 
+    createPrePosDto: CreatePrePosDto): Promise<PrePos> {
+
+      if (!user) throw new ForbiddenException('User not logged in');
+
+      return await this.prePosService.create(createPrePosDto,user);
   }
 
-  @Get('get')
-  findAll() {
-    return this.prePosService.findAll();
+  @Get('list')
+  async findAll(
+    @AuthUser() user: User,
+    @Pagination() paginationParams: PaginationParams,
+  ): Promise<PaginationResponseDto<PrePos>>{ 
+    return new PaginationResponseDto<PrePos>(
+      await this.prePosService.findAll(paginationParams,user),
+    );
   }
 
   @Get('get/:id')
-  findOne(@Param('id') id: string) {
-    return this.prePosService.findOne(id);
+  async findOne(
+    @AuthUser() user: User,
+    @Param('id') id: string,
+  ): Promise<PrePos> {
+    return await this.prePosService.findOne(id, user);
   }
 
   @Patch('update/:id')
-  update(
+  async update(
+    @AuthUser() user: User,
     @Param('id') id: string,
-    @Body() updatePrePosDto: UpdatePrePosDto,
-  ) {
-    return this.prePosService.update(id, updatePrePosDto);
+    @Body(new JoiPipe({ group: 'UPDATE' }))
+    UpdatePrePosDto: UpdatePrePosDto,
+  ): Promise<PrePos> {
+    return await this.prePosService.update(id, UpdatePrePosDto, user);
   }
 
   @Delete('delete/:id')
-  remove(@Param('id') id: string) {
-    return this.prePosService.remove(id);
+  async remove(
+    @AuthUser() user: User,
+    @Param('id') id: string,
+  ): Promise<PrePos> {
+    return await this.prePosService.remove(id, user);
   }
 }

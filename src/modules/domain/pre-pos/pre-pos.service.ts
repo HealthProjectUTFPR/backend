@@ -1,6 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { ForbiddenException,Injectable,NotFoundException, } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { PaginationParams, PaginationResult } from 'src/common/interfaces/pagination.interface';
 import { Repository } from 'typeorm';
+import { User } from 'src/modules/infrastructure/user/entities/user.entity';
+import { Student } from '../student/entities/student.entity';
 import { CreatePrePosDto } from './dto/create-pre_pos.dto';
 import { UpdatePrePosDto } from './dto/update-pre_pos.dto';
 import { PrePos } from './entities/pre-pos.entity';
@@ -10,40 +13,82 @@ export class PrePosService {
   @InjectRepository(PrePos)
   private readonly prePosRepository: Repository<PrePos>;
 
-  async create(createPrePosDto: CreatePrePosDto) {
-    const prePos = this.prePosRepository.create(createPrePosDto);
+  async create(
+    createPrePosDto: CreatePrePosDto,
+    user: User,
+    ): Promise<PrePos> {
+    const prePos = this.prePosRepository.create({
+      ...createPrePosDto,
+      student: { id:  createPrePosDto.studentId},
+      createdBy: user,
+    });
+
     return await this.prePosRepository.save(prePos);
   }
 
-  async findAll() {
-    return await this.prePosRepository.find();
+  async findAll(
+    paginationParams: PaginationParams,
+    user: User,
+  ): Promise<PaginationResult<PrePos>> {
+    const prepos = await this.prePosRepository.findAndCount({
+      where: {createdBy: {id: user.id}},
+      skip: (paginationParams.page -1) * paginationParams.limit,
+      take: paginationParams.limit,
+      relations: ['student'],
+    });
+
+    const meta = {
+      itemsPerPage: +paginationParams.limit,
+      totalItems: +prepos[1],
+      currentPage: +paginationParams.page,
+      totalPages: +Math.ceil(prepos[1] / paginationParams.limit),
+    };
+
+    return {
+      data: prepos[0],
+      meta: meta,
+    };
   }
 
-  async findOne(id: string) {
-    return await this.prePosRepository.findOneBy({ id });
+  async findOne(id: string,
+     user: User,): Promise<PrePos> {
+    const prePos = await this.prePosRepository.findOne({
+      where: { id: id },
+      relations: ['createdBy', 'prepos'],
+    });
+    if (!prePos) throw new NotFoundException();
+    if (prePos.createdBy.id !== user.id) throw new ForbiddenException();
+
+    return prePos;
   }
 
-  async update(id: string, updatePrePosDto: UpdatePrePosDto) {
-    const prePos = await this.findOne(id);
-    prePos.date = updatePrePosDto.date
-    prePos.horarioPos = updatePrePosDto.horarioPos
-    prePos.horarioPre = updatePrePosDto.horarioPre
-    prePos.pasPre = updatePrePosDto.pasPre
-    prePos.pasPos = updatePrePosDto.pasPos
-    prePos.padPre = updatePrePosDto.padPre
-    prePos.padPos = updatePrePosDto.padPos
-    prePos.glicemiaPos = updatePrePosDto.glicemiaPos
-    prePos.glicemiaPre = updatePrePosDto.glicemiaPre
-    prePos.horarioTreino = updatePrePosDto.horarioTreino
-    prePos.pseEPre = updatePrePosDto.pseEPre
-    prePos.pseEPos = updatePrePosDto.pseEPos
-    prePos.observacao = updatePrePosDto.observacao
-    return await this.prePosRepository.save(prePos);
+  async update(
+    id: string, 
+    updatePrePosDto: UpdatePrePosDto,
+    user: User,): Promise<PrePos>{
+    let prePos = await this.prePosRepository.findOne({
+      where: {id: id},
+      relations: ['createdBy'],
+    });
+
+    if (prePos.createdBy.id !== user.id) throw new ForbiddenException();
+    if (updatePrePosDto.studentId)
+      prePos.student = {id: updatePrePosDto.studentId} as Student;
+    await this.prePosRepository.update(id,updatePrePosDto);
+    prePos = await this.prePosRepository.findOneBy({id: id});
+
+    return prePos
   }
 
-  async remove(id: string) {
-    const prePos = await this.findOne(id);
-    await this.prePosRepository.softRemove(prePos);
+  async remove(id: string,
+     user: User):  Promise<PrePos> {
+    const prePos = await this.prePosRepository.findOne({
+      where: { id: id },
+      relations: ['createdBy'],
+    });
+    if(prePos.createdBy.id !== user.id) throw new ForbiddenException();
+    await this.prePosRepository.softDelete(id);
+
     return prePos;
   }
 }

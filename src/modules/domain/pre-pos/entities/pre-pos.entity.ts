@@ -1,5 +1,8 @@
+import { Exclude } from 'class-transformer';
 import { BaseEntity } from 'src/common/entities/base.entity';
-import { Column, Entity } from 'typeorm';
+import { User } from 'src/modules/infrastructure/user/entities/user.entity';
+import { Column, Entity, JoinColumn, ManyToOne} from 'typeorm';
+import { Student } from '../../student/entities/student.entity';
 
 @Entity()
 export class PrePos extends BaseEntity {
@@ -41,5 +44,14 @@ export class PrePos extends BaseEntity {
 
   @Column()
   observacao: string;
+
+  // @ManyToOne(() => User, (user) => user.prepos)
+  @JoinColumn()
+  @Exclude()
+  createdBy: User;
+  
+  @ManyToOne(() => Student, (student) => student.prepos)
+  @JoinColumn()
+  student: Student;
 
 }
