@@ -54,7 +54,7 @@ export class PrePosService {
      user: User,): Promise<PrePos> {
     const prePos = await this.prePosRepository.findOne({
       where: { id: id },
-      relations: ['createdBy', 'prepos'],
+      relations: ['createdBy', 'student'],
     });
     if (!prePos) throw new NotFoundException();
     if (prePos.createdBy.id !== user.id) throw new ForbiddenException();
@@ -77,7 +77,7 @@ export class PrePosService {
     await this.prePosRepository.update(id,updatePrePosDto);
     prePos = await this.prePosRepository.findOneBy({id: id});
 
-    return prePos
+    return prePos;
   }
 
   async remove(id: string,
