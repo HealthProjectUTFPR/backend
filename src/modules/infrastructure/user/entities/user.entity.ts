@@ -12,9 +12,6 @@ export class User extends BaseEntity {
   email: string;
 
   @Column()
-  name: string;
-
-  @Column()
   password: string;
 
   @OneToMany(() => TodoItem, (todoItem) => todoItem.createdBy)
