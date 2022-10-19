@@ -1,5 +1,6 @@
 import { BaseEntity } from 'src/common/entities/base.entity';
 import { generateHash } from 'src/common/utils/hash.util';
+import { PrePos } from 'src/modules/domain/pre-pos/entities/pre-pos.entity';
 import { Student } from 'src/modules/domain/student/entities/student.entity';
 import { BeforeInsert, BeforeUpdate, Column, Entity, OneToMany } from 'typeorm';
 
@@ -13,6 +14,9 @@ export class User extends BaseEntity {
 
   @Column()
   password: string;
+
+  @OneToMany(() => PrePos, (PrePos) => PrePos.createdBy)
+  prepos: PrePos[];
 
   @OneToMany(() => Student, (student) => student.user)
   students: Student[];

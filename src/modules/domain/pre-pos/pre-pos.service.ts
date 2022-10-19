@@ -17,10 +17,11 @@ export class PrePosService {
     createPrePosDto: CreatePrePosDto,
     user: User,
     ): Promise<PrePos> {
+    
     const prePos = this.prePosRepository.create({
       ...createPrePosDto,
       student: { id:  createPrePosDto.studentId},
-      createdBy: user,
+      createdBy: user
     });
 
     return await this.prePosRepository.save(prePos);

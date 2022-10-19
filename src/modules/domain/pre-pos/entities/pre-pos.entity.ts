@@ -45,9 +45,9 @@ export class PrePos extends BaseEntity {
   @Column()
   observacao: string;
 
-  // @ManyToOne(() => User, (user) => user.prepos)
-  @JoinColumn()
+  @ManyToOne(() => User, (createdBy) => createdBy.prepos)
   @Exclude()
+  @JoinColumn()
   createdBy: User;
   
   @ManyToOne(() => Student, (student) => student.prepos)
