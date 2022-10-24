@@ -1,6 +1,6 @@
 import { BaseEntity } from 'src/common/entities/base.entity';
 import { generateHash } from 'src/common/utils/hash.util';
-import { Evaluation } from 'src/modules/domain/evaluations/base/entities/evaluation.entity';
+import { Evaluation } from 'src/modules/domain/evaluations/entities/evaluation.entity';
 import { TodoItem } from 'src/modules/domain/todo-item/entities/todo-item.entity';
 import { BeforeInsert, BeforeUpdate, Column, Entity, OneToMany } from 'typeorm';
 
