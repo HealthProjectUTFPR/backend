@@ -8,14 +8,7 @@ import { TestBatteries } from './entities/test-batteries.entity';
 import { User } from 'src/modules/infrastructure/user/entities/user.entity';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([
-      Evaluation,
-      Field,
-      TestBatteries,
-      User,
-    ]),
-  ],
+  imports: [TypeOrmModule.forFeature([Evaluation, Field, TestBatteries, User])],
   controllers: [EvaluationController],
   providers: [EvaluationService],
   exports: [TypeOrmModule],

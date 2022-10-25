@@ -1,4 +1,13 @@
-import { Body, Controller, ForbiddenException, Get, Param, Patch, Post, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  ForbiddenException,
+  Get,
+  Param,
+  Patch,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
 import { JoiPipe } from 'nestjs-joi';
 import { AuthUser } from 'src/common/decorators/auth-user.decorator';
 import { Pagination } from 'src/common/decorators/pagination.decorator';
@@ -28,13 +37,13 @@ export class EvaluationController {
 
     return await this.evaluationService.create(createEvaluationDto, user);
   }
-  
+
   @Get('list')
   async findAll(
     @AuthUser() user: User,
     @Pagination() paginationParams: PaginationParams,
     @Body(new JoiPipe({ group: 'FIND' }))
-    input: FindAllEvaluationDto
+    input: FindAllEvaluationDto,
   ): Promise<PaginationResponseDto<Evaluation>> {
     return new PaginationResponseDto<Evaluation>(
       await this.evaluationService.findAll(input, paginationParams, user),
@@ -45,7 +54,7 @@ export class EvaluationController {
   async findOne(
     @Param('id') id: string,
     @Body(new JoiPipe({ group: 'FIND' }))
-    input: FindOneEvaluationDto
+    input: FindOneEvaluationDto,
   ): Promise<Evaluation> {
     return await this.evaluationService.findOne(input);
   }
@@ -59,5 +68,4 @@ export class EvaluationController {
   ): Promise<Evaluation> {
     return await this.evaluationService.update(id, input, user);
   }
-  
 }

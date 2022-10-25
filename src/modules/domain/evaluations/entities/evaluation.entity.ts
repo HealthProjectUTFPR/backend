@@ -1,7 +1,14 @@
 import { Exclude } from 'class-transformer';
 import { BaseEntity } from 'src/common/entities/base.entity';
 import { User } from 'src/modules/infrastructure/user/entities/user.entity';
-import { Column, Entity, JoinColumn, JoinTable, ManyToOne, OneToMany } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  JoinTable,
+  ManyToOne,
+  OneToMany,
+} from 'typeorm';
 import { Field } from './field.entity';
 import { TestBatteries } from './test-batteries.entity';
 
