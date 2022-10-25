@@ -1,4 +1,5 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
+import { User } from 'src/modules/infrastructure/user/entities/user.entity';
 import { Evaluation } from '../entities/evaluation.entity';
 import { CardiorespiratoryCapacityFactory } from './cardiorespiratoryCapacity.factory';
 import { CardiorespiratoryCapacityDto } from './dto/cardiorespiratoryCapacity.dto';
@@ -32,10 +33,15 @@ export class CardiorespiratoryCapacityStrategy {
   ) {
     const recalculationResult = this.recalculateResult(input);
 
+    console.log('recalculationResult', recalculationResult);
+
     return recalculationResult === result;
   }
 
-  async create(input: CardiorespiratoryCapacityDto): Promise<Evaluation> {
+  async create(
+    input: CardiorespiratoryCapacityDto,
+    user: User,
+  ): Promise<string> {
     const sex = 'Homem';
     const age = 70;
     const { date, weight, time, finalFC, vo2Lmin, vo2MlKG, result } = input;
@@ -53,14 +59,17 @@ export class CardiorespiratoryCapacityStrategy {
         'Resultado inválido de acordo com os dados repassados!',
       );
 
-    return await this.cardiorespiratoryCapacityFactory.createOrUpdate({
-      date,
-      weight,
-      time,
-      finalFC,
-      vo2Lmin,
-      vo2MlKG,
-      result,
-    });
+    return await this.cardiorespiratoryCapacityFactory.createOrUpdate(
+      {
+        date,
+        weight,
+        time,
+        finalFC,
+        vo2Lmin,
+        vo2MlKG,
+        result,
+      },
+      user,
+    );
   }
 }

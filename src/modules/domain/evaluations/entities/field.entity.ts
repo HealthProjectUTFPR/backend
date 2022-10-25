@@ -11,6 +11,14 @@ export enum DataType {
   Dt_date = 'date',
 }
 
+export const StringToDataType = {
+  ['int']: DataType.Dt_int,
+  ['string']: DataType.Dt_string,
+  ['float']: DataType.Dt_float,
+  ['boolean']: DataType.Dt_boolean,
+  ['date']: DataType.Dt_date,
+};
+
 @Entity()
 export class Field extends BaseEntity {
   @Column()
@@ -27,8 +35,8 @@ export class Field extends BaseEntity {
   dataType: DataType;
 
   @ManyToOne(() => Evaluation, (evaluation) => evaluation.fields)
-  evaluationField: Evaluation;
+  evaluation: Evaluation;
 
   @ManyToOne(() => TestBatteries, (testBatteries) => testBatteries.fields)
-  testBatteriesField: TestBatteries;
+  testBatteriesField?: TestBatteries;
 }

@@ -20,8 +20,8 @@ export class Evaluation extends BaseEntity {
   @Column()
   result: string;
 
-  @OneToMany(() => Field, (field) => field.evaluationField)
-  fields: Field[];
+  @OneToMany(() => Field, (field) => field.evaluation)
+  fields?: Field[];
 
   @ManyToOne(() => User, (user) => user.evaluations)
   @JoinColumn()
@@ -30,5 +30,5 @@ export class Evaluation extends BaseEntity {
 
   @OneToMany(() => TestBatteries, (testBatteries) => testBatteries.evaluations)
   @JoinTable()
-  testBatteries: TestBatteries[];
+  testBatteries?: TestBatteries[];
 }

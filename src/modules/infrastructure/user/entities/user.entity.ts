@@ -2,7 +2,7 @@ import { BaseEntity } from 'src/common/entities/base.entity';
 import { generateHash } from 'src/common/utils/hash.util';
 import { Evaluation } from 'src/modules/domain/evaluations/entities/evaluation.entity';
 import { TodoItem } from 'src/modules/domain/todo-item/entities/todo-item.entity';
-import { BeforeInsert, BeforeUpdate, Column, Entity, OneToMany, CreateDateColumn } from 'typeorm';
+import { BeforeInsert, BeforeUpdate, Column, Entity, OneToMany } from 'typeorm';
 
 @Entity()
 export class User extends BaseEntity {

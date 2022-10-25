@@ -1,6 +1,5 @@
 import * as Joi from 'joi';
-import { JoiSchema} from 'nestjs-joi';
-
+import { JoiSchema } from 'nestjs-joi';
 
 export class UpdateUserDto {
   @JoiSchema(['EDIT'], Joi.string().optional())
