@@ -16,6 +16,9 @@ import { PaginationParams } from 'src/common/interfaces/pagination.interface';
 import { JwtAuthGuard } from 'src/modules/infrastructure/auth/auth.guard';
 import { User } from 'src/modules/infrastructure/user/entities/user.entity';
 import { CreateEvaluationDto } from './dto/create-evaluation.dto';
+import { FindAllEvaluationDto } from './dto/findall-evaluation.dto';
+import { FindOneEvaluationDto } from './dto/findone-evaluation.dto';
+import { UpdateEvaluationDto } from './dto/update-evaluation.dto';
 import { Evaluation } from './entities/evaluation.entity';
 import { EvaluationService } from './evaluation.service';
 
@@ -39,15 +42,21 @@ export class EvaluationController {
   async findAll(
     @AuthUser() user: User,
     @Pagination() paginationParams: PaginationParams,
+    @Body(new JoiPipe({ group: 'FIND' }))
+    input: FindAllEvaluationDto,
   ): Promise<PaginationResponseDto<Evaluation>> {
     return new PaginationResponseDto<Evaluation>(
-      await this.evaluationService.findAll(paginationParams, user),
+      await this.evaluationService.findAll(input, paginationParams, user),
     );
   }
 
   @Get('get/:id')
-  async findOne(@Param('id') id: string): Promise<Evaluation> {
-    return await this.evaluationService.findOne(id);
+  async findOne(
+    @Param('id') id: string,
+    @Body(new JoiPipe({ group: 'FIND' }))
+    input: FindOneEvaluationDto,
+  ): Promise<Evaluation> {
+    return await this.evaluationService.findOne(input);
   }
 
   @Patch('update/:id')
@@ -55,8 +64,8 @@ export class EvaluationController {
     @AuthUser() user: User,
     @Param('id') id: string,
     @Body(new JoiPipe({ group: 'UPDATE' }))
-    updateEvaluationDto: CreateEvaluationDto,
+    input: UpdateEvaluationDto,
   ): Promise<Evaluation> {
-    return await this.evaluationService.update(id, updateEvaluationDto, user);
+    return await this.evaluationService.update(id, input, user);
   }
 }

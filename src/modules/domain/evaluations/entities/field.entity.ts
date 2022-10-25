@@ -1,7 +1,7 @@
 import { BaseEntity } from 'src/common/entities/base.entity';
 import { Column, Entity, ManyToOne } from 'typeorm';
-import { Evaluation } from '../../evaluations/base/entities/evaluation.entity';
-import { TestBatteries } from '../../test-batteries/entities/test-batteries.entity';
+import { Evaluation } from './evaluation.entity';
+import { TestBatteries } from './test-batteries.entity';
 
 export enum DataType {
   Dt_int = 'int',

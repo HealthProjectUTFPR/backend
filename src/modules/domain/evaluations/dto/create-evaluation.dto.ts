@@ -2,12 +2,12 @@ import * as Joi from 'joi';
 import { JoiSchema } from 'nestjs-joi';
 import { User } from 'src/modules/infrastructure/user/entities/user.entity';
 
-export class CreateTestBatteriesDto {
+export class CreateEvaluationDto {
   @JoiSchema(['CREATE'], Joi.string().required())
-  name: string;
+  type: string;
 
-  @JoiSchema(['CREATE'], Joi.string().optional())
-  evaluationsId: string;
+  @JoiSchema(['CREATE'], Joi.object().required())
+  data: object;
 
   @JoiSchema(['CREATE'], Joi.forbidden())
   createdBy: User;

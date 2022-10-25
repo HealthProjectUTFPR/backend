@@ -9,8 +9,8 @@ import {
   ManyToOne,
   OneToMany,
 } from 'typeorm';
-import { Field } from '../../../field/entities/field.entity';
-import { TestBatteries } from '../../../test-batteries/entities/test-batteries.entity';
+import { Field } from './field.entity';
+import { TestBatteries } from './test-batteries.entity';
 
 @Entity()
 export class Evaluation extends BaseEntity {
