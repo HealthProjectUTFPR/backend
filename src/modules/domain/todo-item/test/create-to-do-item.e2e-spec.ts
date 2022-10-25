@@ -23,6 +23,7 @@ beforeAll(async () => {
 
   await appRequest.post('/auth/register').send({
     email: 'test1@test.com',
+    name: 'Isaac Almeida',
     password: '12345678',
   });
 
@@ -38,6 +39,7 @@ beforeAll(async () => {
 
   await appRequest.post('/auth/register').send({
     email: 'test2@test.com',
+    name: 'Isaac',
     password: '12345678',
   });
 
