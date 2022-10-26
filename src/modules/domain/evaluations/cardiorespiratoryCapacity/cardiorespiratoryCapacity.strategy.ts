@@ -41,7 +41,7 @@ export class CardiorespiratoryCapacityStrategy {
   async create(
     input: CardiorespiratoryCapacityDto,
     user: User,
-  ): Promise<string> {
+  ): Promise<Evaluation> {
     const sex = 'Homem';
     const age = 70;
     const { date, weight, time, finalFC, vo2Lmin, vo2MlKG, result } = input;

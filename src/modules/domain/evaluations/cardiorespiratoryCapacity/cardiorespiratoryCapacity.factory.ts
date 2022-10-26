@@ -3,13 +3,16 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/modules/infrastructure/user/entities/user.entity';
 import { Repository } from 'typeorm';
 import { Evaluation } from '../entities/evaluation.entity';
-import { Field, StringToDataType } from '../entities/field.entity';
+import { Field } from '../entities/field.entity';
 import { CardiorespiratoryCapacityDto } from './dto/cardiorespiratoryCapacity.dto';
 
 @Injectable()
 export class CardiorespiratoryCapacityFactory {
   @InjectRepository(Evaluation)
   private readonly evaluationsRepository: Repository<Evaluation>;
+
+  @InjectRepository(Field)
+  private readonly fieldRepository: Repository<Field>;
 
   private parseFieldsToString(data: Partial<CardiorespiratoryCapacityDto>) {
     const values = Object.entries(data);
@@ -22,7 +25,7 @@ export class CardiorespiratoryCapacityFactory {
       inputs.push({
         name: key,
         value: String(value),
-        dataType: StringToDataType[type],
+        dataType: type,
       });
     });
 
@@ -32,13 +35,40 @@ export class CardiorespiratoryCapacityFactory {
   async createOrUpdate(
     input: CardiorespiratoryCapacityDto,
     user: User,
-  ): Promise<string> {
+  ): Promise<Evaluation> {
     const { result, ...rest } = input;
 
-    const inputs = this.parseFieldsToString(rest);
+    const arrayOfFields = this.parseFieldsToString(rest);
 
-    console.log('user', inputs, result);
+    let evaluation = this.evaluationsRepository.create({
+      name: 'Sarcopenia',
+      result,
+      createdBy: user,
+    });
 
-    return 'teste';
+    evaluation = await this.evaluationsRepository.save(evaluation);
+
+    const fields: Field[] = await Promise.all(
+      arrayOfFields.map(async (field) => {
+        const entityField = this.fieldRepository.create({
+          ...field,
+          evaluation,
+        } as Field);
+
+        return await this.fieldRepository.save(entityField);
+      }),
+    );
+
+    evaluation.fields = fields;
+    const { id } = evaluation;
+
+    await evaluation.save();
+
+    return await this.evaluationsRepository.findOne({
+      where: {
+        id: id,
+      },
+      relations: ['fields'],
+    });
   }
 }

@@ -32,7 +32,7 @@ export class EvaluationController {
     @AuthUser() user: User,
     @Body(new JoiPipe({ group: 'CREATE' }))
     createEvaluationDto: CreateEvaluationDto,
-  ): Promise<string> {
+  ): Promise<Evaluation> {
     if (!user) throw new ForbiddenException('User not logged in');
 
     return await this.evaluationService.create(createEvaluationDto, user);

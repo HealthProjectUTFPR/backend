@@ -18,7 +18,7 @@ export class EvaluationService {
     private readonly cardiorespiratoryCapacityStrategy: CardiorespiratoryCapacityStrategy,
   ) {}
 
-  async create(input: CreateEvaluationDto, user: User): Promise<string> {
+  async create(input: CreateEvaluationDto, user: User): Promise<Evaluation> {
     const { data, type } = input;
 
     switch (type) {
