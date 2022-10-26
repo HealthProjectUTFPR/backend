@@ -1,4 +1,4 @@
-import { TestBatteries } from 'src/modules/domain/test-batteries/entities/test-batteries.entity';
+import { TestBatteries } from '../entities/test-batteries.entity';
 
 export interface IField {
   value: number | string | boolean | Date;
