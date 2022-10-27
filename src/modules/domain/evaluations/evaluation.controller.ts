@@ -41,7 +41,6 @@ export class EvaluationController {
     try {
       return await this.evaluationService.create(createEvaluationDto, user);
     } catch (error) {
-      console.log({ ...error });
       throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }

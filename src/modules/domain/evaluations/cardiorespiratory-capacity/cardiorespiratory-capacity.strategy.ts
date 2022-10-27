@@ -34,8 +34,6 @@ export class CardiorespiratoryCapacityStrategy {
   ) {
     const recalculationResult = this.recalculateResult(input);
 
-    console.log('recalculationResult', recalculationResult);
-
     return recalculationResult === result;
   }
 
