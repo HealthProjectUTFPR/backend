@@ -3,19 +3,31 @@ import {
   Injectable,
   InternalServerErrorException,
 } from '@nestjs/common';
+import { Evaluation } from '../entities/evaluation.entity';
 import { SarcopeniaDto } from './dto/sarcopenia.dto';
+import { ISarcopenia } from './interfaces/sarcopenia.interface';
+import { SarcopeniaFactory } from './sarcopenia.factory';
 
 @Injectable()
 export class SarcopeniaStrategy {
-  async recalculateResult({
+  constructor(private readonly sarcopeniaFactory: SarcopeniaFactory) {}
+
+  private recalculateResult({
+    sex,
+    age,
     weight,
     measuredMuscleMass,
     usualWalkingSpeed,
     handGripStrength,
     muscleMassIndex,
     calfCircumference,
-    result,
-  }) {}
+  }: Partial<ISarcopenia>): Partial<ISarcopenia> {}
+
+  private validateResult(result: string, input: Partial<ISarcopenia>): boolean {
+    const recalculateResult = this.recalculateResult(input);
+
+    return recalculateResult === result;
+  }
 
   async create(input: SarcopeniaDto): Promise<Evaluation> {
     try {
