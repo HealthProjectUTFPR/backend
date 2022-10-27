@@ -1,12 +1,19 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Body,
+  Injectable,
+  UsePipes,
+  ValidationPipe,
+} from '@nestjs/common';
 import { User } from 'src/modules/infrastructure/user/entities/user.entity';
-import { Evaluation } from '../entities/evaluation.entity';
-import { CardiorespiratoryCapacityFactory } from './cardiorespiratoryCapacity.factory';
-import { CardiorespiratoryCapacityDto } from './dto/cardiorespiratoryCapacity.dto';
-import { calculateCardiorespiratoryCapacityResult } from './helpers/calculateResult';
-import { calculateVO2LMin } from './helpers/calculateVO2Lmin';
-import { calculateVO2MlKg } from './helpers/calculateVO2MlKg';
-import { ICardiorespiratoryCapacity } from './interface/cardiorespiratoryCapacity.interface';
+import { CardiorespiratoryCapacityFactory } from './cardiorespiratory-capacity.factory';
+import { CardioRespiratoryCapacitySchema } from './dto/cardiorespiratory-capacity.dto';
+import { CreateCardiorespiratoryCapacityDto } from './dto/create-cardiorespiratory-capacity.dto';
+import { GetCardiorespiratoryCapacityDto } from './dto/get-cardiorespiratory-capacity.dto';
+import { calculateCardiorespiratoryCapacityResult } from './helpers/calculate-result';
+import { calculateVO2LMin } from './helpers/calculate-vo2-lmin';
+import { calculateVO2MlKg } from './helpers/calculate-vo2-ml-kg';
+import { ICardiorespiratoryCapacity } from './interface/cardiorespiratory-capacity.interface';
 
 @Injectable()
 export class CardiorespiratoryCapacityStrategy {
@@ -39,9 +46,12 @@ export class CardiorespiratoryCapacityStrategy {
   }
 
   async create(
-    input: CardiorespiratoryCapacityDto,
+    input: CreateCardiorespiratoryCapacityDto,
     user: User,
-  ): Promise<Evaluation> {
+    type: string,
+  ): Promise<GetCardiorespiratoryCapacityDto> {
+    await CardioRespiratoryCapacitySchema.validateAsync(input);
+
     const sex = 'Homem';
     const age = 70;
     const { date, weight, time, finalFC, vo2Lmin, vo2MlKG, result } = input;
@@ -59,17 +69,16 @@ export class CardiorespiratoryCapacityStrategy {
         'Resultado inválido de acordo com os dados repassados!',
       );
 
-    return await this.cardiorespiratoryCapacityFactory.createOrUpdate(
-      {
-        date,
-        weight,
-        time,
-        finalFC,
-        vo2Lmin,
-        vo2MlKG,
-        result,
-      },
-      user,
-    );
+    const data: CreateCardiorespiratoryCapacityDto = {
+      date,
+      weight,
+      time,
+      finalFC,
+      vo2Lmin,
+      vo2MlKG,
+      result,
+    };
+
+    return await this.cardiorespiratoryCapacityFactory.create(data, user, type);
   }
 }

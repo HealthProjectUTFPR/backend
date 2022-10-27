@@ -32,6 +32,7 @@
     "class-sanitizer": "^1.0.1",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.13.2",
+    "dayjs": "1.11.6",
     "joi": "^17.6.0",
     "nestjs-joi": "^1.8.0",
     "passport": "^0.6.0",

@@ -1,4 +1,4 @@
-import { ICardiorespiratoryCapacity } from '../../interface/cardiorespiratoryCapacity.interface';
+import { ICardiorespiratoryCapacity } from '../../interface/cardiorespiratory-capacity.interface';
 
 function verifyCardiorespiratoryCapacityOfMan({
   vo2MlKG,

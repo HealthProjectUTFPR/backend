@@ -1,8 +1,8 @@
 import * as Joi from 'joi';
 import { JoiSchema } from 'nestjs-joi';
 
-export class CardiorespiratoryCapacityDto {
-  @JoiSchema(Joi.string().required())
+export class CreateCardiorespiratoryCapacityDto {
+  @JoiSchema(Joi.date().required())
   date: Date;
 
   @JoiSchema(Joi.number().required())

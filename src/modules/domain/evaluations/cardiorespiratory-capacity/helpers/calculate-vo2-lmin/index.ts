@@ -1,4 +1,4 @@
-import { ICardiorespiratoryCapacity } from '../../interface/cardiorespiratoryCapacity.interface';
+import { ICardiorespiratoryCapacity } from '../../interface/cardiorespiratory-capacity.interface';
 
 export const calculateVO2LMin = ({
   weight,

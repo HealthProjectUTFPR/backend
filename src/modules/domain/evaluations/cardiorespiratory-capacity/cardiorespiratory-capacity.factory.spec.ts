@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { CardiorespiratoryCapacityFactory } from './cardiorespiratoryCapacity.factory';
+import { CardiorespiratoryCapacityFactory } from './cardiorespiratory-capacity.factory';
 
 describe('CardiorespiratoryCapacityFactory', () => {
   let service: CardiorespiratoryCapacityFactory;

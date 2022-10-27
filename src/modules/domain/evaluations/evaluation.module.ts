@@ -6,8 +6,8 @@ import { Evaluation } from './entities/evaluation.entity';
 import { Field } from './entities/field.entity';
 import { TestBatteries } from './entities/test-batteries.entity';
 import { User } from 'src/modules/infrastructure/user/entities/user.entity';
-import { CardiorespiratoryCapacityStrategy } from './cardiorespiratoryCapacity/cardiorespiratoryCapacity.strategy';
-import { CardiorespiratoryCapacityFactory } from './cardiorespiratoryCapacity/cardiorespiratoryCapacity.factory';
+import { CardiorespiratoryCapacityStrategy } from './cardiorespiratory-capacity/cardiorespiratory-capacity.strategy';
+import { CardiorespiratoryCapacityFactory } from './cardiorespiratory-capacity/cardiorespiratory-capacity.factory';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Evaluation, Field, TestBatteries, User])],

@@ -6,4 +6,5 @@ export interface ICardiorespiratoryCapacity {
   finalFC: number;
   time: number;
   age: number;
+  date: Date;
 }

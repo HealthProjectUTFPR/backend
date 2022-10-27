@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { CardiorespiratoryCapacityStrategy } from './cardiorespiratoryCapacity.strategy';
+import { CardiorespiratoryCapacityStrategy } from './cardiorespiratory-capacity.strategy';
 
 describe('CardiorespiratoryCapacityStrategy', () => {
   let service: CardiorespiratoryCapacityStrategy;
