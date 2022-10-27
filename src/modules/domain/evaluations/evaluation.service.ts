@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { PaginationResponseDto } from 'src/common/dtos/pagination.dto';
 import {
   PaginationParams,
   PaginationResult,
@@ -43,17 +44,28 @@ export class EvaluationService {
     input: FindAllEvaluationDto,
     paginationParams: PaginationParams,
     user: User,
-  ): Promise<PaginationResult<Evaluation>> {
-    const { type, where } = input;
+  ): Promise<PaginationResponseDto<ResponseEvaluation[]>> {
+    const { orderBy } = input;
 
-    switch (type) {
-      case 'sarcopenia':
-        console.log('Alguma Coisa');
-        break;
-      default:
-        break;
-    }
-    return;
+    const cardioEvaluations =
+      await this.cardiorespiratoryCapacityStrategy.getAll(
+        orderBy,
+        paginationParams,
+      );
+
+    const cardioEvaluationsLength = cardioEvaluations.length;
+
+    const meta = {
+      itemsPerPage: +paginationParams.limit,
+      totalItems: +cardioEvaluationsLength,
+      currentPage: +paginationParams.page,
+      totalPages: +Math.ceil(cardioEvaluationsLength / paginationParams.limit),
+    };
+
+    return {
+      meta: meta,
+      data: cardioEvaluations,
+    };
   }
 
   async findOne(input: FindOneEvaluationDto): Promise<Evaluation> {

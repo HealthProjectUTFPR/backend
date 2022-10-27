@@ -4,8 +4,10 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { PaginationParams } from 'src/common/interfaces/pagination.interface';
 import { User } from 'src/modules/infrastructure/user/entities/user.entity';
 import { Repository } from 'typeorm';
+import { FindAllEvaluationDto } from '../dto/findall-evaluation.dto';
 import { Evaluation } from '../entities/evaluation.entity';
 import { CardiorespiratoryCapacityFactory } from './cardiorespiratory-capacity.factory';
 import { CardioRespiratoryCapacitySchema } from './dto/cardiorespiratory-capacity.dto';
@@ -120,6 +122,7 @@ export class CardiorespiratoryCapacityStrategy {
     const evaluation = await this.evaluationRepository.findOne({
       where: {
         id,
+        deletedAt: null,
       },
       relations: ['fields'],
     });
@@ -144,5 +147,17 @@ export class CardiorespiratoryCapacityStrategy {
       newData,
       evaluation,
     );
+  }
+
+  async getAll(
+    orderBy: string,
+    paginationParams: PaginationParams,
+  ): Promise<GetCardiorespiratoryCapacityDto[]> {
+    const evaluations = this.cardiorespiratoryCapacityFactory.getAll(
+      orderBy,
+      paginationParams,
+    );
+
+    return evaluations;
   }
 }

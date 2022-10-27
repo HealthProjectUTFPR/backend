@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/modules/infrastructure/user/entities/user.entity';
-import { Repository } from 'typeorm';
+import { Equal, Not, Repository } from 'typeorm';
 import { Evaluation } from '../entities/evaluation.entity';
 import { Field } from '../entities/field.entity';
 import { CreateCardiorespiratoryCapacityDto } from './dto/create-cardiorespiratory-capacity.dto';
@@ -9,6 +9,7 @@ import { GetCardiorespiratoryCapacityDto } from './dto/get-cardiorespiratory-cap
 import { ICardiorespiratoryCapacity } from './interface/cardiorespiratory-capacity.interface';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
+import { PaginationParams } from 'src/common/interfaces/pagination.interface';
 dayjs.extend(customParseFormat);
 
 @Injectable()
@@ -43,7 +44,7 @@ export class CardiorespiratoryCapacityFactory {
   private parseFieldsToCorrectType(
     data: Evaluation,
   ): GetCardiorespiratoryCapacityDto {
-    const { id, createdAt, updatedAt, result, deletedAt, fields } = data;
+    const { id, name, createdAt, updatedAt, result, deletedAt, fields } = data;
 
     const parsedFields: Partial<ICardiorespiratoryCapacity> = {};
 
@@ -72,13 +73,14 @@ export class CardiorespiratoryCapacityFactory {
     const { date, time, vo2MlKG, weight, vo2Lmin, finalFC } = parsedFields;
 
     const returnedValues: GetCardiorespiratoryCapacityDto = {
+      id,
+      name,
       date,
       time,
       vo2MlKG,
       weight,
       vo2Lmin,
       finalFC,
-      id,
       result,
       createdAt,
       updatedAt,
@@ -155,10 +157,38 @@ export class CardiorespiratoryCapacityFactory {
       }),
     );
 
+    evaluation.updatedAt = new Date();
     evaluation.result = result;
 
     evaluation.save();
 
     return this.parseFieldsToCorrectType(evaluation);
+  }
+
+  async getAll(
+    orderBy: string,
+    paginationParams: PaginationParams,
+  ): Promise<GetCardiorespiratoryCapacityDto[]> {
+    const { page, limit } = paginationParams;
+
+    const evaluations = await this.evaluationsRepository.find({
+      where: {
+        name: 'ACR',
+        deletedAt: null,
+      },
+      skip: (page - 1) * limit,
+      take: limit,
+      relations: ['fields'],
+      order: {
+        [orderBy]: 'DESC',
+      },
+    });
+
+    const parsedEvaluations: GetCardiorespiratoryCapacityDto[] =
+      evaluations.map((item) => {
+        return this.parseFieldsToCorrectType(item);
+      });
+
+    return parsedEvaluations;
   }
 }

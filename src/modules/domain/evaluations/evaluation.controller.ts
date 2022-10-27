@@ -45,8 +45,8 @@ export class EvaluationController {
     @Pagination() paginationParams: PaginationParams,
     @Body(new JoiPipe({ group: 'FIND' }))
     input: FindAllEvaluationDto,
-  ): Promise<PaginationResponseDto<Evaluation>> {
-    return new PaginationResponseDto<Evaluation>(
+  ): Promise<PaginationResponseDto<ResponseEvaluation[]>> {
+    return new PaginationResponseDto<ResponseEvaluation[]>(
       await this.evaluationService.findAll(input, paginationParams, user),
     );
   }

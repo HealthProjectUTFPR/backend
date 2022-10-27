@@ -6,6 +6,9 @@ export class GetCardiorespiratoryCapacityDto extends CreateCardiorespiratoryCapa
   @JoiSchema(Joi.string().required())
   id: string;
 
+  @JoiSchema(Joi.string().required())
+  name: string;
+
   @JoiSchema(Joi.date().required())
   createdAt: Date;
 
