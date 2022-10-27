@@ -1,10 +1,4 @@
-import {
-  BadRequestException,
-  Body,
-  Injectable,
-  UsePipes,
-  ValidationPipe,
-} from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { User } from 'src/modules/infrastructure/user/entities/user.entity';
 import { CardiorespiratoryCapacityFactory } from './cardiorespiratory-capacity.factory';
 import { CardioRespiratoryCapacitySchema } from './dto/cardiorespiratory-capacity.dto';
