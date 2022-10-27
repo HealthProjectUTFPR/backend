@@ -1,15 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import dayjs from 'dayjs';
+import customParseFormat from 'dayjs/plugin/customParseFormat';
+import { PaginationParams } from 'src/common/interfaces/pagination.interface';
 import { User } from 'src/modules/infrastructure/user/entities/user.entity';
-import { Equal, Not, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { Evaluation } from '../entities/evaluation.entity';
 import { Field } from '../entities/field.entity';
 import { CreateCardiorespiratoryCapacityDto } from './dto/create-cardiorespiratory-capacity.dto';
 import { GetCardiorespiratoryCapacityDto } from './dto/get-cardiorespiratory-capacity.dto';
 import { ICardiorespiratoryCapacity } from './interface/cardiorespiratory-capacity.interface';
-import dayjs from 'dayjs';
-import customParseFormat from 'dayjs/plugin/customParseFormat';
-import { PaginationParams } from 'src/common/interfaces/pagination.interface';
 dayjs.extend(customParseFormat);
 
 @Injectable()

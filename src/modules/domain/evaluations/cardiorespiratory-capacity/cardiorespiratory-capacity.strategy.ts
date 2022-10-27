@@ -7,11 +7,11 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { PaginationParams } from 'src/common/interfaces/pagination.interface';
 import { User } from 'src/modules/infrastructure/user/entities/user.entity';
 import { Repository } from 'typeorm';
-import { FindAllEvaluationDto } from '../dto/findall-evaluation.dto';
 import { Evaluation } from '../entities/evaluation.entity';
 import { CardiorespiratoryCapacityFactory } from './cardiorespiratory-capacity.factory';
 import { CardioRespiratoryCapacitySchema } from './dto/cardiorespiratory-capacity.dto';
 import { CreateCardiorespiratoryCapacityDto } from './dto/create-cardiorespiratory-capacity.dto';
+import { GetAllCardiorespiratoryCapacityDto } from './dto/get-all-cardiorespiratory-capacity.dto';
 import { GetCardiorespiratoryCapacityDto } from './dto/get-cardiorespiratory-capacity.dto';
 import { UpdateCardiorespiratoryCapacityDto } from './dto/update-cardiorespiratory-capacity.dto';
 import { calculateCardiorespiratoryCapacityResult } from './helpers/calculate-result';
@@ -152,12 +152,17 @@ export class CardiorespiratoryCapacityStrategy {
   async getAll(
     orderBy: string,
     paginationParams: PaginationParams,
-  ): Promise<GetCardiorespiratoryCapacityDto[]> {
-    const evaluations = this.cardiorespiratoryCapacityFactory.getAll(
+  ): Promise<GetAllCardiorespiratoryCapacityDto> {
+    const evaluations = await this.cardiorespiratoryCapacityFactory.getAll(
       orderBy,
       paginationParams,
     );
 
-    return evaluations;
+    const returnedData: GetAllCardiorespiratoryCapacityDto = {
+      evaluations,
+      count: evaluations.length,
+    };
+
+    return returnedData;
   }
 }

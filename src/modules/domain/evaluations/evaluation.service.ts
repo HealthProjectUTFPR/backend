@@ -1,9 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PaginationResponseDto } from 'src/common/dtos/pagination.dto';
-import {
-  PaginationParams,
-  PaginationResult,
-} from 'src/common/interfaces/pagination.interface';
+import { PaginationParams } from 'src/common/interfaces/pagination.interface';
 import { User } from 'src/modules/infrastructure/user/entities/user.entity';
 import { CardiorespiratoryCapacityStrategy } from './cardiorespiratory-capacity/cardiorespiratory-capacity.strategy';
 import { CreateCardiorespiratoryCapacityDto } from './cardiorespiratory-capacity/dto/create-cardiorespiratory-capacity.dto';
@@ -47,24 +44,22 @@ export class EvaluationService {
   ): Promise<PaginationResponseDto<ResponseEvaluation[]>> {
     const { orderBy } = input;
 
-    const cardioEvaluations =
+    const { evaluations: cardioEvaluation, count: countCardioEvaluation } =
       await this.cardiorespiratoryCapacityStrategy.getAll(
         orderBy,
         paginationParams,
       );
 
-    const cardioEvaluationsLength = cardioEvaluations.length;
-
     const meta = {
       itemsPerPage: +paginationParams.limit,
-      totalItems: +cardioEvaluationsLength,
+      totalItems: +countCardioEvaluation,
       currentPage: +paginationParams.page,
-      totalPages: +Math.ceil(cardioEvaluationsLength / paginationParams.limit),
+      totalPages: +Math.ceil(countCardioEvaluation / paginationParams.limit),
     };
 
     return {
       meta: meta,
-      data: cardioEvaluations,
+      data: cardioEvaluation,
     };
   }
 
