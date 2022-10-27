@@ -3,8 +3,6 @@ import {
   Controller,
   ForbiddenException,
   Get,
-  HttpException,
-  HttpStatus,
   Param,
   Patch,
   Post,
@@ -34,15 +32,11 @@ export class EvaluationController {
   async create(
     @AuthUser() user: User,
     @Body(new JoiPipe({ group: 'CREATE' }))
-    createEvaluationDto: CreateEvaluationDto,
+    input: CreateEvaluationDto,
   ): Promise<ResponseEvaluation> {
-    if (!user) throw new ForbiddenException('User not logged in');
+    if (!user) throw new ForbiddenException('Sessão de usuário inválida');
 
-    try {
-      return await this.evaluationService.create(createEvaluationDto, user);
-    } catch (error) {
-      throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
-    }
+    return await this.evaluationService.create(input, user);
   }
 
   @Get('list')
@@ -72,7 +66,9 @@ export class EvaluationController {
     @Param('id') id: string,
     @Body(new JoiPipe({ group: 'UPDATE' }))
     input: UpdateEvaluationDto,
-  ): Promise<Evaluation> {
-    return await this.evaluationService.update(id, input, user);
+  ): Promise<ResponseEvaluation> {
+    if (!user) throw new ForbiddenException('Sessão de usuário inválida');
+
+    return await this.evaluationService.update(id, input);
   }
 }

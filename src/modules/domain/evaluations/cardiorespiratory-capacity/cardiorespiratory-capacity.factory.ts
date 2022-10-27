@@ -130,4 +130,35 @@ export class CardiorespiratoryCapacityFactory {
 
     return this.parseFieldsToCorrectType(evaluation);
   }
+
+  async update(
+    id: string,
+    type: string,
+    input: CreateCardiorespiratoryCapacityDto,
+    evaluation: Evaluation,
+  ): Promise<GetCardiorespiratoryCapacityDto> {
+    const { result, ...rest } = input;
+
+    const arrayOfFields = this.parseFieldsToString(rest);
+
+    const { fields } = evaluation;
+
+    await Promise.all(
+      arrayOfFields.map((field, idx) => {
+        const newField: Field = fields[idx];
+
+        newField.name = field.name;
+        newField.value = field.value;
+        newField.dataType = field.dataType;
+
+        return this.fieldRepository.update(newField.id, newField);
+      }),
+    );
+
+    evaluation.result = result;
+
+    evaluation.save();
+
+    return this.parseFieldsToCorrectType(evaluation);
+  }
 }

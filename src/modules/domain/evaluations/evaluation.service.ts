@@ -6,6 +6,7 @@ import {
 import { User } from 'src/modules/infrastructure/user/entities/user.entity';
 import { CardiorespiratoryCapacityStrategy } from './cardiorespiratory-capacity/cardiorespiratory-capacity.strategy';
 import { CreateCardiorespiratoryCapacityDto } from './cardiorespiratory-capacity/dto/create-cardiorespiratory-capacity.dto';
+import { UpdateCardiorespiratoryCapacityDto } from './cardiorespiratory-capacity/dto/update-cardiorespiratory-capacity.dto';
 import { CreateEvaluationDto } from './dto/create-evaluation.dto';
 import { FindAllEvaluationDto } from './dto/findall-evaluation.dto';
 import { FindOneEvaluationDto } from './dto/findone-evaluation.dto';
@@ -71,14 +72,16 @@ export class EvaluationService {
   async update(
     id: string,
     input: UpdateEvaluationDto,
-    user: User,
-  ): Promise<Evaluation> {
+  ): Promise<ResponseEvaluation> {
     const { type, data } = input;
 
     switch (type) {
-      case 'sarcopenia':
-        console.log('Alguma Coisa');
-        break;
+      case 'ACR':
+        return await this.cardiorespiratoryCapacityStrategy.update(
+          id,
+          type,
+          data as UpdateCardiorespiratoryCapacityDto,
+        );
       default:
         break;
     }
