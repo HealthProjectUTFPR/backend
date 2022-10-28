@@ -165,4 +165,17 @@ export class CardiorespiratoryCapacityStrategy {
 
     return returnedData;
   }
+
+  async getByID(id: string): Promise<GetCardiorespiratoryCapacityDto> {
+    const evaluation = await this.evaluationRepository.findOne({
+      where: { id, deletedAt: null },
+      relations: ['fields'],
+    });
+
+    if (!evaluation) {
+      throw new NotFoundException(`Avaliação com id ${id} não encontrada`);
+    }
+
+    return this.cardiorespiratoryCapacityFactory.getOne(evaluation);
+  }
 }

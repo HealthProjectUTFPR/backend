@@ -6,10 +6,7 @@ import { CardiorespiratoryCapacityStrategy } from './cardiorespiratory-capacity/
 import { CreateCardiorespiratoryCapacityDto } from './cardiorespiratory-capacity/dto/create-cardiorespiratory-capacity.dto';
 import { UpdateCardiorespiratoryCapacityDto } from './cardiorespiratory-capacity/dto/update-cardiorespiratory-capacity.dto';
 import { CreateEvaluationDto } from './dto/create-evaluation.dto';
-import { FindAllEvaluationDto } from './dto/findall-evaluation.dto';
-import { FindOneEvaluationDto } from './dto/findone-evaluation.dto';
 import { UpdateEvaluationDto } from './dto/update-evaluation.dto';
-import { Evaluation } from './entities/evaluation.entity';
 import { ResponseEvaluation } from './types/response-evaluation.type';
 
 @Injectable()
@@ -38,12 +35,10 @@ export class EvaluationService {
   }
 
   async findAll(
-    input: FindAllEvaluationDto,
+    orderBy: string,
     paginationParams: PaginationParams,
     user: User,
   ): Promise<PaginationResponseDto<ResponseEvaluation[]>> {
-    const { orderBy } = input;
-
     const { evaluations: cardioEvaluation, count: countCardioEvaluation } =
       await this.cardiorespiratoryCapacityStrategy.getAll(
         orderBy,
@@ -63,17 +58,13 @@ export class EvaluationService {
     };
   }
 
-  async findOne(input: FindOneEvaluationDto): Promise<Evaluation> {
-    const { type, id } = input;
-
+  async getByID(id: string, type: string): Promise<ResponseEvaluation> {
     switch (type) {
-      case 'sarcopenia':
-        console.log('Alguma Coisa');
-        break;
+      case 'ACR':
+        return await this.cardiorespiratoryCapacityStrategy.getByID(id);
       default:
         break;
     }
-    return;
   }
 
   async update(

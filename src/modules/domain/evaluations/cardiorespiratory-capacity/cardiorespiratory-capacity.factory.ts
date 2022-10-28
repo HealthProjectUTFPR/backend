@@ -191,4 +191,10 @@ export class CardiorespiratoryCapacityFactory {
 
     return parsedEvaluations;
   }
+
+  async getOne(
+    evaluation: Evaluation,
+  ): Promise<GetCardiorespiratoryCapacityDto> {
+    return this.parseFieldsToCorrectType(evaluation);
+  }
 }
