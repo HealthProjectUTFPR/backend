@@ -43,6 +43,8 @@ export class EvaluationController {
     @Pagination() paginationParams: PaginationParams,
     @Query('orderBy') orderBy: string,
   ): Promise<PaginationResponseDto<ResponseEvaluation[]>> {
+    if (!user) throw new ForbiddenException('Sessão de usuário inválida');
+
     return new PaginationResponseDto<ResponseEvaluation[]>(
       await this.evaluationService.findAll(orderBy, paginationParams, user),
     );
@@ -50,9 +52,12 @@ export class EvaluationController {
 
   @Get('/:id')
   async findOne(
+    @AuthUser() user: User,
     @Param('id') id: string,
     @Query('type') type: string,
   ): Promise<ResponseEvaluation> {
+    if (!user) throw new ForbiddenException('Sessão de usuário inválida');
+
     return await this.evaluationService.getByID(id, type);
   }
 
