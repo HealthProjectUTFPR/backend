@@ -13,6 +13,7 @@ async function bootstrap() {
       'Projeto desenvolvido durante materia de Projeto Integrado e Engenharia de Software 1 na UTFPR.',
     )
     .setVersion('1.0')
+    .addBearerAuth()
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
