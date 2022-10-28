@@ -9,6 +9,7 @@ import {
   Query,
   UseGuards,
 } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import { JoiPipe } from 'nestjs-joi';
 import { AuthUser } from 'src/common/decorators/auth-user.decorator';
 import { Pagination } from 'src/common/decorators/pagination.decorator';
@@ -21,6 +22,7 @@ import { UpdateEvaluationDto } from './dto/update-evaluation.dto';
 import { EvaluationService } from './evaluation.service';
 import { ResponseEvaluation } from './types/response-evaluation.type';
 
+@ApiTags('evaluation')
 @Controller('evaluation')
 @UseGuards(JwtAuthGuard)
 export class EvaluationController {
