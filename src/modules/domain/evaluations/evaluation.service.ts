@@ -43,7 +43,7 @@ export class EvaluationService {
     const isOrderByValid = orderBy in EvaluationOrderBy;
 
     if (!isOrderByValid)
-      throw new BadRequestException('Valor inválido para orderBy.');
+      throw new BadRequestException(`Campo ${orderBy} inválido para orderBy.`);
 
     const { evaluations: cardioEvaluation, count: countCardioEvaluation } =
       await this.cardiorespiratoryCapacityStrategy.getAll(
