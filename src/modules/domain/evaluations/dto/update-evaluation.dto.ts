@@ -12,7 +12,6 @@ export class UpdateEvaluationDto {
   @JoiSchema(['CREATE'], Joi.object().required())
   data: object;
 
-  @ApiProperty()
   @JoiSchema(['CREATE'], Joi.forbidden())
   createdBy: User;
 }
