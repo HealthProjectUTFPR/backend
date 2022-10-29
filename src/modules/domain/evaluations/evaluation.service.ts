@@ -1,4 +1,5 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
+import Joi from 'joi';
 import { PaginationResponseDto } from 'src/common/dtos/pagination.dto';
 import { PaginationParams } from 'src/common/interfaces/pagination.interface';
 import { User } from 'src/modules/infrastructure/user/entities/user.entity';
@@ -7,6 +8,7 @@ import { CreateCardiorespiratoryCapacityDto } from './cardiorespiratory-capacity
 import { UpdateCardiorespiratoryCapacityDto } from './cardiorespiratory-capacity/dto/update-cardiorespiratory-capacity.dto';
 import { CreateEvaluationDto } from './dto/create-evaluation.dto';
 import { UpdateEvaluationDto } from './dto/update-evaluation.dto';
+import { EvaluationOrderBy } from './enums/order-by.enum';
 import { ResponseEvaluation } from './types/response-evaluation.type';
 
 @Injectable()
@@ -31,17 +33,21 @@ export class EvaluationService {
       default:
         break;
     }
-    return;
   }
 
   async findAll(
-    orderBy: string,
+    orderBy: EvaluationOrderBy,
     paginationParams: PaginationParams,
     user: User,
   ): Promise<PaginationResponseDto<ResponseEvaluation[]>> {
+    const isOrderByValid = orderBy in EvaluationOrderBy;
+
+    if (!isOrderByValid)
+      throw new BadRequestException('Valor inválido para orderBy.');
+
     const { evaluations: cardioEvaluation, count: countCardioEvaluation } =
       await this.cardiorespiratoryCapacityStrategy.getAll(
-        orderBy,
+        orderBy as EvaluationOrderBy,
         paginationParams,
       );
 
@@ -59,6 +65,12 @@ export class EvaluationService {
   }
 
   async getByID(id: string, type: string): Promise<ResponseEvaluation> {
+    const scheme = Joi.string().guid().required();
+    const isValidUUID = scheme.validate(id);
+
+    if (Boolean(isValidUUID.error))
+      throw new BadRequestException('ID inválido.');
+
     switch (type) {
       case 'ACR':
         return await this.cardiorespiratoryCapacityStrategy.getByID(id);
@@ -71,6 +83,12 @@ export class EvaluationService {
     id: string,
     input: UpdateEvaluationDto,
   ): Promise<ResponseEvaluation> {
+    const scheme = Joi.string().guid().required();
+    const isValidUUID = scheme.validate(id);
+
+    if (Boolean(isValidUUID.error))
+      throw new BadRequestException('ID inválido.');
+
     const { type, data } = input;
 
     switch (type) {
@@ -83,6 +101,5 @@ export class EvaluationService {
       default:
         break;
     }
-    return;
   }
 }

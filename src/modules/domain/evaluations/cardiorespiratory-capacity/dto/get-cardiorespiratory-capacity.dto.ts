@@ -5,7 +5,7 @@ import { CreateCardiorespiratoryCapacityDto } from './create-cardiorespiratory-c
 
 export class GetCardiorespiratoryCapacityDto extends CreateCardiorespiratoryCapacityDto {
   @ApiProperty()
-  @JoiSchema(Joi.string().required())
+  @JoiSchema(Joi.string().guid().required())
   id: string;
 
   @ApiProperty()

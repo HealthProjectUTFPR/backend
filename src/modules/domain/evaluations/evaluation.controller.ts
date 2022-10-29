@@ -20,6 +20,7 @@ import { User } from 'src/modules/infrastructure/user/entities/user.entity';
 import { CreateEvaluationDto } from './dto/create-evaluation.dto';
 import { UpdateEvaluationDto } from './dto/update-evaluation.dto';
 import { EvaluationService } from './evaluation.service';
+import { EvaluationOrderBy } from './enums/order-by.enum';
 import { ResponseEvaluation } from './types/response-evaluation.type';
 
 @ApiBearerAuth()
@@ -44,7 +45,7 @@ export class EvaluationController {
   async findAll(
     @AuthUser() user: User,
     @Pagination() paginationParams: PaginationParams,
-    @Query('orderBy') orderBy: string,
+    @Query('orderBy') orderBy: EvaluationOrderBy,
   ): Promise<PaginationResponseDto<ResponseEvaluation[]>> {
     if (!user) throw new ForbiddenException('Sessão de usuário inválida');
 

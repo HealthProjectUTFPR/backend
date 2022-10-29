@@ -7,6 +7,7 @@ import { User } from 'src/modules/infrastructure/user/entities/user.entity';
 import { Repository } from 'typeorm';
 import { Evaluation } from '../entities/evaluation.entity';
 import { Field } from '../entities/field.entity';
+import { EvaluationOrderBy } from '../enums/order-by.enum';
 import { CreateCardiorespiratoryCapacityDto } from './dto/create-cardiorespiratory-capacity.dto';
 import { GetCardiorespiratoryCapacityDto } from './dto/get-cardiorespiratory-capacity.dto';
 import { ICardiorespiratoryCapacity } from './interface/cardiorespiratory-capacity.interface';
@@ -166,7 +167,7 @@ export class CardiorespiratoryCapacityFactory {
   }
 
   async getAll(
-    orderBy: string,
+    orderBy: EvaluationOrderBy,
     paginationParams: PaginationParams,
   ): Promise<GetCardiorespiratoryCapacityDto[]> {
     const { page, limit } = paginationParams;

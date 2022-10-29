@@ -8,6 +8,7 @@ import { PaginationParams } from 'src/common/interfaces/pagination.interface';
 import { User } from 'src/modules/infrastructure/user/entities/user.entity';
 import { Repository } from 'typeorm';
 import { Evaluation } from '../entities/evaluation.entity';
+import { EvaluationOrderBy } from '../enums/order-by.enum';
 import { CardiorespiratoryCapacityFactory } from './cardiorespiratory-capacity.factory';
 import { CardioRespiratoryCapacitySchema } from './dto/cardiorespiratory-capacity.dto';
 import { CreateCardiorespiratoryCapacityDto } from './dto/create-cardiorespiratory-capacity.dto';
@@ -150,7 +151,7 @@ export class CardiorespiratoryCapacityStrategy {
   }
 
   async getAll(
-    orderBy: string,
+    orderBy: EvaluationOrderBy,
     paginationParams: PaginationParams,
   ): Promise<GetAllCardiorespiratoryCapacityDto> {
     const evaluations = await this.cardiorespiratoryCapacityFactory.getAll(
