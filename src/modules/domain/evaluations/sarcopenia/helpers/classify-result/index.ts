@@ -1,23 +1,28 @@
+import {
+  ISarcopenia,
+  ISarcopeniaResult,
+} from '../../interfaces/sarcopenia.interface';
+
 const verifySarcopeniaOfMan = ({
-  walkingSpeed,
-  handgripStrength,
+  usualWalkingSpeed,
+  handGripStrength,
   muscleMassIndex,
-}) => {
+}: Partial<ISarcopenia>) => {
   let hasSarcopenia = false;
   let title = 'Sem sarcopenia';
   let description =
     'De acordo com os dados informados, o paciente não sofre de Sarcopenia.';
   let type = 'success';
 
-  if (walkingSpeed > 0.8 && handgripStrength > 30) {
+  if (usualWalkingSpeed > 0.8 && handGripStrength > 30) {
     hasSarcopenia = false;
   } else if (
-    walkingSpeed > 0.8 &&
-    handgripStrength <= 30 &&
+    usualWalkingSpeed > 0.8 &&
+    handGripStrength <= 30 &&
     muscleMassIndex > 8.9
   ) {
     hasSarcopenia = false;
-  } else if (walkingSpeed <= 0.8 && muscleMassIndex > 8.9) {
+  } else if (usualWalkingSpeed <= 0.8 && muscleMassIndex > 8.9) {
     hasSarcopenia = false;
   } else {
     hasSarcopenia = true;
@@ -32,25 +37,25 @@ const verifySarcopeniaOfMan = ({
 };
 
 const verifySarcopeniaOfWoman = ({
-  walkingSpeed,
-  handgripStrength,
+  usualWalkingSpeed,
+  handGripStrength,
   muscleMassIndex,
-}) => {
+}: Partial<ISarcopenia>) => {
   let hasSarcopenia = false;
   let title = 'Sem sarcopenia';
   let description =
     'De acordo com os dados informados, o paciente não sofre de Sarcopenia.';
   let type = 'success';
 
-  if (walkingSpeed > 0.8 && handgripStrength > 20) {
+  if (usualWalkingSpeed > 0.8 && handGripStrength > 20) {
     hasSarcopenia = false;
   } else if (
-    walkingSpeed > 0.8 &&
-    handgripStrength <= 20 &&
+    usualWalkingSpeed > 0.8 &&
+    handGripStrength <= 20 &&
     muscleMassIndex > 6.37
   ) {
     hasSarcopenia = false;
-  } else if (walkingSpeed <= 0.8 && muscleMassIndex > 6.37) {
+  } else if (usualWalkingSpeed <= 0.8 && muscleMassIndex > 6.37) {
     hasSarcopenia = false;
   } else {
     hasSarcopenia = true;
@@ -65,31 +70,29 @@ const verifySarcopeniaOfWoman = ({
 };
 
 const classifyResult = ({
-  walkingSpeed,
-  handgripStrength,
+  usualWalkingSpeed,
+  handGripStrength,
   muscleMassIndex,
   sex,
-}) => {
+}: Partial<ISarcopenia>): boolean => {
   let result;
   if (sex === 'Homem') {
     result = verifySarcopeniaOfMan({
-      walkingSpeed,
-      handgripStrength,
+      usualWalkingSpeed,
+      handGripStrength,
       muscleMassIndex,
-      sex,
     });
   } else {
     result = verifySarcopeniaOfWoman({
-      walkingSpeed,
-      handgripStrength,
+      usualWalkingSpeed,
+      handGripStrength,
       muscleMassIndex,
-      sex,
     });
   }
 
-  const { title, description, type, hasSarcopenia } = result;
+  const { hasSarcopenia } = result;
 
-  return { title, description, type, hasSarcopenia };
+  return hasSarcopenia;
 };
 
 export default classifyResult;

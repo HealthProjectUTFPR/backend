@@ -1,7 +1,7 @@
 import Joi from 'joi';
 import { JoiSchema } from 'nestjs-joi';
 
-export class SarcopeniaDto {
+export class CreateSarcopeniaDTO {
   @JoiSchema(Joi.string().required())
   date: Date;
 
@@ -12,7 +12,10 @@ export class SarcopeniaDto {
   measuredMuscleMass: number;
 
   @JoiSchema(Joi.number().required())
-  usualWalkingSpeed: number;
+  estimatedMuscleMass: number;
+
+  @JoiSchema(Joi.number().required())
+  walkingSpeed: number;
 
   @JoiSchema(Joi.number().required())
   handGripStrength: number;
@@ -25,4 +28,7 @@ export class SarcopeniaDto {
 
   @JoiSchema(Joi.string().required())
   result: string;
+
+  @JoiSchema(Joi.number().required())
+  hasSarcopenia: boolean;
 }
