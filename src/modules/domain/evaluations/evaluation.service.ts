@@ -9,7 +9,7 @@ import {
   PaginationResult,
 } from 'src/common/interfaces/pagination.interface';
 import { User } from 'src/modules/infrastructure/user/entities/user.entity';
-import { FindOneOptions, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { CreateEvaluationDto } from './dto/create-evaluation.dto';
 import { FindAllEvaluationDto } from './dto/findall-evaluation.dto';
 import { FindOneEvaluationDto } from './dto/findone-evaluation.dto';

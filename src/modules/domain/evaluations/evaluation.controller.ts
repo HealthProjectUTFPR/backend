@@ -70,7 +70,7 @@ export class EvaluationController {
     return await this.evaluationService.update(id, input, user);
   }
 
-  @Delete('delete/:id')
+  @Delete('/:id')
   async delete(@Param('id') id: string): Promise<Evaluation> {
     return await this.evaluationService.delete(id);
   }
