@@ -20,11 +20,9 @@ export class Field extends BaseEntity {
   value: string;
 
   @Column({
-    type: 'enum',
-    enum: DataType,
-    default: DataType.Dt_string,
+    default: 'string',
   })
-  dataType: DataType;
+  dataType: string;
 
   @ManyToOne(() => Evaluation, (evaluation) => evaluation.fields)
   evaluation: Evaluation;
