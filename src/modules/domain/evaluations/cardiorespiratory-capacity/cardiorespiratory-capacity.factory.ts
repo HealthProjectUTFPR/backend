@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import { PaginationParams } from 'src/common/interfaces/pagination.interface';
+import { parseType } from 'src/common/utils/parse-type.util';
 import { User } from 'src/modules/infrastructure/user/entities/user.entity';
 import { Repository } from 'typeorm';
 import { Evaluation } from '../entities/evaluation.entity';
@@ -50,23 +51,7 @@ export class CardiorespiratoryCapacityFactory {
     const parsedFields: Partial<ICardiorespiratoryCapacity> = {};
 
     fields.forEach(({ name, value, dataType }) => {
-      let formattedValue: string | number | Date | boolean;
-
-      switch (dataType) {
-        case 'date':
-          formattedValue = new Date(value);
-          break;
-        case 'boolean':
-          formattedValue = Boolean(value);
-          break;
-        case 'string':
-          formattedValue = String(value);
-          break;
-        case 'int':
-          formattedValue = parseInt(value, 10);
-        case 'float':
-          formattedValue = parseFloat(value);
-      }
+      const formattedValue = parseType(dataType, value);
 
       parsedFields[name] = formattedValue;
     });

@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   ForbiddenException,
   Get,
   Param,
@@ -19,8 +20,9 @@ import { JwtAuthGuard } from 'src/modules/infrastructure/auth/auth.guard';
 import { User } from 'src/modules/infrastructure/user/entities/user.entity';
 import { CreateEvaluationDto } from './dto/create-evaluation.dto';
 import { UpdateEvaluationDto } from './dto/update-evaluation.dto';
-import { EvaluationService } from './evaluation.service';
+import { Evaluation } from './entities/evaluation.entity';
 import { EvaluationOrderBy } from './enums/order-by.enum';
+import { EvaluationService } from './evaluation.service';
 import { ResponseEvaluation } from './types/response-evaluation.type';
 
 @ApiBearerAuth()
@@ -75,5 +77,10 @@ export class EvaluationController {
     if (!user) throw new ForbiddenException('Sessão de usuário inválida');
 
     return await this.evaluationService.update(id, input);
+  }
+
+  @Delete('/:id')
+  async delete(@Param('id') id: string): Promise<Evaluation> {
+    return await this.evaluationService.delete(id);
   }
 }
