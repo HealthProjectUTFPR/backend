@@ -80,9 +80,11 @@ export class EvaluationService {
     return;
   }
 
-  async delete(id: FindOneOptions<Evaluation>): Promise<Evaluation> {
+  async delete(id: string): Promise<Evaluation> {
     try {
-      const evaluation = await this.evaluationsRepository.findOne(id);
+      const evaluation = await this.evaluationsRepository.findOne({
+        where: { id },
+      });
 
       if (!evaluation) {
         throw new NotFoundException('Cannot find evaluation with this id.');
