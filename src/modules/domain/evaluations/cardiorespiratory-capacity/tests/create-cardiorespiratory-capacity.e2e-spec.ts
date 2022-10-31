@@ -62,4 +62,23 @@ describe('Avaliação Cardiorespiratória', () => {
       .set('Authorization', `Bearer ${token}`)
       .expect(400);
   });
+
+  it(`/ (CREATE) sucesso na criação`, async () => {
+    return await server
+      .post('/evaluation')
+      .send({
+        type: 'ACR',
+        data: {
+          weight: 75,
+          time: 10,
+          date: '2022-10-12T03:00:00.000Z',
+          finalFC: 150,
+          vo2Lmin: 3.733740000000001,
+          vo2MlKG: 46.67175000000002,
+          result: 'Muito bom!',
+        },
+      })
+      .set('Authorization', `Bearer ${token}`)
+      .expect(201);
+  });
 });
