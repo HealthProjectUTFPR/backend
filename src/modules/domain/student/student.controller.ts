@@ -7,6 +7,7 @@ import {
   Patch,
   Post,
   UseGuards,
+  ForbiddenException
 } from '@nestjs/common';
 import { JoiPipe } from 'nestjs-joi';
 import { StudentService } from './student.service';
@@ -28,7 +29,7 @@ export class StudentController {
     @Body(new JoiPipe({ group: 'CREATE' }))
     createStudentDto: CreateStudentDto,
   ): Promise<Student> {
-    // if (!user) throw new ForbiddenException('User not logged in');
+    if (!user) throw new ForbiddenException('User not logged in');
 
     return this.studentService.create(createStudentDto, user);
   }
