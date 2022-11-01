@@ -126,7 +126,6 @@ export class EvaluationService {
       await this.evaluationsRepository.softRemove(evaluation);
       return evaluation;
     } catch (error) {
-      console.log('error', error);
       throw new BadRequestException(
         'Algo deu errado. Não conseguimos remover a avaliação.',
       );
