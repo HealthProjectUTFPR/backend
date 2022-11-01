@@ -8,7 +8,8 @@ import { UserModule } from 'src/modules/infrastructure/user/user.module';
 
 let app: INestApplication;
 let server: request.SuperTest<request.Test>;
-let token;
+let token: string;
+let id: string;
 
 beforeAll(async () => {
   const module = await Test.createTestingModule({
@@ -43,28 +44,27 @@ afterAll(async () => {
   await app.close();
 });
 
-describe('Criar avaliações Cardiorespiratória', () => {
-  it(`/ (CREATE) falha na validação do resultado`, async () => {
+describe('Buscar avaliação Cardiorespiratória', () => {
+  it(`/:id?type=ACR (GET) deve receber erro ao buscar id inválido`, async () => {
+    id = 'aca8e3cd-2c41-4b7e-9e1f-f3d8206064a';
+
     return await server
-      .post('/evaluation')
-      .send({
-        type: 'ACR',
-        data: {
-          weight: 80,
-          time: 10,
-          date: '2022-10-12T03:00:00.000Z',
-          finalFC: 150,
-          vo2Lmin: 3.733740000000001,
-          vo2MlKG: 46.67175000000002,
-          result: 'Muito bom!',
-        },
-      })
+      .get(`/evaluation/${id}?type=ACR`)
       .set('Authorization', `Bearer ${token}`)
       .expect(400);
   });
 
-  it(`/ (CREATE) sucesso na criação`, async () => {
+  it(`/:id?type=ACR (GET) deve receber erro ao buscar id não válido porém inexistente`, async () => {
+    id = 'aca8e3cd-2c41-4b7e-9e1f-f3d8206064a9';
+
     return await server
+      .get(`/evaluation/${id}?type=ACR`)
+      .set('Authorization', `Bearer ${token}`)
+      .expect(404);
+  });
+
+  it(`/:id?type=ACR (GET) deve retornar sucesso ao buscar id válido`, async () => {
+    const response = await server
       .post('/evaluation')
       .send({
         type: 'ACR',
@@ -78,7 +78,13 @@ describe('Criar avaliações Cardiorespiratória', () => {
           result: 'Muito bom!',
         },
       })
+      .set('Authorization', `Bearer ${token}`);
+
+    id = response.body.id;
+
+    return await server
+      .get(`/evaluation/${id}?type=ACR`)
       .set('Authorization', `Bearer ${token}`)
-      .expect(201);
+      .expect(200);
   });
 });

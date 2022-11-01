@@ -43,42 +43,53 @@ afterAll(async () => {
   await app.close();
 });
 
-describe('Criar avaliações Cardiorespiratória', () => {
-  it(`/ (CREATE) falha na validação do resultado`, async () => {
+describe('Buscar avaliações Cardiorespiratória', () => {
+  it(`/ (GET) deve receber um array vazio como resultado`, async () => {
     return await server
-      .post('/evaluation')
-      .send({
-        type: 'ACR',
-        data: {
-          weight: 80,
-          time: 10,
-          date: '2022-10-12T03:00:00.000Z',
-          finalFC: 150,
-          vo2Lmin: 3.733740000000001,
-          vo2MlKG: 46.67175000000002,
-          result: 'Muito bom!',
-        },
-      })
+      .get('/evaluation?page=1&limit=50&orderBy=updatedAt')
       .set('Authorization', `Bearer ${token}`)
-      .expect(400);
+      .expect((res) => {
+        expect(res.body.data).toStrictEqual([]);
+      })
+      .expect(200);
   });
 
-  it(`/ (CREATE) sucesso na criação`, async () => {
+  it(`/ (GET) deve receber um array não vazio como resultado`, async () => {
+    for (let i = 0; i < 5; i++) {
+      await server
+        .post('/evaluation')
+        .send({
+          type: 'ACR',
+          data: {
+            weight: 75,
+            time: 10,
+            date: '2022-10-12T03:00:00.000Z',
+            finalFC: 150,
+            vo2Lmin: 3.733740000000001,
+            vo2MlKG: 46.67175000000002,
+            result: 'Muito bom!',
+          },
+        })
+        .set('Authorization', `Bearer ${token}`);
+    }
+
     return await server
-      .post('/evaluation')
-      .send({
-        type: 'ACR',
-        data: {
-          weight: 75,
-          time: 10,
-          date: '2022-10-12T03:00:00.000Z',
-          finalFC: 150,
-          vo2Lmin: 3.733740000000001,
-          vo2MlKG: 46.67175000000002,
-          result: 'Muito bom!',
-        },
-      })
+      .get('/evaluation?page=1&limit=50&orderBy=updatedAt')
       .set('Authorization', `Bearer ${token}`)
-      .expect(201);
+      .expect((res) => {
+        expect(res.body.meta.totalItems).toBe(5);
+      })
+      .expect(200);
+  });
+
+  it(`/ (GET) deve falhar devido a página invalida`, async () => {
+    const page = -1;
+    const limit = 5;
+    const orderBy = 'updatedAt';
+
+    return await server
+      .get(`/evaluation?page=${page}&limit=${limit}&orderBy=${orderBy}`)
+      .set('Authorization', `Bearer ${token}`)
+      .expect(400);
   });
 });
