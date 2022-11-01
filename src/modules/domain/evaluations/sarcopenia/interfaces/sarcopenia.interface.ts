@@ -9,7 +9,7 @@ export interface ISarcopenia {
 
   height: number;
 
-  measuredMuscleMass: number;
+  measuredMuscleMass?: number;
 
   walkingSpeed: number;
 
@@ -18,6 +18,8 @@ export interface ISarcopenia {
   muscleMassIndex: number;
 
   calfCircumference: number;
+
+  result: string;
 }
 
 export interface ISarcopeniaResult {

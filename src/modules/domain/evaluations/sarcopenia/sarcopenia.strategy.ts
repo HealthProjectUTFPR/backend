@@ -27,6 +27,7 @@ export class SarcopeniaStrategy {
     handGripStrength,
     muscleMassIndex,
     measuredMuscleMass,
+    result,
   }: Partial<ISarcopenia>) {
     const estimatedMuscleMass = calculateEstimatedMuscleMass({
       weight,
@@ -100,6 +101,7 @@ export class SarcopeniaStrategy {
         handGripStrength,
         muscleMassIndex,
         calfCircumference,
+        result,
       });
 
       if (!isResultValid)

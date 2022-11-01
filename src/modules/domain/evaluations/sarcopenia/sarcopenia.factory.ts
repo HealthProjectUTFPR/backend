@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import dayjs from 'dayjs';
 import { User } from 'src/modules/infrastructure/user/entities/user.entity';
 import { Repository } from 'typeorm';
 import { Evaluation } from '../entities/evaluation.entity';
@@ -23,7 +24,8 @@ export class SarcopeniaFactory {
     values.forEach(([key, value]) => {
       let type: string = typeof value;
       if (type === 'number') type = Number.isInteger(value) ? 'int' : 'float';
-      if (type === 'string') type = dayjs(value).isValid() ? 'date' : 'string';
+      if (type === 'string')
+        type = dayjs(value as string).isValid() ? 'date' : 'string';
 
       inputs.push({
         name: key,
@@ -38,7 +40,7 @@ export class SarcopeniaFactory {
   private parseFieldsToCorrectType(data: Evaluation): GetSarcopeniaDto {
     const { id, name, createdAt, updatedAt, result, deletedAt, fields } = data;
 
-    const parsedFields: Partial<ISarcopenia> = {};
+    const parsedFields = {};
 
     fields.forEach(({ name, value, dataType }) => {
       let formattedValue: string | number | Date | boolean;

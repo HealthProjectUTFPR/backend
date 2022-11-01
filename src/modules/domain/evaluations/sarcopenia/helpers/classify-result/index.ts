@@ -4,7 +4,7 @@ import {
 } from '../../interfaces/sarcopenia.interface';
 
 const verifySarcopeniaOfMan = ({
-  usualWalkingSpeed,
+  walkingSpeed,
   handGripStrength,
   muscleMassIndex,
 }: Partial<ISarcopenia>) => {
@@ -14,15 +14,15 @@ const verifySarcopeniaOfMan = ({
     'De acordo com os dados informados, o paciente não sofre de Sarcopenia.';
   let type = 'success';
 
-  if (usualWalkingSpeed > 0.8 && handGripStrength > 30) {
+  if (walkingSpeed > 0.8 && handGripStrength > 30) {
     hasSarcopenia = false;
   } else if (
-    usualWalkingSpeed > 0.8 &&
+    walkingSpeed > 0.8 &&
     handGripStrength <= 30 &&
     muscleMassIndex > 8.9
   ) {
     hasSarcopenia = false;
-  } else if (usualWalkingSpeed <= 0.8 && muscleMassIndex > 8.9) {
+  } else if (walkingSpeed <= 0.8 && muscleMassIndex > 8.9) {
     hasSarcopenia = false;
   } else {
     hasSarcopenia = true;
@@ -37,7 +37,7 @@ const verifySarcopeniaOfMan = ({
 };
 
 const verifySarcopeniaOfWoman = ({
-  usualWalkingSpeed,
+  walkingSpeed,
   handGripStrength,
   muscleMassIndex,
 }: Partial<ISarcopenia>) => {
@@ -47,15 +47,15 @@ const verifySarcopeniaOfWoman = ({
     'De acordo com os dados informados, o paciente não sofre de Sarcopenia.';
   let type = 'success';
 
-  if (usualWalkingSpeed > 0.8 && handGripStrength > 20) {
+  if (walkingSpeed > 0.8 && handGripStrength > 20) {
     hasSarcopenia = false;
   } else if (
-    usualWalkingSpeed > 0.8 &&
+    walkingSpeed > 0.8 &&
     handGripStrength <= 20 &&
     muscleMassIndex > 6.37
   ) {
     hasSarcopenia = false;
-  } else if (usualWalkingSpeed <= 0.8 && muscleMassIndex > 6.37) {
+  } else if (walkingSpeed <= 0.8 && muscleMassIndex > 6.37) {
     hasSarcopenia = false;
   } else {
     hasSarcopenia = true;
@@ -70,7 +70,7 @@ const verifySarcopeniaOfWoman = ({
 };
 
 const classifyResult = ({
-  usualWalkingSpeed,
+  walkingSpeed,
   handGripStrength,
   muscleMassIndex,
   sex,
@@ -78,13 +78,13 @@ const classifyResult = ({
   let result;
   if (sex === 'Homem') {
     result = verifySarcopeniaOfMan({
-      usualWalkingSpeed,
+      walkingSpeed,
       handGripStrength,
       muscleMassIndex,
     });
   } else {
     result = verifySarcopeniaOfWoman({
-      usualWalkingSpeed,
+      walkingSpeed,
       handGripStrength,
       muscleMassIndex,
     });
