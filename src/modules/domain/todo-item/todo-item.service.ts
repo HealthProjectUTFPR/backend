@@ -85,15 +85,4 @@ export class TodoItemService {
 
     return todoItem;
   }
-
-  async remove(id: string, user: User): Promise<TodoItem> {
-    const todoItem = await this.todoItemsRepository.findOne({
-      where: { id: id },
-      relations: ['createdBy'],
-    });
-    if (todoItem.createdBy.id !== user.id) throw new ForbiddenException();
-    await this.todoItemsRepository.softDelete(id);
-
-    return todoItem;
-  }
 }
