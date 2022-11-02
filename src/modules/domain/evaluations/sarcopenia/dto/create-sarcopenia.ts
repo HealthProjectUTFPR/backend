@@ -8,11 +8,11 @@ export class CreateSarcopeniaDTO {
   @JoiSchema(Joi.number().required())
   weight: number;
 
-  @JoiSchema(Joi.number().required())
-  measuredMuscleMass: number;
+  @JoiSchema(Joi.number())
+  measuredMuscleMass?: number;
 
-  @JoiSchema(Joi.number().required())
-  estimatedMuscleMass: number;
+  @JoiSchema(Joi.number())
+  estimatedMuscleMass?: number;
 
   @JoiSchema(Joi.number().required())
   walkingSpeed: number;

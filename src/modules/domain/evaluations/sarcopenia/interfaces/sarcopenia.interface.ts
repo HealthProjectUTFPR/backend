@@ -15,9 +15,9 @@ export interface ISarcopenia {
 
   handGripStrength: number;
 
-  muscleMassIndex: number;
-
   calfCircumference: number;
+
+  muscleMassIndex: number;
 
   result: string;
 }

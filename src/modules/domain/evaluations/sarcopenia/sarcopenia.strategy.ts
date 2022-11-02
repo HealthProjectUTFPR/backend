@@ -17,37 +17,39 @@ import { SarcopeniaFactory } from './sarcopenia.factory';
 export class SarcopeniaStrategy {
   constructor(private readonly sarcopeniaFactory: SarcopeniaFactory) {}
 
-  private recalculateResult({
-    sex,
-    age,
-    weight,
-    race,
-    height,
-    walkingSpeed,
-    handGripStrength,
-    muscleMassIndex,
-    measuredMuscleMass,
-    result,
-  }: Partial<ISarcopenia>) {
-    const estimatedMuscleMass = calculateEstimatedMuscleMass({
-      weight,
+  private recalculateResult(input: Partial<ISarcopenia>) {
+    const {
       sex,
+      age,
+      weight,
       race,
       height,
-      age,
-    });
+      walkingSpeed,
+      handGripStrength,
+      measuredMuscleMass,
+    } = input;
 
-    const indexOfEstimatedMuscleMassPerStature =
-      calculateIndexOfEstimatedMuscleMassPerStature({
-        estimatedMuscleMass,
-        height,
-      });
+    let muscleMassIndex;
 
-    const indexOfMeasuredMuscleMassPerStature =
-      calculateIndexOfMeasuredMuscleMassPerStature({
+    if (measuredMuscleMass) {
+      muscleMassIndex = calculateIndexOfMeasuredMuscleMassPerStature({
         measuredMuscleMass,
         height,
       });
+    } else {
+      const estimatedMuscleMass = calculateEstimatedMuscleMass({
+        weight,
+        sex,
+        race,
+        height,
+        age,
+      });
+
+      muscleMassIndex = calculateIndexOfEstimatedMuscleMassPerStature({
+        estimatedMuscleMass,
+        height,
+      });
+    }
 
     const classifiedResult = classifyResult({
       walkingSpeed,
@@ -82,6 +84,7 @@ export class SarcopeniaStrategy {
         date,
         weight,
         measuredMuscleMass,
+        estimatedMuscleMass,
         walkingSpeed,
         handGripStrength,
         muscleMassIndex,
@@ -109,7 +112,20 @@ export class SarcopeniaStrategy {
           'Resultado da avaliação inválido de acordo com os dados repassados!',
         );
 
-      return await this.sarcopeniaFactory.create(input, user, type);
+      const data: CreateSarcopeniaDTO = {
+        date,
+        weight,
+        measuredMuscleMass,
+        estimatedMuscleMass,
+        walkingSpeed,
+        handGripStrength,
+        muscleMassIndex,
+        calfCircumference,
+        result,
+        hasSarcopenia,
+      };
+
+      return await this.sarcopeniaFactory.create(data, user, type);
     } catch (error) {
       throw new InternalServerErrorException(
         'Algo de errado ocorreu na criação da avaliação.',
