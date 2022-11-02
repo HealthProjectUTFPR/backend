@@ -1,9 +1,9 @@
-import { ICardiorespiratoryCapacity } from '../../interface/cardiorespiratory-capacity.interface';
+import { IBodyComposition } from '../../inte../../interface/body-composition.interface';
 
 export const calculateVO2MlKg = ({
   weight,
   vo2Lmin,
-}: Partial<ICardiorespiratoryCapacity>) => {
+}: Partial<IBodyComposition>) => {
   if (!weight) {
     return 0;
   }

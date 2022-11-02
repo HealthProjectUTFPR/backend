@@ -8,7 +8,7 @@ import { UserModule } from 'src/modules/infrastructure/user/user.module';
 
 let app: INestApplication;
 let server: request.SuperTest<request.Test>;
-let token;
+let token: string;
 
 beforeAll(async () => {
   const module = await Test.createTestingModule({
@@ -43,12 +43,12 @@ afterAll(async () => {
   await app.close();
 });
 
-describe('Criar avaliações Cardiorespiratória', () => {
+describe('Criar avaliações Composição Corporal', () => {
   it(`/ (CREATE) falha na validação do resultado`, async () => {
     return await server
       .post('/evaluation')
       .send({
-        type: 'ACR',
+        type: 'bodyComposition',
         data: {
           weight: 80,
           time: 10,
@@ -67,7 +67,7 @@ describe('Criar avaliações Cardiorespiratória', () => {
     return await server
       .post('/evaluation')
       .send({
-        type: 'ACR',
+        type: 'bodyComposition',
         data: {
           weight: 75,
           time: 10,

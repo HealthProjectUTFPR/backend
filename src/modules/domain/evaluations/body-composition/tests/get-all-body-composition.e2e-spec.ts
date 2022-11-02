@@ -8,7 +8,7 @@ import { UserModule } from 'src/modules/infrastructure/user/user.module';
 
 let app: INestApplication;
 let server: request.SuperTest<request.Test>;
-let token;
+let token: string;
 
 beforeAll(async () => {
   const module = await Test.createTestingModule({
@@ -43,7 +43,7 @@ afterAll(async () => {
   await app.close();
 });
 
-describe('Buscar avaliações Cardiorespiratória', () => {
+describe('Buscar avaliações Composição Corporal', () => {
   it(`/ (GET) deve receber um array vazio como resultado`, async () => {
     return await server
       .get('/evaluation?page=1&limit=50&orderBy=updatedAt')
@@ -59,7 +59,7 @@ describe('Buscar avaliações Cardiorespiratória', () => {
       await server
         .post('/evaluation')
         .send({
-          type: 'ACR',
+          type: 'bodyComposition',
           data: {
             weight: 75,
             time: 10,

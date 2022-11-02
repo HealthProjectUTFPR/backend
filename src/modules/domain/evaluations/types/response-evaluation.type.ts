@@ -1,3 +1,3 @@
-import { GetCardiorespiratoryCapacityDto } from '../cardiorespiratory-capacity/dto/get-cardiorespiratory-capacity.dto';
+import { GetBodyCompositionDto } from '../body-composition/dto/get-body-composition.dto';
 
-export type ResponseEvaluation = GetCardiorespiratoryCapacityDto;
+export type ResponseEvaluation = GetBodyCompositionDto;

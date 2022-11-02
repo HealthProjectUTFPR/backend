@@ -9,24 +9,24 @@ import { User } from 'src/modules/infrastructure/user/entities/user.entity';
 import { Repository } from 'typeorm';
 import { Evaluation } from '../entities/evaluation.entity';
 import { EvaluationOrderBy } from '../enums/order-by.enum';
-import { CardiorespiratoryCapacityFactory } from './cardiorespiratory-capacity.factory';
-import { CardioRespiratoryCapacitySchema } from './dto/cardiorespiratory-capacity.dto';
-import { CreateCardiorespiratoryCapacityDto } from './dto/create-cardiorespiratory-capacity.dto';
-import { GetAllCardiorespiratoryCapacityDto } from './dto/get-all-cardiorespiratory-capacity.dto';
-import { GetCardiorespiratoryCapacityDto } from './dto/get-cardiorespiratory-capacity.dto';
-import { UpdateCardiorespiratoryCapacityDto } from './dto/update-cardiorespiratory-capacity.dto';
+import { BodyCompositionFactory } from './body-composition.factory';
+import { BodyCompositionSchema } from './dto/body-composition.dto';
+import { CreateBodyCompositionDto } from './dto/create-body-composition.dto';
+import { GetAllBodyCompositionDto } from './dto/get-all-body-composition.dto';
+import { GetBodyCompositionDto } from './dto/get-body-composition.dto';
+import { UpdateBodyCompositionDto } from './dto/update-body-composition.dto';
 import { calculateCardiorespiratoryCapacityResult } from './helpers/calculate-result';
 import { calculateVO2LMin } from './helpers/calculate-vo2-lmin';
 import { calculateVO2MlKg } from './helpers/calculate-vo2-ml-kg';
-import { ICardiorespiratoryCapacity } from './interface/cardiorespiratory-capacity.interface';
+import { IBodyComposition } from './interface/body-composition.interface';
 
 @Injectable()
-export class CardiorespiratoryCapacityStrategy {
+export class BodyCompositionStrategy {
   @InjectRepository(Evaluation)
   private readonly evaluationRepository: Repository<Evaluation>;
 
   constructor(
-    private readonly cardiorespiratoryCapacityFactory: CardiorespiratoryCapacityFactory,
+    private readonly bodyCompositionFactory: BodyCompositionFactory,
   ) {}
 
   private recalculateResult({
@@ -35,28 +35,25 @@ export class CardiorespiratoryCapacityStrategy {
     time,
     age,
     sex,
-  }: Partial<ICardiorespiratoryCapacity>) {
+  }: Partial<IBodyComposition>) {
     const vo2Lmin = calculateVO2LMin({ weight, finalFC, time, age, sex });
     const vo2MlKG = calculateVO2MlKg({ weight, vo2Lmin });
 
     return calculateCardiorespiratoryCapacityResult({ sex, vo2MlKG });
   }
 
-  private validateResult(
-    result: string,
-    input: Partial<ICardiorespiratoryCapacity>,
-  ) {
+  private validateResult(result: string, input: Partial<IBodyComposition>) {
     const recalculationResult = this.recalculateResult(input);
 
     return recalculationResult === result;
   }
 
   async create(
-    input: CreateCardiorespiratoryCapacityDto,
+    input: CreateBodyCompositionDto,
     user: User,
     type: string,
-  ): Promise<GetCardiorespiratoryCapacityDto> {
-    const validation = CardioRespiratoryCapacitySchema.validate(input);
+  ): Promise<GetBodyCompositionDto> {
+    const validation = BodyCompositionSchema.validate(input);
 
     if (validation?.error) {
       throw new BadRequestException(validation.error.message);
@@ -79,7 +76,7 @@ export class CardiorespiratoryCapacityStrategy {
         'Resultado inválido de acordo com os dados repassados',
       );
 
-    const data: CreateCardiorespiratoryCapacityDto = {
+    const data: CreateBodyCompositionDto = {
       date,
       weight,
       time,
@@ -89,15 +86,15 @@ export class CardiorespiratoryCapacityStrategy {
       result,
     };
 
-    return await this.cardiorespiratoryCapacityFactory.create(data, user, type);
+    return await this.bodyCompositionFactory.create(data, user, type);
   }
 
   async update(
     id: string,
     type: string,
-    input: UpdateCardiorespiratoryCapacityDto,
-  ): Promise<GetCardiorespiratoryCapacityDto> {
-    const validation = CardioRespiratoryCapacitySchema.validate(input);
+    input: UpdateBodyCompositionDto,
+  ): Promise<GetBodyCompositionDto> {
+    const validation = BodyCompositionSchema.validate(input);
 
     if (validation?.error) {
       throw new BadRequestException(validation.error.message);
@@ -132,7 +129,7 @@ export class CardiorespiratoryCapacityStrategy {
       throw new NotFoundException(`Avaliação com id ${id} não encontrada`);
     }
 
-    const newData: UpdateCardiorespiratoryCapacityDto = {
+    const newData: UpdateBodyCompositionDto = {
       date,
       weight,
       time,
@@ -142,7 +139,7 @@ export class CardiorespiratoryCapacityStrategy {
       result,
     };
 
-    return await this.cardiorespiratoryCapacityFactory.update(
+    return await this.bodyCompositionFactory.update(
       id,
       type,
       newData,
@@ -153,13 +150,13 @@ export class CardiorespiratoryCapacityStrategy {
   async getAll(
     orderBy: EvaluationOrderBy,
     paginationParams: PaginationParams,
-  ): Promise<GetAllCardiorespiratoryCapacityDto> {
-    const evaluations = await this.cardiorespiratoryCapacityFactory.getAll(
+  ): Promise<GetAllBodyCompositionDto> {
+    const evaluations = await this.bodyCompositionFactory.getAll(
       orderBy,
       paginationParams,
     );
 
-    const returnedData: GetAllCardiorespiratoryCapacityDto = {
+    const returnedData: GetAllBodyCompositionDto = {
       evaluations,
       count: evaluations.length,
     };
@@ -167,7 +164,7 @@ export class CardiorespiratoryCapacityStrategy {
     return returnedData;
   }
 
-  async getByID(id: string): Promise<GetCardiorespiratoryCapacityDto> {
+  async getByID(id: string): Promise<GetBodyCompositionDto> {
     const evaluation = await this.evaluationRepository.findOne({
       where: { id, deletedAt: null },
       relations: ['fields'],
@@ -177,6 +174,6 @@ export class CardiorespiratoryCapacityStrategy {
       throw new NotFoundException(`Avaliação com id ${id} não encontrada`);
     }
 
-    return this.cardiorespiratoryCapacityFactory.getOne(evaluation);
+    return this.bodyCompositionFactory.getOne(evaluation);
   }
 }

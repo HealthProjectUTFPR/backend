@@ -1,8 +1,8 @@
-import { ICardiorespiratoryCapacity } from '../../interface/cardiorespiratory-capacity.interface';
+import { IBodyComposition } from '../../inte../../interface/body-composition.interface';
 
 function verifyCardiorespiratoryCapacityOfMan({
   vo2MlKG,
-}: Partial<ICardiorespiratoryCapacity>) {
+}: Partial<IBodyComposition>) {
   let result = '';
 
   if (vo2MlKG >= 42.5) {
@@ -22,7 +22,7 @@ function verifyCardiorespiratoryCapacityOfMan({
 
 function verifyCardiorespiratoryCapacityOfWoman({
   vo2MlKG,
-}: Partial<ICardiorespiratoryCapacity>) {
+}: Partial<IBodyComposition>) {
   let result = '';
 
   if (vo2MlKG >= 35.2) {
@@ -43,7 +43,7 @@ function verifyCardiorespiratoryCapacityOfWoman({
 export function calculateCardiorespiratoryCapacityResult({
   sex,
   vo2MlKG,
-}: Partial<ICardiorespiratoryCapacity>) {
+}: Partial<IBodyComposition>) {
   let result: string;
 
   if (sex === 'Homem') {

@@ -2,7 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import * as Joi from 'joi';
 import { JoiSchema } from 'nestjs-joi';
 
-export class CreateCardiorespiratoryCapacityDto {
+export class UpdateBodyCompositionDto {
   @ApiProperty()
   @JoiSchema(Joi.date().required())
   date: Date;

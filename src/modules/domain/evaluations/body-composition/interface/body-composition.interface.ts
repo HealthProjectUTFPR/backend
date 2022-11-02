@@ -1,4 +1,4 @@
-export interface ICardiorespiratoryCapacity {
+export interface IBodyComposition {
   sex: string;
   vo2MlKG: number;
   vo2Lmin: number;

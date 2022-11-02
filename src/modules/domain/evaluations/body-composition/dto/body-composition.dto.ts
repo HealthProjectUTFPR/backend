@@ -1,6 +1,6 @@
 import Joi from 'joi';
 
-export const CardioRespiratoryCapacitySchema = Joi.object({
+export const BodyCompositionSchema = Joi.object({
   date: Joi.date().required(),
   weight: Joi.number().required(),
   time: Joi.number().required(),

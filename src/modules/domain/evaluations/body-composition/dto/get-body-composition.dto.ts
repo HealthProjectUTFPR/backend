@@ -1,9 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger';
 import * as Joi from 'joi';
 import { JoiSchema } from 'nestjs-joi';
-import { CreateCardiorespiratoryCapacityDto } from './create-cardiorespiratory-capacity.dto';
+import { CreateBodyCompositionDto } from './create-body-composition.dto';
 
-export class GetCardiorespiratoryCapacityDto extends CreateCardiorespiratoryCapacityDto {
+export class GetBodyCompositionDto extends CreateBodyCompositionDto {
   @ApiProperty()
   @JoiSchema(Joi.string().guid().required())
   id: string;

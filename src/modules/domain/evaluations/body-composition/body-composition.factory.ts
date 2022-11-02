@@ -9,22 +9,20 @@ import { Repository } from 'typeorm';
 import { Evaluation } from '../entities/evaluation.entity';
 import { Field } from '../entities/field.entity';
 import { EvaluationOrderBy } from '../enums/order-by.enum';
-import { CreateCardiorespiratoryCapacityDto } from './dto/create-cardiorespiratory-capacity.dto';
-import { GetCardiorespiratoryCapacityDto } from './dto/get-cardiorespiratory-capacity.dto';
-import { ICardiorespiratoryCapacity } from './interface/cardiorespiratory-capacity.interface';
+import { CreateBodyCompositionDto } from './dto/create-body-composition.dto';
+import { GetBodyCompositionDto } from './dto/get-body-composition.dto';
+import { IBodyComposition } from './interface/body-composition.interface';
 dayjs.extend(customParseFormat);
 
 @Injectable()
-export class CardiorespiratoryCapacityFactory {
+export class BodyCompositionFactory {
   @InjectRepository(Evaluation)
   private readonly evaluationsRepository: Repository<Evaluation>;
 
   @InjectRepository(Field)
   private readonly fieldRepository: Repository<Field>;
 
-  private parseFieldsToString(
-    data: Partial<CreateCardiorespiratoryCapacityDto>,
-  ) {
+  private parseFieldsToString(data: Partial<CreateBodyCompositionDto>) {
     const values = Object.entries(data);
     const inputs = [];
 
@@ -43,12 +41,10 @@ export class CardiorespiratoryCapacityFactory {
     return inputs;
   }
 
-  private parseFieldsToCorrectType(
-    data: Evaluation,
-  ): GetCardiorespiratoryCapacityDto {
+  private parseFieldsToCorrectType(data: Evaluation): GetBodyCompositionDto {
     const { id, name, createdAt, updatedAt, result, deletedAt, fields } = data;
 
-    const parsedFields: Partial<ICardiorespiratoryCapacity> = {};
+    const parsedFields: Partial<IBodyComposition> = {};
 
     fields.forEach(({ name, value, dataType }) => {
       const formattedValue = parseType(dataType, value);
@@ -58,7 +54,7 @@ export class CardiorespiratoryCapacityFactory {
 
     const { date, time, vo2MlKG, weight, vo2Lmin, finalFC } = parsedFields;
 
-    const returnedValues: GetCardiorespiratoryCapacityDto = {
+    const returnedValues: GetBodyCompositionDto = {
       id,
       name,
       date,
@@ -77,10 +73,10 @@ export class CardiorespiratoryCapacityFactory {
   }
 
   async create(
-    input: CreateCardiorespiratoryCapacityDto,
+    input: CreateBodyCompositionDto,
     user: User,
     type: string,
-  ): Promise<GetCardiorespiratoryCapacityDto> {
+  ): Promise<GetBodyCompositionDto> {
     const { result, ...rest } = input;
 
     const arrayOfFields = this.parseFieldsToString(rest);
@@ -122,9 +118,9 @@ export class CardiorespiratoryCapacityFactory {
   async update(
     id: string,
     type: string,
-    input: CreateCardiorespiratoryCapacityDto,
+    input: CreateBodyCompositionDto,
     evaluation: Evaluation,
-  ): Promise<GetCardiorespiratoryCapacityDto> {
+  ): Promise<GetBodyCompositionDto> {
     const { result, ...rest } = input;
 
     const arrayOfFields = this.parseFieldsToString(rest);
@@ -154,12 +150,12 @@ export class CardiorespiratoryCapacityFactory {
   async getAll(
     orderBy: EvaluationOrderBy,
     paginationParams: PaginationParams,
-  ): Promise<GetCardiorespiratoryCapacityDto[]> {
+  ): Promise<GetBodyCompositionDto[]> {
     const { page, limit } = paginationParams;
 
     const evaluations = await this.evaluationsRepository.find({
       where: {
-        name: 'ACR',
+        name: 'bodyComposition',
         deletedAt: null,
       },
       skip: (page - 1) * limit,
@@ -170,17 +166,16 @@ export class CardiorespiratoryCapacityFactory {
       },
     });
 
-    const parsedEvaluations: GetCardiorespiratoryCapacityDto[] =
-      evaluations.map((item) => {
+    const parsedEvaluations: GetBodyCompositionDto[] = evaluations.map(
+      (item) => {
         return this.parseFieldsToCorrectType(item);
-      });
+      },
+    );
 
     return parsedEvaluations;
   }
 
-  async getOne(
-    evaluation: Evaluation,
-  ): Promise<GetCardiorespiratoryCapacityDto> {
+  async getOne(evaluation: Evaluation): Promise<GetBodyCompositionDto> {
     return this.parseFieldsToCorrectType(evaluation);
   }
 }

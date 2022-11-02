@@ -44,30 +44,30 @@ afterAll(async () => {
   await app.close();
 });
 
-describe('Buscar avaliação Cardiorespiratória', () => {
-  it(`/:id?type=ACR (GET) deve receber erro ao buscar id inválido`, async () => {
+describe('Buscar avaliação Composição Corporal', () => {
+  it(`/:id?type=bodyComposition (GET) deve receber erro ao buscar id inválido`, async () => {
     id = 'aca8e3cd-2c41-4b7e-9e1f-f3d8206064a';
 
     return await server
-      .get(`/evaluation/${id}?type=ACR`)
+      .get(`/evaluation/${id}?type=bodyComposition`)
       .set('Authorization', `Bearer ${token}`)
       .expect(400);
   });
 
-  it(`/:id?type=ACR (GET) deve receber erro ao buscar id não válido porém inexistente`, async () => {
+  it(`/:id?type=bodyComposition (GET) deve receber erro ao buscar id não válido porém inexistente`, async () => {
     id = 'aca8e3cd-2c41-4b7e-9e1f-f3d8206064a9';
 
     return await server
-      .get(`/evaluation/${id}?type=ACR`)
+      .get(`/evaluation/${id}?type=bodyComposition`)
       .set('Authorization', `Bearer ${token}`)
       .expect(404);
   });
 
-  it(`/:id?type=ACR (GET) deve retornar sucesso ao buscar id válido`, async () => {
+  it(`/:id?type=bodyComposition (GET) deve retornar sucesso ao buscar id válido`, async () => {
     const response = await server
       .post('/evaluation')
       .send({
-        type: 'ACR',
+        type: 'bodyComposition',
         data: {
           weight: 75,
           time: 10,
@@ -83,7 +83,7 @@ describe('Buscar avaliação Cardiorespiratória', () => {
     id = response.body.id;
 
     return await server
-      .get(`/evaluation/${id}?type=ACR`)
+      .get(`/evaluation/${id}?type=bodyComposition`)
       .set('Authorization', `Bearer ${token}`)
       .expect(200);
   });

@@ -9,9 +9,9 @@ import { PaginationResponseDto } from 'src/common/dtos/pagination.dto';
 import { PaginationParams } from 'src/common/interfaces/pagination.interface';
 import { User } from 'src/modules/infrastructure/user/entities/user.entity';
 import { Repository } from 'typeorm';
-import { CardiorespiratoryCapacityStrategy } from './cardiorespiratory-capacity/cardiorespiratory-capacity.strategy';
-import { CreateCardiorespiratoryCapacityDto } from './cardiorespiratory-capacity/dto/create-cardiorespiratory-capacity.dto';
-import { UpdateCardiorespiratoryCapacityDto } from './cardiorespiratory-capacity/dto/update-cardiorespiratory-capacity.dto';
+import { BodyCompositionStrategy } from './body-composition/body-composition.strategy';
+import { CreateBodyCompositionDto } from './body-composition/dto/create-body-composition.dto';
+import { UpdateBodyCompositionDto } from './body-composition/dto/update-body-composition.dto';
 import { CreateEvaluationDto } from './dto/create-evaluation.dto';
 import { UpdateEvaluationDto } from './dto/update-evaluation.dto';
 import { Evaluation } from './entities/evaluation.entity';
@@ -24,7 +24,7 @@ export class EvaluationService {
   private readonly evaluationsRepository: Repository<Evaluation>;
 
   constructor(
-    private readonly cardiorespiratoryCapacityStrategy: CardiorespiratoryCapacityStrategy,
+    private readonly bodyCompositionStrategy: BodyCompositionStrategy,
   ) {}
 
   async create(
@@ -34,9 +34,9 @@ export class EvaluationService {
     const { data, type } = input;
 
     switch (type) {
-      case 'ACR':
-        return await this.cardiorespiratoryCapacityStrategy.create(
-          data as CreateCardiorespiratoryCapacityDto,
+      case 'bodyComposition':
+        return await this.bodyCompositionStrategy.create(
+          data as CreateBodyCompositionDto,
           user,
           type,
         );
@@ -56,7 +56,7 @@ export class EvaluationService {
       throw new BadRequestException(`Campo ${orderBy} inválido para orderBy.`);
 
     const { evaluations: cardioEvaluation, count: countCardioEvaluation } =
-      await this.cardiorespiratoryCapacityStrategy.getAll(
+      await this.bodyCompositionStrategy.getAll(
         orderBy as EvaluationOrderBy,
         paginationParams,
       );
@@ -82,8 +82,8 @@ export class EvaluationService {
       throw new BadRequestException('ID inválido.');
 
     switch (type) {
-      case 'ACR':
-        return await this.cardiorespiratoryCapacityStrategy.getByID(id);
+      case 'bodyComposition':
+        return await this.bodyCompositionStrategy.getByID(id);
       default:
         break;
     }
@@ -102,11 +102,11 @@ export class EvaluationService {
     const { type, data } = input;
 
     switch (type) {
-      case 'ACR':
-        return await this.cardiorespiratoryCapacityStrategy.update(
+      case 'bodyComposition':
+        return await this.bodyCompositionStrategy.update(
           id,
           type,
-          data as UpdateCardiorespiratoryCapacityDto,
+          data as UpdateBodyCompositionDto,
         );
       default:
         break;
