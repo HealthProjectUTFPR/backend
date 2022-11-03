@@ -9,6 +9,7 @@ import {
   ManyToOne,
   OneToMany,
 } from 'typeorm';
+import { Student } from '../../student/entities/student.entity';
 import { Field } from './field.entity';
 import { TestBatteries } from './test-batteries.entity';
 
@@ -27,6 +28,11 @@ export class Evaluation extends BaseEntity {
   @JoinColumn()
   @Exclude()
   createdBy: User;
+
+  @ManyToOne(() => Student, (student) => student.evaluations)
+  @JoinColumn()
+  @Exclude()
+  student: Student;
 
   @OneToMany(() => TestBatteries, (testBatteries) => testBatteries.evaluations)
   @JoinTable()

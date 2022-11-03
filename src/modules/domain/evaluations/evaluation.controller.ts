@@ -32,15 +32,16 @@ import { ResponseEvaluation } from './types/response-evaluation.type';
 export class EvaluationController {
   constructor(private readonly evaluationService: EvaluationService) {}
 
-  @Post('/')
+  @Post('/:studentId')
   async create(
     @AuthUser() user: User,
+    @Param('studentId') studentId: string,
     @Body(new JoiPipe({ group: 'CREATE' }))
     input: CreateEvaluationDto,
   ): Promise<ResponseEvaluation> {
     if (!user) throw new ForbiddenException('Sessão de usuário inválida');
 
-    return await this.evaluationService.create(input, user);
+    return await this.evaluationService.create(input, user, studentId);
   }
 
   @Get('/')

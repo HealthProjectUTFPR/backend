@@ -4,9 +4,11 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import dayjs from 'dayjs';
 import { PaginationParams } from 'src/common/interfaces/pagination.interface';
 import { User } from 'src/modules/infrastructure/user/entities/user.entity';
 import { Repository } from 'typeorm';
+import { Student } from '../../student/entities/student.entity';
 import { Evaluation } from '../entities/evaluation.entity';
 import { EvaluationOrderBy } from '../enums/order-by.enum';
 import { BodyCompositionFactory } from './body-composition.factory';
@@ -52,6 +54,7 @@ export class BodyCompositionStrategy {
     input: CreateBodyCompositionDto,
     user: User,
     type: string,
+    student: Student,
   ): Promise<GetBodyCompositionDto> {
     const validation = BodyCompositionSchema.validate(input);
 
@@ -59,9 +62,12 @@ export class BodyCompositionStrategy {
       throw new BadRequestException(validation.error.message);
     }
 
-    const sex = 'Mulher';
-    const age = 70;
-    const height = 192.5;
+    const { sex: studentSex, birthDate, stature } = student;
+
+    const sex = studentSex === 'H' ? 'Homem' : 'Mulher';
+    const age = dayjs(new Date()).diff(birthDate, 'year');
+    const height = stature;
+
     const { date, weight, time, finalFC, vo2Lmin, vo2MlKG, result } = input;
 
     const isResultValid = this.validateResult(result, {
@@ -101,8 +107,24 @@ export class BodyCompositionStrategy {
       throw new BadRequestException(validation.error.message);
     }
 
-    const sex = 'Homem';
-    const age = 70;
+    const evaluation = await this.evaluationRepository.findOne({
+      where: {
+        id,
+        deletedAt: null,
+      },
+      relations: ['fields', 'student'],
+    });
+
+    if (!evaluation) {
+      throw new NotFoundException(`Avaliação com id ${id} não encontrada`);
+    }
+
+    const { sex: studentSex, birthDate, stature } = evaluation.student;
+
+    const sex = studentSex === 'H' ? 'Homem' : 'Mulher';
+    const age = dayjs(new Date()).diff(birthDate, 'year');
+    const height = stature;
+
     const { date, weight, time, finalFC, vo2Lmin, vo2MlKG, result } = input;
 
     const isResultValid = this.validateResult(result, {
@@ -117,18 +139,6 @@ export class BodyCompositionStrategy {
       throw new BadRequestException(
         'Resultado inválido de acordo com os dados repassados',
       );
-
-    const evaluation = await this.evaluationRepository.findOne({
-      where: {
-        id,
-        deletedAt: null,
-      },
-      relations: ['fields'],
-    });
-
-    if (!evaluation) {
-      throw new NotFoundException(`Avaliação com id ${id} não encontrada`);
-    }
 
     const newData: UpdateBodyCompositionDto = {
       date,

@@ -1,13 +1,17 @@
 import { BaseEntity } from 'src/common/entities/base.entity';
-import { Column, Entity, ManyToOne } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 import { User } from 'src/modules/infrastructure/user/entities/user.entity';
+import { Exclude } from 'class-transformer';
+import { Evaluation } from '../../evaluations/entities/evaluation.entity';
 
 @Entity()
 export class Student extends BaseEntity {
   @Column()
   name: string;
 
-  @Column()
+  @Column({
+    length: 1,
+  })
   sex: string;
 
   @Column()
@@ -29,8 +33,16 @@ export class Student extends BaseEntity {
   address: string;
 
   @Column()
+  birthDate: Date;
+
+  @Column()
   flag: boolean;
 
   @ManyToOne(() => User, (user) => user.students)
   user: User;
+
+  @OneToMany(() => Evaluation, (evaluation) => evaluation.student)
+  @JoinColumn()
+  @Exclude()
+  evaluations: Evaluation[];
 }

@@ -8,9 +8,18 @@ import { TestBatteries } from './entities/test-batteries.entity';
 import { User } from 'src/modules/infrastructure/user/entities/user.entity';
 import { BodyCompositionStrategy } from './body-composition/body-composition.strategy';
 import { BodyCompositionFactory } from './body-composition/body-composition.factory';
+import { StudentModule } from '../student/student.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Evaluation, Field, TestBatteries, User])],
+  imports: [
+    TypeOrmModule.forFeature([
+      Evaluation,
+      Field,
+      TestBatteries,
+      User,
+      StudentModule,
+    ]),
+  ],
   controllers: [EvaluationController],
   providers: [
     EvaluationService,
