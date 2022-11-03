@@ -4,9 +4,11 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import dayjs from 'dayjs';
 import { PaginationParams } from 'src/common/interfaces/pagination.interface';
 import { User } from 'src/modules/infrastructure/user/entities/user.entity';
 import { Repository } from 'typeorm';
+import { Student } from '../../student/entities/student.entity';
 import { Evaluation } from '../entities/evaluation.entity';
 import { EvaluationOrderBy } from '../enums/order-by.enum';
 import { CardiorespiratoryCapacityFactory } from './cardiorespiratory-capacity.factory';
@@ -55,6 +57,7 @@ export class CardiorespiratoryCapacityStrategy {
     input: CreateCardiorespiratoryCapacityDto,
     user: User,
     type: string,
+    student: Student,
   ): Promise<GetCardiorespiratoryCapacityDto> {
     const validation = CardioRespiratoryCapacitySchema.validate(input);
 
@@ -62,8 +65,11 @@ export class CardiorespiratoryCapacityStrategy {
       throw new BadRequestException(validation.error.message);
     }
 
-    const sex = 'Homem';
-    const age = 70;
+    const { sex: studentSex, birthDate } = student;
+
+    const sex = studentSex === 'H' ? 'Homem' : 'Mulher';
+    const age = dayjs(new Date()).diff(birthDate, 'year');
+
     const { date, weight, time, finalFC, vo2Lmin, vo2MlKG, result } = input;
 
     const isResultValid = this.validateResult(result, {
@@ -89,7 +95,12 @@ export class CardiorespiratoryCapacityStrategy {
       result,
     };
 
-    return await this.cardiorespiratoryCapacityFactory.create(data, user, type);
+    return await this.cardiorespiratoryCapacityFactory.create(
+      data,
+      user,
+      type,
+      student,
+    );
   }
 
   async update(
@@ -103,8 +114,23 @@ export class CardiorespiratoryCapacityStrategy {
       throw new BadRequestException(validation.error.message);
     }
 
-    const sex = 'Homem';
-    const age = 70;
+    const evaluation = await this.evaluationRepository.findOne({
+      where: {
+        id,
+        deletedAt: null,
+      },
+      relations: ['fields', 'student'],
+    });
+
+    if (!evaluation) {
+      throw new NotFoundException(`Avaliação com id ${id} não encontrada`);
+    }
+
+    const { sex: studentSex, birthDate } = evaluation.student;
+
+    const sex = studentSex === 'H' ? 'Homem' : 'Mulher';
+    const age = dayjs(new Date()).diff(birthDate, 'year');
+
     const { date, weight, time, finalFC, vo2Lmin, vo2MlKG, result } = input;
 
     const isResultValid = this.validateResult(result, {
@@ -119,18 +145,6 @@ export class CardiorespiratoryCapacityStrategy {
       throw new BadRequestException(
         'Resultado inválido de acordo com os dados repassados',
       );
-
-    const evaluation = await this.evaluationRepository.findOne({
-      where: {
-        id,
-        deletedAt: null,
-      },
-      relations: ['fields'],
-    });
-
-    if (!evaluation) {
-      throw new NotFoundException(`Avaliação com id ${id} não encontrada`);
-    }
 
     const newData: UpdateCardiorespiratoryCapacityDto = {
       date,

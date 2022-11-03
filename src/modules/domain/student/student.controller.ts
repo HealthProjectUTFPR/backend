@@ -7,7 +7,7 @@ import {
   Patch,
   Post,
   UseGuards,
-  ForbiddenException
+  ForbiddenException,
 } from '@nestjs/common';
 import { JoiPipe } from 'nestjs-joi';
 import { StudentService } from './student.service';

@@ -6,6 +6,7 @@ import { PaginationParams } from 'src/common/interfaces/pagination.interface';
 import { parseType } from 'src/common/utils/parse-type.util';
 import { User } from 'src/modules/infrastructure/user/entities/user.entity';
 import { Repository } from 'typeorm';
+import { Student } from '../../student/entities/student.entity';
 import { Evaluation } from '../entities/evaluation.entity';
 import { Field } from '../entities/field.entity';
 import { EvaluationOrderBy } from '../enums/order-by.enum';
@@ -80,6 +81,7 @@ export class CardiorespiratoryCapacityFactory {
     input: CreateCardiorespiratoryCapacityDto,
     user: User,
     type: string,
+    student: Student,
   ): Promise<GetCardiorespiratoryCapacityDto> {
     const { result, ...rest } = input;
 
@@ -89,6 +91,7 @@ export class CardiorespiratoryCapacityFactory {
       name: type,
       result,
       createdBy: user,
+      student,
     });
 
     evaluation = await this.evaluationsRepository.save(evaluation);

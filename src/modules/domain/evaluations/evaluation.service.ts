@@ -9,6 +9,7 @@ import { PaginationResponseDto } from 'src/common/dtos/pagination.dto';
 import { PaginationParams } from 'src/common/interfaces/pagination.interface';
 import { User } from 'src/modules/infrastructure/user/entities/user.entity';
 import { Repository } from 'typeorm';
+import { Student } from '../student/entities/student.entity';
 import { CardiorespiratoryCapacityStrategy } from './cardiorespiratory-capacity/cardiorespiratory-capacity.strategy';
 import { CreateCardiorespiratoryCapacityDto } from './cardiorespiratory-capacity/dto/create-cardiorespiratory-capacity.dto';
 import { UpdateCardiorespiratoryCapacityDto } from './cardiorespiratory-capacity/dto/update-cardiorespiratory-capacity.dto';
@@ -23,6 +24,9 @@ export class EvaluationService {
   @InjectRepository(Evaluation)
   private readonly evaluationsRepository: Repository<Evaluation>;
 
+  @InjectRepository(Student)
+  private readonly studentRepository: Repository<Student>;
+
   constructor(
     private readonly cardiorespiratoryCapacityStrategy: CardiorespiratoryCapacityStrategy,
   ) {}
@@ -30,8 +34,19 @@ export class EvaluationService {
   async create(
     input: CreateEvaluationDto,
     user: User,
+    studentId: string,
   ): Promise<ResponseEvaluation> {
     const { data, type } = input;
+
+    const student = await this.studentRepository.findOne({
+      where: { id: studentId },
+    });
+
+    if (!student) {
+      throw new BadRequestException(
+        `Estudante com id ${studentId} não encontrado.`,
+      );
+    }
 
     switch (type) {
       case 'ACR':
@@ -39,6 +54,7 @@ export class EvaluationService {
           data as CreateCardiorespiratoryCapacityDto,
           user,
           type,
+          student,
         );
       default:
         break;
