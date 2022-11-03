@@ -35,13 +35,22 @@ export class StudentController {
   }
 
   @Patch('delete/:id')
-  async update(
+  async delete(
     @AuthUser() user: User,
     @Param('id') id: string,
     @Body(new JoiPipe({ group: 'UPDATE' }))
     updateStudentDto: UpdateStudentDto,
   ): Promise<Student> {
-    return await this.studentService.update(id, updateStudentDto, user);
+    return await this.studentService.delete(id, updateStudentDto, user);
+  }
+
+  @Patch('update/:id')
+  async update(
+    @Param('id') id: string,
+    @Body(new JoiPipe({ group: 'UPDATE' }))
+    updateStudentDto: UpdateStudentDto,
+  ): Promise<Student> {
+    return await this.studentService.update(id, updateStudentDto);
   }
 
   @Get('index')

@@ -29,7 +29,7 @@ export class UpdateStudentDto {
   @JoiSchema(['UPDATE'], Joi.string().optional())
   address: string;
 
-  @JoiSchema(['UPDATE'], Joi.date().required())
+  @JoiSchema(['UPDATE'], Joi.date().optional())
   birthDate: Date;
 
   @JoiSchema(['UPDATE'], Joi.boolean().optional())
