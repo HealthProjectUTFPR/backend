@@ -27,7 +27,7 @@ export class StudentService {
     return await this.studentRepository.findOneBy({ id });
   }
 
-  async update(
+  async delete(
     id: string,
     updateStudentDto: UpdateStudentDto,
     user: User,
@@ -39,6 +39,29 @@ export class StudentService {
     student = await this.studentRepository.findOneBy({ id: id });
     updateStudentDto.flag = false;
     student.flag = updateStudentDto.flag;
+
+    return await this.studentRepository.save(student);
+  }
+
+  async update(
+    id: string,
+    updateStudentDto: UpdateStudentDto,
+  ): Promise<Student> {
+    let student = await this.studentRepository.findOne({
+      where: { id: id },
+    });
+    student = await this.studentRepository.findOneBy({ id: id });
+    const {name, breed, stature, contact, healthPlan, emergencyContact, address, birthDate, flag} = updateStudentDto;
+
+    student.name = name? name : student.name;
+    student.breed = breed? breed : student.breed;
+    student.stature = stature? stature : student.stature;
+    student.contact = contact? contact : student.contact;
+    student.healthPlan = healthPlan? healthPlan : student.healthPlan;
+    student.emergencyContact = emergencyContact? emergencyContact : student.emergencyContact;
+    student.address = address? address : student.address;
+    student.birthDate = birthDate? birthDate : student.birthDate;
+    student.flag = flag? flag : student.flag;
 
     return await this.studentRepository.save(student);
   }
