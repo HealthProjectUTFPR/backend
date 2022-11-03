@@ -40,7 +40,7 @@ export class SarcopeniaFactory {
   private parseFieldsToCorrectType(data: Evaluation): GetSarcopeniaDto {
     const { id, name, createdAt, updatedAt, result, deletedAt, fields } = data;
 
-    const parsedFields = {};
+    const parsedFields: Partial<ISarcopenia> = {};
 
     fields.forEach(({ name, value, dataType }) => {
       let formattedValue: string | number | Date | boolean;
@@ -64,18 +64,31 @@ export class SarcopeniaFactory {
       parsedFields[name] = formattedValue;
     });
 
-    const { date, time, vo2MlKG, weight, vo2Lmin, finalFC } = parsedFields;
+    const {
+      date,
+      weight,
+      measuredMuscleMass,
+      estimatedMuscleMass,
+      walkingSpeed,
+      handGripStrength,
+      muscleMassIndex,
+      calfCircumference,
+      hasSarcopenia,
+    } = parsedFields;
 
     const returnedValues: GetSarcopeniaDto = {
       id,
       name,
       date,
-      time,
-      vo2MlKG,
       weight,
-      vo2Lmin,
-      finalFC,
       result,
+      measuredMuscleMass,
+      estimatedMuscleMass,
+      walkingSpeed,
+      handGripStrength,
+      muscleMassIndex,
+      calfCircumference,
+      hasSarcopenia,
       createdAt,
       updatedAt,
       deletedAt,
@@ -92,5 +105,38 @@ export class SarcopeniaFactory {
     const { result, ...rest } = input;
 
     const arrayOfFields = this.parseFieldsToString(rest);
+
+    let evaluation = this.evaluationRepository.create({
+      name: type,
+      result,
+      createdBy: user,
+    });
+
+    evaluation = await this.evaluationRepository.save(evaluation);
+
+    const fields: Field[] = await Promise.all(
+      arrayOfFields.map(async (field) => {
+        const entityField = this.fieldRepository.create({
+          ...field,
+          evaluation,
+        } as Field);
+
+        return await this.fieldRepository.save(entityField);
+      }),
+    );
+
+    evaluation.fields = fields;
+    const { id } = evaluation;
+
+    await evaluation.save();
+
+    evaluation = await this.evaluationRepository.findOne({
+      where: {
+        id: id,
+      },
+      relations: ['fields'],
+    });
+
+    return this.parseFieldsToCorrectType(evaluation);
   }
 }

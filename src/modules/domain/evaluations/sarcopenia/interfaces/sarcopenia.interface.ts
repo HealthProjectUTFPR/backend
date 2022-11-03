@@ -11,6 +11,8 @@ export interface ISarcopenia {
 
   measuredMuscleMass?: number;
 
+  estimatedMuscleMass?: number;
+
   walkingSpeed: number;
 
   handGripStrength: number;
@@ -18,6 +20,10 @@ export interface ISarcopenia {
   calfCircumference: number;
 
   muscleMassIndex: number;
+
+  date: Date;
+
+  hasSarcopenia: boolean;
 
   result: string;
 }
