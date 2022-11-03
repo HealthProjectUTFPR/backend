@@ -13,21 +13,69 @@ export class CreateBodyCompositionDto {
 
   @ApiProperty()
   @JoiSchema(Joi.number().required())
-  time: number;
+  waist: number;
 
   @ApiProperty()
   @JoiSchema(Joi.number().required())
-  finalFC: number;
+  hip: number;
 
   @ApiProperty()
   @JoiSchema(Joi.number().required())
-  vo2Lmin: number;
+  waistEstature: number;
 
   @ApiProperty()
   @JoiSchema(Joi.number().required())
-  vo2MlKG: number;
+  waistHip: number;
 
   @ApiProperty()
-  @JoiSchema(Joi.string().required())
+  @JoiSchema(Joi.number().required())
+  imc: number;
+
+  @ApiProperty()
+  @JoiSchema(Joi.number().required())
+  scapula: number;
+
+  @ApiProperty()
+  @JoiSchema(Joi.number().required())
+  triceps: number;
+
+  @ApiProperty()
+  @JoiSchema(Joi.number().required())
+  biceps: number;
+
+  @ApiProperty()
+  @JoiSchema(Joi.number().required())
+  suprailiac: number;
+
+  @ApiProperty()
+  @JoiSchema(Joi.number().required())
+  sumPleats: number;
+
+  @ApiProperty()
+  @JoiSchema(Joi.number().required())
+  density: number;
+
+  @ApiProperty()
+  @JoiSchema(Joi.number().required())
+  bodyFat: number;
+
+  @ApiProperty()
+  @JoiSchema(Joi.number().required())
+  mg: number;
+
+  @ApiProperty()
+  @JoiSchema(Joi.number().required())
+  mcm: number;
+
+  @ApiProperty()
+  @JoiSchema(Joi.number().required())
+  minimumWeight: number;
+
+  @ApiProperty()
+  @JoiSchema(Joi.number().required())
+  maximumWeight: number;
+
+  @ApiProperty()
+  @JoiSchema(Joi.number().required())
   result: string;
 }

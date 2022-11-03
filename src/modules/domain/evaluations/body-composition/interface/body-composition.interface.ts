@@ -1,10 +1,23 @@
 export interface IBodyComposition {
   sex: string;
-  vo2MlKG: number;
-  vo2Lmin: number;
-  weight: number;
-  finalFC: number;
-  time: number;
   age: number;
+
   date: Date;
+  weight: number;
+  waist: number;
+  hip: number;
+  waistEstature: number;
+  waistHip: number;
+  imc: number;
+  scapula: number;
+  triceps: number;
+  biceps: number;
+  suprailiac: number;
+  sumPleats: number;
+  density: number;
+  bodyFat: number;
+  mg: number;
+  mcm: number;
+  minimumWeight: number;
+  maximumWeight: number;
 }

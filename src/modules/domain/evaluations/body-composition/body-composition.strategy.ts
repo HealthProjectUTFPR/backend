@@ -59,8 +59,9 @@ export class BodyCompositionStrategy {
       throw new BadRequestException(validation.error.message);
     }
 
-    const sex = 'Homem';
+    const sex = 'Mulher';
     const age = 70;
+    const height = 192.5;
     const { date, weight, time, finalFC, vo2Lmin, vo2MlKG, result } = input;
 
     const isResultValid = this.validateResult(result, {
