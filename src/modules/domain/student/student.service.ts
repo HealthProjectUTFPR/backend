@@ -42,4 +42,20 @@ export class StudentService {
 
     return await this.studentRepository.save(student);
   }
+
+  async findAll(
+    id: string,
+  ): Promise<Student[]> {
+    let student = await this.studentRepository.find({
+      relations: {
+        user: true
+      },
+      where: {
+        user: {
+          id: id
+        }
+      },
+    });
+    return student;
+  }
 }

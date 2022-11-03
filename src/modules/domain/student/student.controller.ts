@@ -2,7 +2,7 @@ import {
   Body,
   Controller,
   // Delete,
-  // Get,
+  Get,
   Param,
   Patch,
   Post,
@@ -42,5 +42,12 @@ export class StudentController {
     updateStudentDto: UpdateStudentDto,
   ): Promise<Student> {
     return await this.studentService.update(id, updateStudentDto, user);
+  }
+
+  @Get('index')
+  async index(
+    @AuthUser() user: User,
+  ): Promise<Student[]> {
+    return await this.studentService.findAll(user.id);
   }
 }
