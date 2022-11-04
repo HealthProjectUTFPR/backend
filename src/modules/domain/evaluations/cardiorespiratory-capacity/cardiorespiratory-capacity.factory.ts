@@ -157,6 +157,7 @@ export class CardiorespiratoryCapacityFactory {
   async getAll(
     orderBy: EvaluationOrderBy,
     paginationParams: PaginationParams,
+    studentID: string,
   ): Promise<GetCardiorespiratoryCapacityDto[]> {
     const { page, limit } = paginationParams;
 
@@ -164,6 +165,9 @@ export class CardiorespiratoryCapacityFactory {
       where: {
         name: 'ACR',
         deletedAt: null,
+        student: {
+          id: studentID,
+        },
       },
       skip: (page - 1) * limit,
       take: limit,

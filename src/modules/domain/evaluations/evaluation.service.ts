@@ -64,7 +64,7 @@ export class EvaluationService {
   async findAll(
     orderBy: EvaluationOrderBy,
     paginationParams: PaginationParams,
-    user: User,
+    studentID: string,
   ): Promise<PaginationResponseDto<ResponseEvaluation[]>> {
     const isOrderByValid = orderBy in EvaluationOrderBy;
 
@@ -75,6 +75,7 @@ export class EvaluationService {
       await this.cardiorespiratoryCapacityStrategy.getAll(
         orderBy as EvaluationOrderBy,
         paginationParams,
+        studentID,
       );
 
     const meta = {

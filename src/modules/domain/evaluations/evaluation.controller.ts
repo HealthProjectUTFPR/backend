@@ -47,13 +47,18 @@ export class EvaluationController {
   @Get('/')
   async findAll(
     @AuthUser() user: User,
+    @Param('studentId') studentId: string,
     @Pagination() paginationParams: PaginationParams,
     @Query('orderBy') orderBy: EvaluationOrderBy,
   ): Promise<PaginationResponseDto<ResponseEvaluation[]>> {
     if (!user) throw new ForbiddenException('Sessão de usuário inválida');
 
     return new PaginationResponseDto<ResponseEvaluation[]>(
-      await this.evaluationService.findAll(orderBy, paginationParams, user),
+      await this.evaluationService.findAll(
+        orderBy,
+        paginationParams,
+        studentId,
+      ),
     );
   }
 

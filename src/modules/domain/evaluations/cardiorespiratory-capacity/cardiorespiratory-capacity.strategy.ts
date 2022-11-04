@@ -167,10 +167,12 @@ export class CardiorespiratoryCapacityStrategy {
   async getAll(
     orderBy: EvaluationOrderBy,
     paginationParams: PaginationParams,
+    studentID: string,
   ): Promise<GetAllCardiorespiratoryCapacityDto> {
     const evaluations = await this.cardiorespiratoryCapacityFactory.getAll(
       orderBy,
       paginationParams,
+      studentID,
     );
 
     const returnedData: GetAllCardiorespiratoryCapacityDto = {
