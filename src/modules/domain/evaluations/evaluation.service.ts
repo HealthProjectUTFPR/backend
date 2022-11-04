@@ -11,22 +11,28 @@ import { FindAllEvaluationDto } from './dto/findall-evaluation.dto';
 import { FindOneEvaluationDto } from './dto/findone-evaluation.dto';
 import { UpdateEvaluationDto } from './dto/update-evaluation.dto';
 import { Evaluation } from './entities/evaluation.entity';
+import { CreateSarcopeniaDTO } from './sarcopenia/dto/create-sarcopenia';
+import { SarcopeniaStrategy } from './sarcopenia/sarcopenia.strategy';
 
 @Injectable()
 export class EvaluationService {
   @InjectRepository(Evaluation)
   private readonly evaluationsRepository: Repository<Evaluation>;
 
+  constructor(private readonly sarcopeniaStrategy: SarcopeniaStrategy) {}
+
   async create(input: CreateEvaluationDto, user: User): Promise<Evaluation> {
     const { data, type } = input;
     switch (type) {
       case 'sarcopenia':
-        console.log('sarcopenia');
-        break;
+        return await this.sarcopeniaStrategy.create(
+          data as CreateSarcopeniaDTO,
+          user,
+          type,
+        );
       default:
         break;
     }
-    return;
   }
 
   async findAll(
