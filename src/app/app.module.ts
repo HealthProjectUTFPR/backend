@@ -8,11 +8,11 @@ import { StudentModule } from 'src/modules/domain/student/student.module';
 
 @Module({
   imports: [
-    UserModule,
     AuthModule,
     EvaluationModule,
     DatabaseModule,
     StudentModule,
+    UserModule,
   ],
   controllers: [],
   providers: [

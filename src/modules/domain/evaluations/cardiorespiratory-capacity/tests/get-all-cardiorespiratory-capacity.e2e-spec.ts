@@ -5,14 +5,22 @@ import { EvaluationModule } from '../../evaluation.module';
 import { DatabaseTestModule } from 'src/modules/infrastructure/database/database-test.module';
 import { AuthModule } from 'src/modules/infrastructure/auth/auth.module';
 import { UserModule } from 'src/modules/infrastructure/user/user.module';
+import { StudentModule } from 'src/modules/domain/student/student.module';
 
 let app: INestApplication;
 let server: request.SuperTest<request.Test>;
-let token;
+let token: string;
+let studentId: string;
 
 beforeAll(async () => {
   const module = await Test.createTestingModule({
-    imports: [EvaluationModule, UserModule, DatabaseTestModule, AuthModule],
+    imports: [
+      EvaluationModule,
+      UserModule,
+      DatabaseTestModule,
+      AuthModule,
+      StudentModule,
+    ],
   }).compile();
   app = module.createNestApplication();
   await app.init();
@@ -37,6 +45,24 @@ beforeAll(async () => {
     .expect(200);
 
   token = login.text;
+
+  const student = await server
+    .post('/student/create')
+    .send({
+      name: 'Estudante',
+      sex: 'M',
+      breed: 'Branco',
+      stature: 192,
+      healthPlan: 'free',
+      emergencyContact: '449994484848',
+      contact: '449994484848',
+      address: 'Rua 123',
+      birthDate: '1980-10-12T03:00:00.000Z',
+      flag: true,
+    })
+    .set('Authorization', `Bearer ${token}`);
+
+  studentId = student.body.id;
 });
 
 afterAll(async () => {
@@ -44,9 +70,11 @@ afterAll(async () => {
 });
 
 describe('Buscar avaliações Cardiorespiratória', () => {
-  it(`/ (GET) deve receber um array vazio como resultado`, async () => {
+  it(`/:studentId (GET) deve receber um array vazio como resultado`, async () => {
     return await server
-      .get('/evaluation?page=1&limit=50&orderBy=updatedAt')
+      .get(
+        `/evaluation?studentId=${studentId}&page=1&limit=50&orderBy=updatedAt`,
+      )
       .set('Authorization', `Bearer ${token}`)
       .expect((res) => {
         expect(res.body.data).toStrictEqual([]);
@@ -54,10 +82,10 @@ describe('Buscar avaliações Cardiorespiratória', () => {
       .expect(200);
   });
 
-  it(`/ (GET) deve receber um array não vazio como resultado`, async () => {
+  it(`/:studentId (GET) deve receber um array não vazio como resultado`, async () => {
     for (let i = 0; i < 5; i++) {
       await server
-        .post('/evaluation')
+        .post(`/evaluation/${studentId}`)
         .send({
           type: 'ACR',
           data: {
@@ -74,7 +102,9 @@ describe('Buscar avaliações Cardiorespiratória', () => {
     }
 
     return await server
-      .get('/evaluation?page=1&limit=50&orderBy=updatedAt')
+      .get(
+        `/evaluation?studentId=${studentId}&page=1&limit=50&orderBy=updatedAt`,
+      )
       .set('Authorization', `Bearer ${token}`)
       .expect((res) => {
         expect(res.body.meta.totalItems).toBe(5);
@@ -82,13 +112,15 @@ describe('Buscar avaliações Cardiorespiratória', () => {
       .expect(200);
   });
 
-  it(`/ (GET) deve falhar devido a página invalida`, async () => {
+  it(`/:studentId (GET) deve falhar devido a página invalida`, async () => {
     const page = -1;
     const limit = 5;
     const orderBy = 'updatedAt';
 
     return await server
-      .get(`/evaluation?page=${page}&limit=${limit}&orderBy=${orderBy}`)
+      .get(
+        `/evaluation?studentId=${studentId}&page=${page}&limit=${limit}&orderBy=${orderBy}`,
+      )
       .set('Authorization', `Bearer ${token}`)
       .expect(400);
   });
