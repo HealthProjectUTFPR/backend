@@ -57,6 +57,7 @@ export class EvaluationService {
           data as CreateSarcopeniaDTO,
           user,
           type,
+          student,
         );
       case 'ACR':
         return await this.cardiorespiratoryCapacityStrategy.create(

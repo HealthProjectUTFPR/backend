@@ -4,6 +4,7 @@ import {
   InternalServerErrorException,
 } from '@nestjs/common';
 import { User } from 'src/modules/infrastructure/user/entities/user.entity';
+import { Student } from '../../student/entities/student.entity';
 import { CreateSarcopeniaDTO } from './dto/create-sarcopenia';
 import { GetSarcopeniaDto } from './dto/get-sarcopenia-dto';
 import calculateEstimatedMuscleMass from './helpers/calculate-estimated-muscle-mass';
@@ -74,6 +75,7 @@ export class SarcopeniaStrategy {
     input: CreateSarcopeniaDTO,
     user: User,
     type: string,
+    student: Student,
   ): Promise<GetSarcopeniaDto> {
     try {
       const sex = 'homem';
@@ -125,7 +127,7 @@ export class SarcopeniaStrategy {
         hasSarcopenia,
       };
 
-      return await this.sarcopeniaFactory.create(data, user, type);
+      return await this.sarcopeniaFactory.create(data, user, type, student);
     } catch (error) {
       throw new InternalServerErrorException(
         'Algo de errado ocorreu na criação da avaliação.',

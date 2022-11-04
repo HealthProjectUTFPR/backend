@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import dayjs from 'dayjs';
 import { User } from 'src/modules/infrastructure/user/entities/user.entity';
 import { Repository } from 'typeorm';
+import { Student } from '../../student/entities/student.entity';
 import { Evaluation } from '../entities/evaluation.entity';
 import { Field } from '../entities/field.entity';
 import { CreateSarcopeniaDTO } from './dto/create-sarcopenia';
@@ -101,6 +102,7 @@ export class SarcopeniaFactory {
     input: CreateSarcopeniaDTO,
     user: User,
     type: string,
+    student: Student,
   ): Promise<GetSarcopeniaDto> {
     const { result, ...rest } = input;
 
@@ -110,6 +112,7 @@ export class SarcopeniaFactory {
       name: type,
       result,
       createdBy: user,
+      student,
     });
 
     evaluation = await this.evaluationRepository.save(evaluation);
