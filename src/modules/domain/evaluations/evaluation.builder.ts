@@ -1,5 +1,5 @@
-import { Field } from '../../field/entities/field.entity';
-import { TestBatteries } from '../../test-batteries/entities/test-batteries.entity';
+import { Field } from './entities/field.entity';
+import { TestBatteries } from './entities/test-batteries.entity';
 import { Evaluation } from './entities/evaluation.entity';
 import { IEvaluationBuilder } from './interfaces/evaluation.builder.interface';
 

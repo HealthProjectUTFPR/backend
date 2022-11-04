@@ -6,17 +6,13 @@ import { Evaluation } from './entities/evaluation.entity';
 import { Field } from './entities/field.entity';
 import { TestBatteries } from './entities/test-batteries.entity';
 import { User } from 'src/modules/infrastructure/user/entities/user.entity';
-import { CardiorespiratoryCapacityStrategy } from './cardiorespiratoryCapacity/cardiorespiratoryCapacity.strategy';
-import { CardiorespiratoryCapacityFactory } from './cardiorespiratoryCapacity/cardiorespiratoryCapacity.factory';
+import { SarcopeniaFactory } from './sarcopenia/sarcopenia.factory';
+import { SarcopeniaStrategy } from './sarcopenia/sarcopenia.strategy';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Evaluation, Field, TestBatteries, User])],
   controllers: [EvaluationController],
-  providers: [
-    EvaluationService,
-    CardiorespiratoryCapacityStrategy,
-    CardiorespiratoryCapacityFactory,
-  ],
+  providers: [EvaluationService, SarcopeniaFactory, SarcopeniaStrategy],
   exports: [TypeOrmModule],
 })
 export class EvaluationModule {}

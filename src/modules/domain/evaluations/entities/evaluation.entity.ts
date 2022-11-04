@@ -20,7 +20,7 @@ export class Evaluation extends BaseEntity {
   @Column()
   result: string;
 
-  @OneToMany(() => Field, (field) => field.evaluationField)
+  @OneToMany(() => Field, (field) => field.evaluation)
   fields: Field[];
 
   @ManyToOne(() => User, (user) => user.evaluations)
