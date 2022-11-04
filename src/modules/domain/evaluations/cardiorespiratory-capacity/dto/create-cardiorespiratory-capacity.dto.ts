@@ -11,31 +11,23 @@ export class CreateCardiorespiratoryCapacityDto {
   @JoiSchema(Joi.number().required())
   weight: number;
 
-  @JoiSchema(Joi.number())
-  measuredMuscleMass?: number;
-
-  @JoiSchema(Joi.number())
-  estimatedMuscleMass?: number;
-
+  @ApiProperty()
   @JoiSchema(Joi.number().required())
-  walkingSpeed: number;
+  time: number;
 
   @ApiProperty()
   @JoiSchema(Joi.number().required())
-  handGripStrength: number;
+  finalFC: number;
 
   @ApiProperty()
   @JoiSchema(Joi.number().required())
-  muscleMassIndex: number;
+  vo2Lmin: number;
 
   @ApiProperty()
   @JoiSchema(Joi.number().required())
-  calfCircumference: number;
+  vo2MlKG: number;
 
   @ApiProperty()
   @JoiSchema(Joi.string().required())
   result: string;
-
-  @JoiSchema(Joi.number().required())
-  hasSarcopenia: boolean;
 }
