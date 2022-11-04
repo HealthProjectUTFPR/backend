@@ -5,14 +5,22 @@ import { EvaluationModule } from '../../evaluation.module';
 import { DatabaseTestModule } from 'src/modules/infrastructure/database/database-test.module';
 import { AuthModule } from 'src/modules/infrastructure/auth/auth.module';
 import { UserModule } from 'src/modules/infrastructure/user/user.module';
+import { StudentModule } from 'src/modules/domain/student/student.module';
 
 let app: INestApplication;
 let server: request.SuperTest<request.Test>;
-let token;
+let token: string;
+let studentId: string;
 
 beforeAll(async () => {
   const module = await Test.createTestingModule({
-    imports: [EvaluationModule, UserModule, DatabaseTestModule, AuthModule],
+    imports: [
+      EvaluationModule,
+      UserModule,
+      DatabaseTestModule,
+      AuthModule,
+      StudentModule,
+    ],
   }).compile();
   app = module.createNestApplication();
   await app.init();
@@ -37,6 +45,24 @@ beforeAll(async () => {
     .expect(200);
 
   token = login.text;
+
+  const student = await server
+    .post('/student/create')
+    .send({
+      name: 'Estudante',
+      sex: 'M',
+      breed: 'Branco',
+      stature: 192,
+      healthPlan: 'free',
+      emergencyContact: '449994484848',
+      contact: '449994484848',
+      address: 'Rua 123',
+      birthDate: '1980-10-12T03:00:00.000Z',
+      flag: true,
+    })
+    .set('Authorization', `Bearer ${token}`);
+
+  studentId = student.body.id;
 });
 
 afterAll(async () => {
@@ -44,14 +70,14 @@ afterAll(async () => {
 });
 
 describe('Criar avaliações Cardiorespiratória', () => {
-  it(`/ (CREATE) falha na validação do resultado`, async () => {
+  it(`/:studentId (CREATE) falha na validação do resultado`, async () => {
     return await server
-      .post('/evaluation')
+      .post(`/evaluation/${studentId}`)
       .send({
         type: 'ACR',
         data: {
-          weight: 80,
-          time: 10,
+          weight: 120,
+          time: 20,
           date: '2022-10-12T03:00:00.000Z',
           finalFC: 150,
           vo2Lmin: 3.733740000000001,
@@ -63,9 +89,9 @@ describe('Criar avaliações Cardiorespiratória', () => {
       .expect(400);
   });
 
-  it(`/ (CREATE) sucesso na criação`, async () => {
+  it(`/:studentId (CREATE) sucesso na criação`, async () => {
     return await server
-      .post('/evaluation')
+      .post(`/evaluation/${studentId}`)
       .send({
         type: 'ACR',
         data: {
