@@ -8,16 +8,16 @@ export class MetaDto {
 }
 
 export class PaginationResponseDto<D, T = any> {
-  data: T[] | D[];
   meta: MetaDto;
+  data: T[] | D[];
 
   constructor(
     paginationResult: PaginationResult<D>,
     DtoClass?: { new (data: D): T },
   ) {
+    this.meta = paginationResult.meta;
     this.data = DtoClass
       ? paginationResult.data.map((item) => new DtoClass(item))
       : paginationResult.data;
-    this.meta = paginationResult.meta;
   }
 }

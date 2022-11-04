@@ -4,80 +4,130 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import {
-  PaginationParams,
-  PaginationResult,
-} from 'src/common/interfaces/pagination.interface';
+import Joi from 'joi';
+import { PaginationResponseDto } from 'src/common/dtos/pagination.dto';
+import { PaginationParams } from 'src/common/interfaces/pagination.interface';
 import { User } from 'src/modules/infrastructure/user/entities/user.entity';
 import { Repository } from 'typeorm';
+import { Student } from '../student/entities/student.entity';
+import { CardiorespiratoryCapacityStrategy } from './cardiorespiratory-capacity/cardiorespiratory-capacity.strategy';
+import { CreateCardiorespiratoryCapacityDto } from './cardiorespiratory-capacity/dto/create-cardiorespiratory-capacity.dto';
+import { UpdateCardiorespiratoryCapacityDto } from './cardiorespiratory-capacity/dto/update-cardiorespiratory-capacity.dto';
 import { CreateEvaluationDto } from './dto/create-evaluation.dto';
-import { FindAllEvaluationDto } from './dto/findall-evaluation.dto';
-import { FindOneEvaluationDto } from './dto/findone-evaluation.dto';
 import { UpdateEvaluationDto } from './dto/update-evaluation.dto';
 import { Evaluation } from './entities/evaluation.entity';
+import { EvaluationOrderBy } from './enums/order-by.enum';
+import { ResponseEvaluation } from './types/response-evaluation.type';
 
 @Injectable()
 export class EvaluationService {
   @InjectRepository(Evaluation)
   private readonly evaluationsRepository: Repository<Evaluation>;
 
-  async create(input: CreateEvaluationDto, user: User): Promise<Evaluation> {
+  @InjectRepository(Student)
+  private readonly studentRepository: Repository<Student>;
+
+  constructor(
+    private readonly cardiorespiratoryCapacityStrategy: CardiorespiratoryCapacityStrategy,
+  ) {}
+
+  async create(
+    input: CreateEvaluationDto,
+    user: User,
+    studentId: string,
+  ): Promise<ResponseEvaluation> {
     const { data, type } = input;
+
+    const student = await this.studentRepository.findOne({
+      where: { id: studentId },
+    });
+
+    if (!student) {
+      throw new BadRequestException(
+        `Estudante com id ${studentId} não encontrado.`,
+      );
+    }
+
     switch (type) {
-      case 'sarcopenia':
-        console.log('sarcopenia');
-        break;
+      case 'ACR':
+        return await this.cardiorespiratoryCapacityStrategy.create(
+          data as CreateCardiorespiratoryCapacityDto,
+          user,
+          type,
+          student,
+        );
       default:
         break;
     }
-    return;
   }
 
   async findAll(
-    input: FindAllEvaluationDto,
+    orderBy: EvaluationOrderBy,
     paginationParams: PaginationParams,
-    user: User,
-  ): Promise<PaginationResult<Evaluation>> {
-    const { type, where } = input;
+    studentID: string,
+  ): Promise<PaginationResponseDto<ResponseEvaluation[]>> {
+    const isOrderByValid = orderBy in EvaluationOrderBy;
 
-    switch (type) {
-      case 'sarcopenia':
-        console.log('Alguma Coisa');
-        break;
-      default:
-        break;
-    }
-    return;
+    if (!isOrderByValid)
+      throw new BadRequestException(`Campo ${orderBy} inválido para orderBy.`);
+
+    const { evaluations: cardioEvaluation, count: countCardioEvaluation } =
+      await this.cardiorespiratoryCapacityStrategy.getAll(
+        orderBy as EvaluationOrderBy,
+        paginationParams,
+        studentID,
+      );
+
+    const meta = {
+      itemsPerPage: +paginationParams.limit,
+      totalItems: +countCardioEvaluation,
+      currentPage: +paginationParams.page,
+      totalPages: +Math.ceil(countCardioEvaluation / paginationParams.limit),
+    };
+
+    return {
+      meta: meta,
+      data: cardioEvaluation,
+    };
   }
 
-  async findOne(input: FindOneEvaluationDto): Promise<Evaluation> {
-    const { type, id } = input;
+  async getByID(id: string, type: string): Promise<ResponseEvaluation> {
+    const scheme = Joi.string().guid().required();
+    const isValidUUID = scheme.validate(id);
+
+    if (Boolean(isValidUUID.error))
+      throw new BadRequestException('ID inválido.');
 
     switch (type) {
-      case 'sarcopenia':
-        console.log('Alguma Coisa');
-        break;
+      case 'ACR':
+        return await this.cardiorespiratoryCapacityStrategy.getByID(id);
       default:
         break;
     }
-    return;
   }
 
   async update(
     id: string,
     input: UpdateEvaluationDto,
-    user: User,
-  ): Promise<Evaluation> {
+  ): Promise<ResponseEvaluation> {
+    const scheme = Joi.string().guid().required();
+    const isValidUUID = scheme.validate(id);
+
+    if (Boolean(isValidUUID.error))
+      throw new BadRequestException('ID inválido.');
+
     const { type, data } = input;
 
     switch (type) {
-      case 'sarcopenia':
-        console.log('Alguma Coisa');
-        break;
+      case 'ACR':
+        return await this.cardiorespiratoryCapacityStrategy.update(
+          id,
+          type,
+          data as UpdateCardiorespiratoryCapacityDto,
+        );
       default:
         break;
     }
-    return;
   }
 
   async delete(id: string): Promise<Evaluation> {
@@ -87,14 +137,14 @@ export class EvaluationService {
       });
 
       if (!evaluation) {
-        throw new NotFoundException('Cannot find evaluation with this id.');
+        throw new NotFoundException(`Avaliação com id ${id} não encontrada.`);
       }
 
       await this.evaluationsRepository.softRemove(evaluation);
       return evaluation;
     } catch (error) {
       throw new BadRequestException(
-        'Something went wrong. Could not remove evaluation.',
+        'Algo deu errado. Não conseguimos remover a avaliação.',
       );
     }
   }
