@@ -13,6 +13,7 @@ import { UpdateEvaluationDto } from './dto/update-evaluation.dto';
 import { Evaluation } from './entities/evaluation.entity';
 import { CreateSarcopeniaDTO } from './sarcopenia/dto/create-sarcopenia';
 import { SarcopeniaStrategy } from './sarcopenia/sarcopenia.strategy';
+import { ResponseEvaluation } from './types/response-evaluation.type';
 
 @Injectable()
 export class EvaluationService {
@@ -21,7 +22,10 @@ export class EvaluationService {
 
   constructor(private readonly sarcopeniaStrategy: SarcopeniaStrategy) {}
 
-  async create(input: CreateEvaluationDto, user: User): Promise<Evaluation> {
+  async create(
+    input: CreateEvaluationDto,
+    user: User,
+  ): Promise<ResponseEvaluation> {
     const { data, type } = input;
     switch (type) {
       case 'sarcopenia':

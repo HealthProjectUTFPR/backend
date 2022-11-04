@@ -21,6 +21,7 @@ import { FindOneEvaluationDto } from './dto/findone-evaluation.dto';
 import { UpdateEvaluationDto } from './dto/update-evaluation.dto';
 import { Evaluation } from './entities/evaluation.entity';
 import { EvaluationService } from './evaluation.service';
+import { ResponseEvaluation } from './types/response-evaluation.type';
 
 @Controller('evaluation')
 @UseGuards(JwtAuthGuard)
@@ -32,7 +33,7 @@ export class EvaluationController {
     @AuthUser() user: User,
     @Body(new JoiPipe({ group: 'CREATE' }))
     createEvaluationDto: CreateEvaluationDto,
-  ): Promise<Evaluation> {
+  ): Promise<ResponseEvaluation> {
     if (!user) throw new ForbiddenException('User not logged in');
 
     return await this.evaluationService.create(createEvaluationDto, user);
