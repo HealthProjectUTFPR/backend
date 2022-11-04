@@ -23,7 +23,9 @@ export class BodyCompositionFactory {
   @InjectRepository(Field)
   private readonly fieldRepository: Repository<Field>;
 
-  private parseFieldsToString(data: Partial<CreateBodyCompositionDto>) {
+  private parseFieldsToString(
+    data: Omit<CreateBodyCompositionDto, 'cardiovascularRisk'>,
+  ) {
     const values = Object.entries(data);
     const inputs = [];
 
@@ -53,18 +55,51 @@ export class BodyCompositionFactory {
       parsedFields[name] = formattedValue;
     });
 
-    const { date, time, vo2MlKG, weight, vo2Lmin, finalFC } = parsedFields;
+    const {
+      date,
+      weight,
+      waist,
+      hip,
+      waistEstature,
+      waistHip,
+      imc,
+      scapula,
+      triceps,
+      biceps,
+      suprailiac,
+      sumPleats,
+      density,
+      bodyFat,
+      mg,
+      mcm,
+      minimumWeight,
+      maximumWeight,
+    } = parsedFields;
+
+    const cardiovascularRisk = JSON.parse(result);
 
     const returnedValues: GetBodyCompositionDto = {
       id,
       name,
       date,
-      time,
-      vo2MlKG,
       weight,
-      vo2Lmin,
-      finalFC,
-      result,
+      waist,
+      hip,
+      waistEstature,
+      waistHip,
+      imc,
+      scapula,
+      triceps,
+      biceps,
+      suprailiac,
+      sumPleats,
+      density,
+      bodyFat,
+      mg,
+      mcm,
+      minimumWeight,
+      maximumWeight,
+      cardiovascularRisk,
       createdAt,
       updatedAt,
       deletedAt,
@@ -79,7 +114,9 @@ export class BodyCompositionFactory {
     type: string,
     student: Student,
   ): Promise<GetBodyCompositionDto> {
-    const { result, ...rest } = input;
+    const { cardiovascularRisk, ...rest } = input;
+
+    const result = JSON.stringify(cardiovascularRisk);
 
     const arrayOfFields = this.parseFieldsToString(rest);
 
@@ -124,7 +161,9 @@ export class BodyCompositionFactory {
     input: CreateBodyCompositionDto,
     evaluation: Evaluation,
   ): Promise<GetBodyCompositionDto> {
-    const { result, ...rest } = input;
+    const { cardiovascularRisk, ...rest } = input;
+
+    const result = JSON.stringify(cardiovascularRisk);
 
     const arrayOfFields = this.parseFieldsToString(rest);
 
@@ -153,6 +192,7 @@ export class BodyCompositionFactory {
   async getAll(
     orderBy: EvaluationOrderBy,
     paginationParams: PaginationParams,
+    studentID: string,
   ): Promise<GetBodyCompositionDto[]> {
     const { page, limit } = paginationParams;
 
@@ -160,6 +200,9 @@ export class BodyCompositionFactory {
       where: {
         name: 'bodyComposition',
         deletedAt: null,
+        student: {
+          id: studentID,
+        },
       },
       skip: (page - 1) * limit,
       take: limit,

@@ -64,8 +64,18 @@ export class EvaluationService {
   async findAll(
     orderBy: EvaluationOrderBy,
     paginationParams: PaginationParams,
-    user: User,
+    studentId: string,
   ): Promise<PaginationResponseDto<ResponseEvaluation[]>> {
+    const student = await this.studentRepository.findOne({
+      where: { id: studentId },
+    });
+
+    if (!student) {
+      throw new BadRequestException(
+        `Estudante com id ${studentId} não encontrado.`,
+      );
+    }
+
     const isOrderByValid = orderBy in EvaluationOrderBy;
 
     if (!isOrderByValid)
@@ -75,6 +85,7 @@ export class EvaluationService {
       await this.bodyCompositionStrategy.getAll(
         orderBy as EvaluationOrderBy,
         paginationParams,
+        studentId,
       );
 
     const meta = {

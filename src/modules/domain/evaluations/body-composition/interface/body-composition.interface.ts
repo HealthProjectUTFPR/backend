@@ -3,6 +3,7 @@ export interface IBodyComposition {
   age: number;
 
   date: Date;
+  height: number;
   weight: number;
   waist: number;
   hip: number;
