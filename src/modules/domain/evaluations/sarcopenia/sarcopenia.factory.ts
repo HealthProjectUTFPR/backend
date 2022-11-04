@@ -51,7 +51,7 @@ export class SarcopeniaFactory {
           formattedValue = new Date(value);
           break;
         case 'boolean':
-          formattedValue = Boolean(value);
+          formattedValue = value === 'false' ? false : true;
           break;
         case 'string':
           formattedValue = String(value);
