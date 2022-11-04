@@ -76,6 +76,9 @@ export class CreateBodyCompositionDto {
   maximumWeight: number;
 
   @ApiProperty()
-  @JoiSchema(Joi.number().required())
-  result: string;
+  @JoiSchema(Joi.object().required())
+  cardiovascularRisk: {
+    waistCircumference: string;
+    rcq: string;
+  };
 }

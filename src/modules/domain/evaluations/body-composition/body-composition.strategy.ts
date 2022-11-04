@@ -17,9 +17,13 @@ import { CreateBodyCompositionDto } from './dto/create-body-composition.dto';
 import { GetAllBodyCompositionDto } from './dto/get-all-body-composition.dto';
 import { GetBodyCompositionDto } from './dto/get-body-composition.dto';
 import { UpdateBodyCompositionDto } from './dto/update-body-composition.dto';
-import { calculateCardiorespiratoryCapacityResult } from './helpers/calculate-result';
-import { calculateVO2LMin } from './helpers/calculate-vo2-lmin';
-import { calculateVO2MlKg } from './helpers/calculate-vo2-ml-kg';
+import {
+  calculateBodyCompositionResult,
+  ResultCalculateBodyCompositionResult,
+} from './helpers/calculate-body-composition-result';
+import { calculateBodyFat } from './helpers/calculate-body-fat';
+import { calculateDensity } from './helpers/calculate-density';
+import { calculateImc } from './helpers/calculate-imc';
 import { IBodyComposition } from './interface/body-composition.interface';
 
 @Injectable()
@@ -32,22 +36,60 @@ export class BodyCompositionStrategy {
   ) {}
 
   private recalculateResult({
-    weight,
-    finalFC,
-    time,
-    age,
     sex,
+    waistEstature,
+    waistHip,
   }: Partial<IBodyComposition>) {
-    const vo2Lmin = calculateVO2LMin({ weight, finalFC, time, age, sex });
-    const vo2MlKG = calculateVO2MlKg({ weight, vo2Lmin });
+    const result = calculateBodyCompositionResult({
+      sex,
+      waistEstature,
+      waistHip,
+    });
 
-    return calculateCardiorespiratoryCapacityResult({ sex, vo2MlKG });
+    return result;
   }
 
-  private validateResult(result: string, input: Partial<IBodyComposition>) {
-    const recalculationResult = this.recalculateResult(input);
+  private validateResult(
+    cardiovascularRisk: ResultCalculateBodyCompositionResult,
+    input: Partial<IBodyComposition>,
+  ) {
+    const { waistCircumference, rcq } = cardiovascularRisk;
 
-    return recalculationResult === result;
+    const {
+      density,
+      bodyFat,
+      sex,
+      waistEstature,
+      waistHip,
+      sumPleats,
+      weight,
+      height,
+      imc,
+    } = input;
+
+    const calculatedDensity = calculateDensity({ sex, sumPleats });
+    if (calculatedDensity !== density) return false;
+
+    const calculatedBodyFat = calculateBodyFat(density);
+    if (calculatedBodyFat !== bodyFat) return false;
+
+    const calculatedIMC = calculateImc({ weight, height });
+    if (calculatedIMC !== imc) return false;
+
+    const recalculatedResult = this.recalculateResult({
+      sex,
+      waistHip,
+      waistEstature,
+    });
+
+    if (
+      recalculatedResult.rcq !== rcq &&
+      recalculatedResult.waistCircumference !== waistCircumference
+    ) {
+      return false;
+    }
+
+    return true;
   }
 
   async create(
@@ -62,20 +104,43 @@ export class BodyCompositionStrategy {
       throw new BadRequestException(validation.error.message);
     }
 
-    const { sex: studentSex, birthDate, stature } = student;
+    const { sex: studentSex, birthDate, stature: height } = student;
 
     const sex = studentSex === 'H' ? 'Homem' : 'Mulher';
     const age = dayjs(new Date()).diff(birthDate, 'year');
-    const height = stature;
 
-    const { date, weight, time, finalFC, vo2Lmin, vo2MlKG, result } = input;
-
-    const isResultValid = this.validateResult(result, {
+    const {
+      date,
       weight,
-      finalFC,
-      time,
-      age,
+      waist,
+      hip,
+      waistEstature,
+      waistHip,
+      imc,
+      scapula,
+      triceps,
+      biceps,
+      suprailiac,
+      sumPleats,
+      density,
+      bodyFat,
+      mg,
+      mcm,
+      minimumWeight,
+      maximumWeight,
+      cardiovascularRisk,
+    } = input;
+
+    const isResultValid = this.validateResult(cardiovascularRisk, {
+      density,
+      bodyFat,
       sex,
+      waistEstature,
+      waistHip,
+      sumPleats,
+      weight,
+      height,
+      imc,
     });
 
     if (!isResultValid)
@@ -86,14 +151,26 @@ export class BodyCompositionStrategy {
     const data: CreateBodyCompositionDto = {
       date,
       weight,
-      time,
-      finalFC,
-      vo2Lmin,
-      vo2MlKG,
-      result,
+      waist,
+      hip,
+      waistEstature,
+      waistHip,
+      imc,
+      scapula,
+      triceps,
+      biceps,
+      suprailiac,
+      sumPleats,
+      density,
+      bodyFat,
+      mg,
+      mcm,
+      minimumWeight,
+      maximumWeight,
+      cardiovascularRisk,
     };
 
-    return await this.bodyCompositionFactory.create(data, user, type);
+    return await this.bodyCompositionFactory.create(data, user, type, student);
   }
 
   async update(
@@ -119,20 +196,43 @@ export class BodyCompositionStrategy {
       throw new NotFoundException(`Avaliação com id ${id} não encontrada`);
     }
 
-    const { sex: studentSex, birthDate, stature } = evaluation.student;
+    const { sex: studentSex, birthDate, stature: height } = evaluation.student;
 
     const sex = studentSex === 'H' ? 'Homem' : 'Mulher';
     const age = dayjs(new Date()).diff(birthDate, 'year');
-    const height = stature;
 
-    const { date, weight, time, finalFC, vo2Lmin, vo2MlKG, result } = input;
-
-    const isResultValid = this.validateResult(result, {
+    const {
+      date,
       weight,
-      finalFC,
-      time,
-      age,
+      waist,
+      hip,
+      waistEstature,
+      waistHip,
+      imc,
+      scapula,
+      triceps,
+      biceps,
+      suprailiac,
+      sumPleats,
+      density,
+      bodyFat,
+      mg,
+      mcm,
+      minimumWeight,
+      maximumWeight,
+      cardiovascularRisk,
+    } = input;
+
+    const isResultValid = this.validateResult(cardiovascularRisk, {
+      density,
+      bodyFat,
       sex,
+      waistEstature,
+      waistHip,
+      sumPleats,
+      weight,
+      height,
+      imc,
     });
 
     if (!isResultValid)
@@ -143,11 +243,23 @@ export class BodyCompositionStrategy {
     const newData: UpdateBodyCompositionDto = {
       date,
       weight,
-      time,
-      finalFC,
-      vo2Lmin,
-      vo2MlKG,
-      result,
+      waist,
+      hip,
+      waistEstature,
+      waistHip,
+      imc,
+      scapula,
+      triceps,
+      biceps,
+      suprailiac,
+      sumPleats,
+      density,
+      bodyFat,
+      mg,
+      mcm,
+      minimumWeight,
+      maximumWeight,
+      cardiovascularRisk,
     };
 
     return await this.bodyCompositionFactory.update(
@@ -161,10 +273,12 @@ export class BodyCompositionStrategy {
   async getAll(
     orderBy: EvaluationOrderBy,
     paginationParams: PaginationParams,
+    studentID: string,
   ): Promise<GetAllBodyCompositionDto> {
     const evaluations = await this.bodyCompositionFactory.getAll(
       orderBy,
       paginationParams,
+      studentID,
     );
 
     const returnedData: GetAllBodyCompositionDto = {

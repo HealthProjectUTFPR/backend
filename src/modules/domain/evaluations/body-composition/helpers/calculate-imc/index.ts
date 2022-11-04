@@ -1,7 +1,7 @@
-export const calculateImc = ({
-  weight,
-  height,
-}: {
+interface ICalculateImc {
   weight: number;
   height: number;
-}): number => weight / (height / 100) ** 2;
+}
+
+export const calculateImc = ({ weight, height }: ICalculateImc): number =>
+  weight / (height / 100) ** 2;
