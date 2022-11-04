@@ -1,16 +1,19 @@
 import { Module } from '@nestjs/common';
-import { EvaluationService } from './evaluation.service';
-import { EvaluationController } from './evaluation.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { User } from 'src/modules/infrastructure/user/entities/user.entity';
+import { Student } from '../student/entities/student.entity';
 import { Evaluation } from './entities/evaluation.entity';
 import { Field } from './entities/field.entity';
 import { TestBatteries } from './entities/test-batteries.entity';
-import { User } from 'src/modules/infrastructure/user/entities/user.entity';
+import { EvaluationController } from './evaluation.controller';
+import { EvaluationService } from './evaluation.service';
 import { SarcopeniaFactory } from './sarcopenia/sarcopenia.factory';
 import { SarcopeniaStrategy } from './sarcopenia/sarcopenia.strategy';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Evaluation, Field, TestBatteries, User])],
+  imports: [
+    TypeOrmModule.forFeature([Evaluation, Field, TestBatteries, User, Student]),
+  ],
   controllers: [EvaluationController],
   providers: [EvaluationService, SarcopeniaFactory, SarcopeniaStrategy],
   exports: [TypeOrmModule],

@@ -1,6 +1,6 @@
 import { INestApplication } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
-import * as request from 'supertest';
+import request from 'supertest';
 import { DatabaseTestModule } from '../../database/database-test.module';
 import { AuthModule } from '../auth.module';
 
@@ -14,7 +14,7 @@ beforeAll(async () => {
   app = module.createNestApplication();
   await app.init();
 
-  appRequest = request(app.getHttpServer());
+  appRequest = await request(app.getHttpServer());
 });
 
 afterAll(async () => {
@@ -36,6 +36,7 @@ describe('Register (e2e)', () => {
       .post('/auth/register')
       .send({
         email: 'test@test.com',
+        name: 'Isaac',
         password: '1234',
       })
       .expect(400);
@@ -46,6 +47,7 @@ describe('Register (e2e)', () => {
       .post('/auth/register')
       .send({
         email: 'test@test.com',
+        name: 'Isaac',
         password: '12345678',
       })
       .expect(201);
@@ -56,6 +58,7 @@ describe('Register (e2e)', () => {
       .post('/auth/register')
       .send({
         email: 'test@test.com',
+        name: 'Isaac',
         password: '12345678',
       })
       .expect(409);

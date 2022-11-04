@@ -16,13 +16,13 @@ export function Pagination() {
 
       if (request.query.page) {
         if (request.query.page < 1)
-          throw new BadRequestException('Page must be greater than 1');
+          throw new BadRequestException('Página deve ser maior que 1');
         paginationParams.page = request.query.page;
       }
 
       if (request.query.limit) {
         if (request.query.limit < 1)
-          throw new BadRequestException('Limit must be greater than 1');
+          throw new BadRequestException('Limite deve ser maior que 1');
         paginationParams.limit = request.query.limit;
       }
 

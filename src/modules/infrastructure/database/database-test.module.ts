@@ -1,5 +1,8 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { Evaluation } from 'src/modules/domain/evaluations/entities/evaluation.entity';
+import { Field } from 'src/modules/domain/evaluations/entities/field.entity';
+import { TestBatteries } from 'src/modules/domain/evaluations/entities/test-batteries.entity';
 import { User } from '../user/entities/user.entity';
 
 @Module({
@@ -8,7 +11,7 @@ import { User } from '../user/entities/user.entity';
       type: 'sqlite',
       database: ':memory:',
       logging: false,
-      entities: [User],
+      entities: [User, Evaluation, Field, TestBatteries],
       synchronize: true,
     }),
   ],
