@@ -14,6 +14,7 @@ import { Student } from '../../student/entities/student.entity';
 import { Evaluation } from '../entities/evaluation.entity';
 import { EvaluationOrderBy } from '../enums/order-by.enum';
 import { CreateSarcopeniaDTO } from './dto/create-sarcopenia.dto';
+import { GetAllSarcponiaDTO } from './dto/get-all-sarcopenia.dto';
 import { GetSarcopeniaDto } from './dto/get-sarcopenia.dto';
 import { SarcopeniaSchema } from './dto/sarcopenia.dto';
 import { UpdateSarcopeniaDTO } from './dto/update-sarcopenia.dto';
@@ -230,5 +231,24 @@ export class SarcopeniaStrategy {
         'Algo deu errado na atualiazação da avaliação.',
       );
     }
+  }
+
+  async getAll(
+    orderBy: EvaluationOrderBy,
+    paginationParams: PaginationParams,
+    studentID: string,
+  ): Promise<GetAllSarcponiaDTO> {
+    const evaluations = await this.sarcopeniaFactory.getAll(
+      orderBy,
+      paginationParams,
+      studentID,
+    );
+
+    const returnedData: GetAllSarcponiaDTO = {
+      evaluations,
+      count: evaluations.length,
+    };
+
+    return returnedData;
   }
 }
