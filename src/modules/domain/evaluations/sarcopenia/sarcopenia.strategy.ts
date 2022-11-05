@@ -31,50 +31,6 @@ export class SarcopeniaStrategy {
 
   constructor(private readonly sarcopeniaFactory: SarcopeniaFactory) {}
 
-  private parseFieldsToCorrectType(data: Evaluation): GetSarcopeniaDto {
-    const { id, name, createdAt, updatedAt, result, deletedAt, fields } = data;
-
-    const parsedFields: Partial<ISarcopenia> = {};
-
-    fields.forEach(({ name, value, dataType }) => {
-      const formattedValue = parseType(dataType, value);
-
-      parsedFields[name] = formattedValue;
-    });
-
-    const {
-      date,
-      weight,
-      measuredMuscleMass,
-      estimatedMuscleMass,
-      walkingSpeed,
-      handGripStrength,
-      muscleMassIndex,
-      calfCircumference,
-      hasSarcopenia,
-    } = parsedFields;
-
-    const returnedValues: GetSarcopeniaDto = {
-      id,
-      name,
-      date,
-      weight,
-      measuredMuscleMass,
-      estimatedMuscleMass,
-      walkingSpeed,
-      handGripStrength,
-      muscleMassIndex,
-      calfCircumference,
-      hasSarcopenia,
-      result,
-      createdAt,
-      updatedAt,
-      deletedAt,
-    };
-
-    return returnedValues;
-  }
-
   private recalculateResult(input: Partial<ISarcopenia>) {
     const {
       sex,
@@ -272,38 +228,6 @@ export class SarcopeniaStrategy {
     } catch (error) {
       throw new InternalServerErrorException(
         'Algo deu errado na atualiazação da avaliação.',
-      );
-    }
-  }
-
-  async getAll(
-    orderBy: EvaluationOrderBy,
-    paginationParams: PaginationParams,
-    studentID: string,
-  ): Promise<GetSarcopeniaDto[]> {
-    try {
-      const { page, limit } = paginationParams;
-
-      const evaluations = await this.evaluationRepository.find({
-        where: {
-          name: 'sarcopenia',
-          deletedAt: null,
-          student: { id: studentID },
-        },
-        skip: (page - 1) * limit,
-        take: limit,
-        relations: ['fields'],
-        order: { [orderBy]: 'DESC' },
-      });
-
-      const parsedEvaluations: GetSarcopeniaDto[] = evaluations.map((item) => {
-        return this.parseFieldsToCorrectType(item);
-      });
-
-      return parsedEvaluations;
-    } catch (error) {
-      throw new InternalServerErrorException(
-        'Algo deu errado na busca das avaliações.',
       );
     }
   }

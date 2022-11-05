@@ -1,11 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import dayjs from 'dayjs';
+import { PaginationParams } from 'src/common/interfaces/pagination.interface';
 import { User } from 'src/modules/infrastructure/user/entities/user.entity';
 import { Repository } from 'typeorm';
 import { Student } from '../../student/entities/student.entity';
 import { Evaluation } from '../entities/evaluation.entity';
 import { Field } from '../entities/field.entity';
+import { EvaluationOrderBy } from '../enums/order-by.enum';
 import { CreateSarcopeniaDTO } from './dto/create-sarcopenia.dto';
 import { GetSarcopeniaDto } from './dto/get-sarcopenia.dto';
 import { ISarcopenia } from './interfaces/sarcopenia.interface';
@@ -173,5 +175,31 @@ export class SarcopeniaFactory {
     evaluation.save();
 
     return this.parseFieldsToCorrectType(evaluation);
+  }
+
+  async getAll(
+    orderBy: EvaluationOrderBy,
+    paginationParams: PaginationParams,
+    studentID: string,
+  ): Promise<GetSarcopeniaDto[]> {
+    const { page, limit } = paginationParams;
+
+    const evaluations = await this.evaluationRepository.find({
+      where: {
+        name: 'sarcopenia',
+        deletedAt: null,
+        student: { id: studentID },
+      },
+      skip: (page - 1) * limit,
+      take: limit,
+      relations: ['fields'],
+      order: { [orderBy]: 'DESC' },
+    });
+
+    const parsedEvaluations: GetSarcopeniaDto[] = evaluations.map((item) => {
+      return this.parseFieldsToCorrectType(item);
+    });
+
+    return parsedEvaluations;
   }
 }
