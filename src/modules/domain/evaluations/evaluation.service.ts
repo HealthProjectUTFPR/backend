@@ -13,6 +13,8 @@ import { Student } from '../student/entities/student.entity';
 import { CardiorespiratoryCapacityStrategy } from './cardiorespiratory-capacity/cardiorespiratory-capacity.strategy';
 import { CreateCardiorespiratoryCapacityDto } from './cardiorespiratory-capacity/dto/create-cardiorespiratory-capacity.dto';
 import { UpdateCardiorespiratoryCapacityDto } from './cardiorespiratory-capacity/dto/update-cardiorespiratory-capacity.dto';
+import { BalanceStrategy } from './balance/balance.strategy';
+import { CreateBalanceDto } from './balance/dto/create-balance.dto';
 import { CreateEvaluationDto } from './dto/create-evaluation.dto';
 import { UpdateEvaluationDto } from './dto/update-evaluation.dto';
 import { Evaluation } from './entities/evaluation.entity';
@@ -29,6 +31,7 @@ export class EvaluationService {
 
   constructor(
     private readonly cardiorespiratoryCapacityStrategy: CardiorespiratoryCapacityStrategy,
+    private readonly BalanceStrategy: BalanceStrategy,
   ) {}
 
   async create(
@@ -52,6 +55,13 @@ export class EvaluationService {
       case 'ACR':
         return await this.cardiorespiratoryCapacityStrategy.create(
           data as CreateCardiorespiratoryCapacityDto,
+          user,
+          type,
+          student,
+        );
+      case 'AEQ':
+        return await this.BalanceStrategy.create(
+          data as CreateBalanceDto,
           user,
           type,
           student,
