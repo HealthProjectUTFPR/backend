@@ -6,10 +6,13 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import dayjs from 'dayjs';
+import { PaginationParams } from 'src/common/interfaces/pagination.interface';
+import { parseType } from 'src/common/utils/parse-type.util';
 import { User } from 'src/modules/infrastructure/user/entities/user.entity';
 import { Repository } from 'typeorm';
 import { Student } from '../../student/entities/student.entity';
 import { Evaluation } from '../entities/evaluation.entity';
+import { EvaluationOrderBy } from '../enums/order-by.enum';
 import { CreateSarcopeniaDTO } from './dto/create-sarcopenia.dto';
 import { GetSarcopeniaDto } from './dto/get-sarcopenia.dto';
 import { SarcopeniaSchema } from './dto/sarcopenia.dto';
@@ -27,6 +30,50 @@ export class SarcopeniaStrategy {
   private readonly evaluationRepository: Repository<Evaluation>;
 
   constructor(private readonly sarcopeniaFactory: SarcopeniaFactory) {}
+
+  private parseFieldsToCorrectType(data: Evaluation): GetSarcopeniaDto {
+    const { id, name, createdAt, updatedAt, result, deletedAt, fields } = data;
+
+    const parsedFields: Partial<ISarcopenia> = {};
+
+    fields.forEach(({ name, value, dataType }) => {
+      const formattedValue = parseType(dataType, value);
+
+      parsedFields[name] = formattedValue;
+    });
+
+    const {
+      date,
+      weight,
+      measuredMuscleMass,
+      estimatedMuscleMass,
+      walkingSpeed,
+      handGripStrength,
+      muscleMassIndex,
+      calfCircumference,
+      hasSarcopenia,
+    } = parsedFields;
+
+    const returnedValues: GetSarcopeniaDto = {
+      id,
+      name,
+      date,
+      weight,
+      measuredMuscleMass,
+      estimatedMuscleMass,
+      walkingSpeed,
+      handGripStrength,
+      muscleMassIndex,
+      calfCircumference,
+      hasSarcopenia,
+      result,
+      createdAt,
+      updatedAt,
+      deletedAt,
+    };
+
+    return returnedValues;
+  }
 
   private recalculateResult(input: Partial<ISarcopenia>) {
     const {
@@ -224,7 +271,39 @@ export class SarcopeniaStrategy {
       return await this.sarcopeniaFactory.update(id, type, newData, evaluation);
     } catch (error) {
       throw new InternalServerErrorException(
-        'Algo deu errado na atualiazação da avaliação',
+        'Algo deu errado na atualiazação da avaliação.',
+      );
+    }
+  }
+
+  async getAll(
+    orderBy: EvaluationOrderBy,
+    paginationParams: PaginationParams,
+    studentID: string,
+  ): Promise<GetSarcopeniaDto[]> {
+    try {
+      const { page, limit } = paginationParams;
+
+      const evaluations = await this.evaluationRepository.find({
+        where: {
+          name: 'sarcopenia',
+          deletedAt: null,
+          student: { id: studentID },
+        },
+        skip: (page - 1) * limit,
+        take: limit,
+        relations: ['fields'],
+        order: { [orderBy]: 'DESC' },
+      });
+
+      const parsedEvaluations: GetSarcopeniaDto[] = evaluations.map((item) => {
+        return this.parseFieldsToCorrectType(item);
+      });
+
+      return parsedEvaluations;
+    } catch (error) {
+      throw new InternalServerErrorException(
+        'Algo deu errado na busca das avaliações.',
       );
     }
   }
