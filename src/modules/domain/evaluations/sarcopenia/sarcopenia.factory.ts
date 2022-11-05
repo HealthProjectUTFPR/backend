@@ -6,8 +6,8 @@ import { Repository } from 'typeorm';
 import { Student } from '../../student/entities/student.entity';
 import { Evaluation } from '../entities/evaluation.entity';
 import { Field } from '../entities/field.entity';
-import { CreateSarcopeniaDTO } from './dto/create-sarcopenia';
-import { GetSarcopeniaDto } from './dto/get-sarcopenia-dto';
+import { CreateSarcopeniaDTO } from './dto/create-sarcopenia.dto';
+import { GetSarcopeniaDto } from './dto/get-sarcopenia.dto';
 import { ISarcopenia } from './interfaces/sarcopenia.interface';
 
 @Injectable()

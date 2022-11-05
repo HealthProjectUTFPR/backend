@@ -17,7 +17,7 @@ import { CreateEvaluationDto } from './dto/create-evaluation.dto';
 import { UpdateEvaluationDto } from './dto/update-evaluation.dto';
 import { Evaluation } from './entities/evaluation.entity';
 import { EvaluationOrderBy } from './enums/order-by.enum';
-import { CreateSarcopeniaDTO } from './sarcopenia/dto/create-sarcopenia';
+import { CreateSarcopeniaDTO } from './sarcopenia/dto/create-sarcopenia.dto';
 import { SarcopeniaStrategy } from './sarcopenia/sarcopenia.strategy';
 import { ResponseEvaluation } from './types/response-evaluation.type';
 

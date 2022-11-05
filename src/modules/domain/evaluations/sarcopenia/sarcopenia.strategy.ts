@@ -5,8 +5,10 @@ import {
 } from '@nestjs/common';
 import { User } from 'src/modules/infrastructure/user/entities/user.entity';
 import { Student } from '../../student/entities/student.entity';
-import { CreateSarcopeniaDTO } from './dto/create-sarcopenia';
-import { GetSarcopeniaDto } from './dto/get-sarcopenia-dto';
+import { CardioRespiratoryCapacitySchema } from '../cardiorespiratory-capacity/dto/cardiorespiratory-capacity.dto';
+import { CreateSarcopeniaDTO } from './dto/create-sarcopenia.dto';
+import { GetSarcopeniaDto } from './dto/get-sarcopenia.dto';
+import { UpdateSarcopeniaDTO } from './dto/update-sarcopenia.dto';
 import calculateEstimatedMuscleMass from './helpers/calculate-estimated-muscle-mass';
 import calculateIndexOfEstimatedMuscleMassPerStature from './helpers/calculate-index-of-estimated-muscle-mass-per-stature';
 import calculateIndexOfMeasuredMuscleMassPerStature from './helpers/calculate-index-of-measured-muscle-mass-per-stature';
@@ -30,7 +32,7 @@ export class SarcopeniaStrategy {
       measuredMuscleMass,
     } = input;
 
-    let muscleMassIndex;
+    let muscleMassIndex: number;
 
     if (measuredMuscleMass) {
       muscleMassIndex = calculateIndexOfMeasuredMuscleMassPerStature({
@@ -134,4 +136,10 @@ export class SarcopeniaStrategy {
       );
     }
   }
+
+  async update(
+    id: string,
+    type: string,
+    input: UpdateSarcopeniaDTO,
+  ): Promise<GetSarcopeniaDto> {}
 }
