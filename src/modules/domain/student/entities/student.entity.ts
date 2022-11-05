@@ -1,8 +1,8 @@
 import { BaseEntity } from 'src/common/entities/base.entity';
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 import { User } from 'src/modules/infrastructure/user/entities/user.entity';
-import { Exclude } from 'class-transformer';
 import { Evaluation } from '../../evaluations/entities/evaluation.entity';
+import { Exclude } from 'class-transformer';
 
 @Entity()
 export class Student extends BaseEntity {
@@ -17,7 +17,7 @@ export class Student extends BaseEntity {
   @Column()
   breed: string;
 
-  @Column()
+  @Column({ type: 'real' })
   stature: number;
 
   @Column()

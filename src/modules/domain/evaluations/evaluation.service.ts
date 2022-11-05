@@ -13,6 +13,9 @@ import { Student } from '../student/entities/student.entity';
 import { BodyCompositionStrategy } from './body-composition/body-composition.strategy';
 import { CreateBodyCompositionDto } from './body-composition/dto/create-body-composition.dto';
 import { UpdateBodyCompositionDto } from './body-composition/dto/update-body-composition.dto';
+import { CardiorespiratoryCapacityStrategy } from './cardiorespiratory-capacity/cardiorespiratory-capacity.strategy';
+import { CreateCardiorespiratoryCapacityDto } from './cardiorespiratory-capacity/dto/create-cardiorespiratory-capacity.dto';
+import { UpdateCardiorespiratoryCapacityDto } from './cardiorespiratory-capacity/dto/update-cardiorespiratory-capacity.dto';
 import { CreateEvaluationDto } from './dto/create-evaluation.dto';
 import { UpdateEvaluationDto } from './dto/update-evaluation.dto';
 import { Evaluation } from './entities/evaluation.entity';
@@ -29,6 +32,7 @@ export class EvaluationService {
 
   constructor(
     private readonly bodyCompositionStrategy: BodyCompositionStrategy,
+    private readonly cardiorespiratoryCapacityStrategy: CardiorespiratoryCapacityStrategy,
   ) {}
 
   async create(
@@ -49,6 +53,13 @@ export class EvaluationService {
     }
 
     switch (type) {
+      case 'ACR':
+        return await this.cardiorespiratoryCapacityStrategy.create(
+          data as CreateCardiorespiratoryCapacityDto,
+          user,
+          type,
+          student,
+        );
       case 'bodyComposition':
         return await this.bodyCompositionStrategy.create(
           data as CreateBodyCompositionDto,
@@ -64,15 +75,15 @@ export class EvaluationService {
   async findAll(
     orderBy: EvaluationOrderBy,
     paginationParams: PaginationParams,
-    studentId: string,
+    studentID: string,
   ): Promise<PaginationResponseDto<ResponseEvaluation[]>> {
     const student = await this.studentRepository.findOne({
-      where: { id: studentId },
+      where: { id: studentID },
     });
 
     if (!student) {
       throw new BadRequestException(
-        `Estudante com id ${studentId} não encontrado.`,
+        `Estudante com id ${studentID} não encontrado.`,
       );
     }
 
@@ -81,23 +92,32 @@ export class EvaluationService {
     if (!isOrderByValid)
       throw new BadRequestException(`Campo ${orderBy} inválido para orderBy.`);
 
-    const { evaluations: cardioEvaluation, count: countCardioEvaluation } =
+    const { evaluations: bodyEvaluation, count: countBodyEvaluation } =
       await this.bodyCompositionStrategy.getAll(
         orderBy as EvaluationOrderBy,
         paginationParams,
-        studentId,
+        studentID,
       );
+
+    const { evaluations: cardioEvaluation, count: countCardioEvaluation } =
+      await this.cardiorespiratoryCapacityStrategy.getAll(
+        orderBy as EvaluationOrderBy,
+        paginationParams,
+        studentID,
+      );
+
+    const amountOfEvaluation = countBodyEvaluation + countCardioEvaluation;
 
     const meta = {
       itemsPerPage: +paginationParams.limit,
-      totalItems: +countCardioEvaluation,
+      totalItems: +amountOfEvaluation,
       currentPage: +paginationParams.page,
-      totalPages: +Math.ceil(countCardioEvaluation / paginationParams.limit),
+      totalPages: +Math.ceil(amountOfEvaluation / paginationParams.limit),
     };
 
     return {
       meta: meta,
-      data: cardioEvaluation,
+      data: [...cardioEvaluation, ...bodyEvaluation],
     };
   }
 
@@ -109,6 +129,8 @@ export class EvaluationService {
       throw new BadRequestException('ID inválido.');
 
     switch (type) {
+      case 'ACR':
+        return await this.cardiorespiratoryCapacityStrategy.getByID(id);
       case 'bodyComposition':
         return await this.bodyCompositionStrategy.getByID(id);
       default:
@@ -129,6 +151,12 @@ export class EvaluationService {
     const { type, data } = input;
 
     switch (type) {
+      case 'ACR':
+        return await this.cardiorespiratoryCapacityStrategy.update(
+          id,
+          type,
+          data as UpdateCardiorespiratoryCapacityDto,
+        );
       case 'bodyComposition':
         return await this.bodyCompositionStrategy.update(
           id,
