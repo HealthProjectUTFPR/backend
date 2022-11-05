@@ -2,12 +2,17 @@ import {
   BadRequestException,
   Injectable,
   InternalServerErrorException,
+  NotFoundException,
 } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import dayjs from 'dayjs';
 import { User } from 'src/modules/infrastructure/user/entities/user.entity';
+import { Repository } from 'typeorm';
 import { Student } from '../../student/entities/student.entity';
-import { CardioRespiratoryCapacitySchema } from '../cardiorespiratory-capacity/dto/cardiorespiratory-capacity.dto';
+import { Evaluation } from '../entities/evaluation.entity';
 import { CreateSarcopeniaDTO } from './dto/create-sarcopenia.dto';
 import { GetSarcopeniaDto } from './dto/get-sarcopenia.dto';
+import { SarcopeniaSchema } from './dto/sarcopenia.dto';
 import { UpdateSarcopeniaDTO } from './dto/update-sarcopenia.dto';
 import calculateEstimatedMuscleMass from './helpers/calculate-estimated-muscle-mass';
 import calculateIndexOfEstimatedMuscleMassPerStature from './helpers/calculate-index-of-estimated-muscle-mass-per-stature';
@@ -18,6 +23,9 @@ import { SarcopeniaFactory } from './sarcopenia.factory';
 
 @Injectable()
 export class SarcopeniaStrategy {
+  @InjectRepository(Evaluation)
+  private readonly evaluationRepository: Repository<Evaluation>;
+
   constructor(private readonly sarcopeniaFactory: SarcopeniaFactory) {}
 
   private recalculateResult(input: Partial<ISarcopenia>) {
@@ -80,10 +88,13 @@ export class SarcopeniaStrategy {
     student: Student,
   ): Promise<GetSarcopeniaDto> {
     try {
-      const sex = 'homem';
-      const age = 70;
+      const { sex: studentSex, birthDate } = student;
+
+      const sex = studentSex === 'H' ? 'Homem' : 'Mulher';
+      const age = dayjs(new Date()).diff(birthDate, 'year');
       const race = '';
       const height = 1.74;
+
       const {
         date,
         weight,
@@ -141,5 +152,80 @@ export class SarcopeniaStrategy {
     id: string,
     type: string,
     input: UpdateSarcopeniaDTO,
-  ): Promise<GetSarcopeniaDto> {}
+  ): Promise<GetSarcopeniaDto> {
+    try {
+      const validation = SarcopeniaSchema.validate(input);
+
+      if (validation?.error) {
+        throw new BadRequestException(validation.error.message);
+      }
+
+      const evaluation = await this.evaluationRepository.findOne({
+        where: { id, deletedAt: null },
+        relations: ['fields', 'student'],
+      });
+
+      if (!evaluation) {
+        throw new NotFoundException(`Avaliação com o id ${id} não encontrada.`);
+      }
+
+      const { sex: studentSex, birthDate } = evaluation.student;
+
+      const sex = studentSex === 'H' ? 'Homem' : 'Mulher';
+      const age = dayjs(new Date()).diff(birthDate, 'year');
+      const race = '';
+      const height = 1.74;
+
+      const {
+        date,
+        weight,
+        measuredMuscleMass,
+        estimatedMuscleMass,
+        walkingSpeed,
+        handGripStrength,
+        muscleMassIndex,
+        calfCircumference,
+        result,
+        hasSarcopenia,
+      } = input;
+
+      const isResultValid = this.validateResult(hasSarcopenia, {
+        sex,
+        age,
+        weight,
+        race,
+        height,
+        measuredMuscleMass,
+        walkingSpeed,
+        handGripStrength,
+        muscleMassIndex,
+        calfCircumference,
+        result,
+      });
+
+      if (!isResultValid)
+        throw new BadRequestException(
+          'Resultado da avaliação inválido de acordo com os dados repassados!',
+        );
+
+      const newData: UpdateSarcopeniaDTO = {
+        date,
+        weight,
+        measuredMuscleMass,
+        estimatedMuscleMass,
+        walkingSpeed,
+        handGripStrength,
+        muscleMassIndex,
+        calfCircumference,
+        result,
+        hasSarcopenia,
+      };
+
+      return await this.sarcopeniaFactory.update(id, type, newData, evaluation);
+    } catch (error) {
+      throw new InternalServerErrorException(
+        'Algo deu errado na atualiazação da avaliação',
+      );
+    }
+  }
 }
