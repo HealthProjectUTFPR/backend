@@ -57,6 +57,6 @@ export class BalanceStrategy {
             user,
             student,
             type,
-        )
+        );
     }
 }

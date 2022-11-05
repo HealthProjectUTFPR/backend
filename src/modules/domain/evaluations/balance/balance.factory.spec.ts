@@ -1,7 +1,20 @@
+import { Test, TestingModule } from '@nestjs/testing';
 import { BalanceFactory } from './balance.factory';
 
 describe('BalanceFactory', () => {
-  it('should create an instance', () => {
-    expect(new BalanceFactory()).toBeTruthy();
+  let service: BalanceFactory;
+  
+  beforeEach(async () => {
+    const module: TestingModule = await Test.createTestingModule({
+      providers: [BalanceFactory],
+    }).compile();
+
+    service = module.get<BalanceFactory>(BalanceFactory);
+
   });
+
+  it('should be defined', () => {
+    expect(service).toBeDefined();
+  });
+  
 });

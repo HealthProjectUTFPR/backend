@@ -11,4 +11,8 @@ describe('BalanceStrategy', () => {
 
         service = module.get<BalanceStrategy>(BalanceStrategy);
     });
+
+    it('should be defined', () => {
+        expect(service).toBeDefined();
+    });
 });

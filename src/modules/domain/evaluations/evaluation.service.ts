@@ -31,7 +31,7 @@ export class EvaluationService {
 
   constructor(
     private readonly cardiorespiratoryCapacityStrategy: CardiorespiratoryCapacityStrategy,
-    private readonly BalanceStrategy: BalanceStrategy,
+    private readonly balanceStrategy: BalanceStrategy,
   ) {}
 
   async create(
@@ -60,7 +60,7 @@ export class EvaluationService {
           student,
         );
       case 'AEQ':
-        return await this.BalanceStrategy.create(
+        return await this.balanceStrategy.create(
           data as CreateBalanceDto,
           user,
           type,
