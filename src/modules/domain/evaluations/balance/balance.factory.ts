@@ -10,6 +10,9 @@ import { IBalance } from "./interface/balance.interface";
 import { parseType } from "src/common/utils/parse-type.util";
 import { Student } from "../../student/entities/student.entity";
 import { User } from "src/modules/infrastructure/user/entities/user.entity";
+import { UpdateBalanceDto } from "./dto/update-balance.dto";
+import { EvaluationOrderBy } from "../enums/order-by.enum";
+import { PaginationParams } from "src/common/interfaces/pagination.interface";
 
 @Injectable()
 export class BalanceFactory {
@@ -122,5 +125,72 @@ export class BalanceFactory {
         });
 
         return this.parseFieldsToCorrectType(evaluation);
+    }
+
+    async update(
+        id: string,
+        type: string,
+        input: UpdateBalanceDto,
+        evaluation: Evaluation,
+    ): Promise<GetBalanceDto> {
+        const { result, ...rest } = input;
+
+        const fieldsArray = this.parseFieldsToString(rest);
+
+        const { fields } = evaluation;
+
+        await Promise.all(
+            fieldsArray.map((field, index) => {
+                const newField: Field = fields[index];
+                newField.name = field.name;
+                newField.value = field.value;
+                newField.dataType = field.dataType;
+                
+                return this.fieldRepository.update(newField.id, newField);
+            }),
+        );
+
+        evaluation.updatedAt = new Date();
+        evaluation.result = result;
+        evaluation.save();
+
+        return this.parseFieldsToCorrectType(evaluation);
+    }
+
+    async getAll(
+        orderBy: EvaluationOrderBy,
+        paginationParams: PaginationParams,
+        studentId: string,
+    ): Promise<GetBalanceDto[]> {
+        const { page, limit } = paginationParams;
+
+        const evaluations = await this.evaluationRepository.find({
+            where: {
+                name: 'AEQ',
+                deletedAt: null,
+                student: {
+                    id: studentId,
+                },
+            },
+            skip: (page - 1) * limit,
+            take: limit,
+            relations: ['fields'],
+            order: {
+                [orderBy]: 'DESC',
+            },
+        });
+
+        const parsedEvaluation: GetBalanceDto[] = evaluations.map((item) => {
+            return this.parseFieldsToCorrectType(item);
+        });
+
+        return parsedEvaluation;
+
+    }
+
+    async getOne(
+        evaluationId: Evaluation,
+    ): Promise<GetBalanceDto> {
+        return this.parseFieldsToCorrectType(evaluationId);
     }
 }
