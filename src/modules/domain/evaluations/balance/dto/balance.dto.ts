@@ -16,7 +16,7 @@ export const BalanceSchema = Joi.object({
   campo12: Joi.number().required(),
   campo13: Joi.number().required(),
   campo14: Joi.number().required(),
-  total: Joi.number().required(),
+  result: Joi.number().required(),
 }).options({
   abortEarly: false,
 });

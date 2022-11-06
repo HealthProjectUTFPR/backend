@@ -1,5 +1,4 @@
 export interface IBalance {
-    total: number;
     campo1: number;
     campo2: number;
     campo3: number;
@@ -14,5 +13,6 @@ export interface IBalance {
     campo12: number;
     campo13: number;
     campo14: number;
+    result: number;
     date: Date;
 }
