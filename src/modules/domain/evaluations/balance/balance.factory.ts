@@ -60,7 +60,6 @@ export class BalanceFactory {
         const returnBalance: GetBalanceDto = {
             id,
             name,
-            date,
             campo1,
             campo2,
             campo3,
@@ -75,6 +74,7 @@ export class BalanceFactory {
             campo12,
             campo13,
             campo14,
+            date,
             result,
             createdAt,
             updatedAt,
