@@ -10,6 +10,9 @@ import { PaginationParams } from 'src/common/interfaces/pagination.interface';
 import { User } from 'src/modules/infrastructure/user/entities/user.entity';
 import { Repository } from 'typeorm';
 import { Student } from '../student/entities/student.entity';
+import { avdStrategy } from './avd/avd.strategy';
+import { CreateAvdDto } from './avd/dto/create-avd.dto';
+import { UpdateAvdDto } from './avd/dto/update-avd.dto';
 import { CardiorespiratoryCapacityStrategy } from './cardiorespiratory-capacity/cardiorespiratory-capacity.strategy';
 import { CreateCardiorespiratoryCapacityDto } from './cardiorespiratory-capacity/dto/create-cardiorespiratory-capacity.dto';
 import { UpdateCardiorespiratoryCapacityDto } from './cardiorespiratory-capacity/dto/update-cardiorespiratory-capacity.dto';
@@ -29,6 +32,7 @@ export class EvaluationService {
 
   constructor(
     private readonly cardiorespiratoryCapacityStrategy: CardiorespiratoryCapacityStrategy,
+    private readonly avdStrategy: avdStrategy,
   ) {}
 
   async create(
@@ -52,6 +56,13 @@ export class EvaluationService {
       case 'ACR':
         return await this.cardiorespiratoryCapacityStrategy.create(
           data as CreateCardiorespiratoryCapacityDto,
+          user,
+          type,
+          student,
+        );
+      case 'AVD':
+        return await this.avdStrategy.create(
+          data as CreateAvdDto,
           user,
           type,
           student,
@@ -101,6 +112,8 @@ export class EvaluationService {
     switch (type) {
       case 'ACR':
         return await this.cardiorespiratoryCapacityStrategy.getByID(id);
+      case 'AVD':
+        return await this.avdStrategy.getByID(id);
       default:
         break;
     }
@@ -124,6 +137,12 @@ export class EvaluationService {
           id,
           type,
           data as UpdateCardiorespiratoryCapacityDto,
+        );
+      case 'AVD':
+        return await this.avdStrategy.update(
+          id,
+          type,
+          data as UpdateAvdDto,
         );
       default:
         break;
