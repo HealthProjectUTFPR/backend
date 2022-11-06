@@ -17,8 +17,8 @@ export class Field extends BaseEntity {
   dataType: string;
 
   @ManyToOne(() => Evaluation, (evaluation) => evaluation.fields)
-  evaluationField: Evaluation;
+  evaluation: Evaluation;
 
   @ManyToOne(() => TestBatteries, (testBatteries) => testBatteries.fields)
-  testBatteriesField: TestBatteries;
+  testBatteriesField?: TestBatteries;
 }

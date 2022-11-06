@@ -6,11 +6,12 @@ import {
   Inject,
   Post,
 } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import { JoiPipe } from 'nestjs-joi';
 import { User } from '../user/entities/user.entity';
 import { AuthService } from './auth.service';
 import { UserDto } from './dto/user.dto';
-
+@ApiTags('auth')
 @Controller('auth')
 export class AuthController {
   @Inject(AuthService)
