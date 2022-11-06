@@ -6,11 +6,11 @@ import { BeforeInsert, BeforeUpdate, Column, Entity, OneToMany } from 'typeorm';
 
 @Entity()
 export class User extends BaseEntity {
-  @Column({ unique: true })
-  email: string;
-
   @Column()
   name: string;
+
+  @Column({ unique: true })
+  email: string;
 
   @Column()
   password: string;
