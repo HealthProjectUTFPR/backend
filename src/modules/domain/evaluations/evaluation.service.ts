@@ -111,6 +111,8 @@ export class EvaluationService {
     switch (type) {
       case 'ACR':
         return await this.cardiorespiratoryCapacityStrategy.getByID(id);
+      case 'AEQ':
+        return await this.balanceStrategy.getById(id);
       default:
         break;
     }
@@ -134,6 +136,12 @@ export class EvaluationService {
           id,
           type,
           data as UpdateCardiorespiratoryCapacityDto,
+        );
+      case 'AEQ':
+        return await this.balanceStrategy.update(
+          id,
+          type,
+          data as CreateBalanceDto
         );
       default:
         break;
