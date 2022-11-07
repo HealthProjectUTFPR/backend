@@ -7,7 +7,6 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import dayjs from 'dayjs';
 import { PaginationParams } from 'src/common/interfaces/pagination.interface';
-import { parseType } from 'src/common/utils/parse-type.util';
 import { User } from 'src/modules/infrastructure/user/entities/user.entity';
 import { Repository } from 'typeorm';
 import { Student } from '../../student/entities/student.entity';
@@ -227,6 +226,7 @@ export class SarcopeniaStrategy {
 
       return await this.sarcopeniaFactory.update(id, type, newData, evaluation);
     } catch (error) {
+      console.log(error);
       throw new InternalServerErrorException(
         'Algo deu errado na atualiazação da avaliação.',
       );
@@ -250,5 +250,18 @@ export class SarcopeniaStrategy {
     };
 
     return returnedData;
+  }
+
+  async getByID(id: string): Promise<GetSarcopeniaDto> {
+    const evaluation = await this.evaluationRepository.findOne({
+      where: { id, deletedAt: null },
+      relations: ['fields'],
+    });
+
+    if (!evaluation) {
+      throw new NotFoundException(`Avaliação com id ${id} não encontrada`);
+    }
+
+    return this.sarcopeniaFactory.getOne(evaluation);
   }
 }

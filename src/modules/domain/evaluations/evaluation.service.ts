@@ -18,6 +18,7 @@ import { UpdateEvaluationDto } from './dto/update-evaluation.dto';
 import { Evaluation } from './entities/evaluation.entity';
 import { EvaluationOrderBy } from './enums/order-by.enum';
 import { CreateSarcopeniaDTO } from './sarcopenia/dto/create-sarcopenia.dto';
+import { UpdateSarcopeniaDTO } from './sarcopenia/dto/update-sarcopenia.dto';
 import { SarcopeniaStrategy } from './sarcopenia/sarcopenia.strategy';
 import { ResponseEvaluation } from './types/response-evaluation.type';
 
@@ -88,16 +89,28 @@ export class EvaluationService {
         studentID,
       );
 
+    const {
+      evaluations: sarcopeniaEvaluation,
+      count: countSarcopeniaEvaluation,
+    } = await this.sarcopeniaStrategy.getAll(
+      orderBy as EvaluationOrderBy,
+      paginationParams,
+      studentID,
+    );
+
+    const amountOfEvaluations =
+      countCardioEvaluation + countSarcopeniaEvaluation;
+
     const meta = {
       itemsPerPage: +paginationParams.limit,
-      totalItems: +countCardioEvaluation,
+      totalItems: +amountOfEvaluations,
       currentPage: +paginationParams.page,
-      totalPages: +Math.ceil(countCardioEvaluation / paginationParams.limit),
+      totalPages: +Math.ceil(amountOfEvaluations / paginationParams.limit),
     };
 
     return {
       meta: meta,
-      data: cardioEvaluation,
+      data: [...cardioEvaluation, ...sarcopeniaEvaluation],
     };
   }
 
@@ -109,6 +122,8 @@ export class EvaluationService {
       throw new BadRequestException('ID inválido.');
 
     switch (type) {
+      case 'sarcopenia':
+        return await this.sarcopeniaStrategy.getByID(id);
       case 'ACR':
         return await this.cardiorespiratoryCapacityStrategy.getByID(id);
       default:
@@ -129,6 +144,12 @@ export class EvaluationService {
     const { type, data } = input;
 
     switch (type) {
+      case 'sarcopenia':
+        return await this.sarcopeniaStrategy.update(
+          id,
+          type,
+          data as UpdateSarcopeniaDTO,
+        );
       case 'ACR':
         return await this.cardiorespiratoryCapacityStrategy.update(
           id,

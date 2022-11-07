@@ -10,5 +10,5 @@ export const SarcopeniaSchema = Joi.object({
   muscleMassIndex: Joi.number().required(),
   calfCircumference: Joi.number().required(),
   result: Joi.string().required(),
-  hasSarcopenia: Joi.number().required(),
+  hasSarcopenia: Joi.boolean().required(),
 }).options({ abortEarly: false });

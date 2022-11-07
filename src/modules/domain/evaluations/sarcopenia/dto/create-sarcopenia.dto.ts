@@ -39,6 +39,6 @@ export class CreateSarcopeniaDTO {
   result: string;
 
   @ApiProperty()
-  @JoiSchema(Joi.number().required())
+  @JoiSchema(Joi.boolean().required())
   hasSarcopenia: boolean;
 }

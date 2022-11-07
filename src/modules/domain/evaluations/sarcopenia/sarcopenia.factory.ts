@@ -174,6 +174,8 @@ export class SarcopeniaFactory {
 
     evaluation.save();
 
+    console.log('TESTE', evaluation);
+
     return this.parseFieldsToCorrectType(evaluation);
   }
 
@@ -201,5 +203,9 @@ export class SarcopeniaFactory {
     });
 
     return parsedEvaluations;
+  }
+
+  async getOne(evaluation: Evaluation): Promise<GetSarcopeniaDto> {
+    return this.parseFieldsToCorrectType(evaluation);
   }
 }
