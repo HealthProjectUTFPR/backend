@@ -90,65 +90,66 @@ export class SarcopeniaStrategy {
     type: string,
     student: Student,
   ): Promise<GetSarcopeniaDto> {
-    try {
-      const { sex: studentSex, birthDate } = student;
+    const { sex: studentSex, birthDate } = student;
 
-      const sex = studentSex === 'H' ? 'Homem' : 'Mulher';
-      const age = dayjs(new Date()).diff(birthDate, 'year');
-      const race = '';
-      const height = 1.74;
+    const sex = studentSex === 'H' ? 'Homem' : 'Mulher';
+    const age = dayjs(new Date()).diff(birthDate, 'year');
+    const race = '';
+    const height = 1.74;
 
-      const {
-        date,
-        weight,
-        measuredMuscleMass,
-        estimatedMuscleMass,
-        walkingSpeed,
-        handGripStrength,
-        muscleMassIndex,
-        calfCircumference,
-        result,
-        hasSarcopenia,
-      } = input;
+    const {
+      date,
+      weight,
+      measuredMuscleMass,
+      estimatedMuscleMass,
+      walkingSpeed,
+      handGripStrength,
+      muscleMassIndex,
+      calfCircumference,
+      result,
+      hasSarcopenia,
+    } = input;
 
-      const isResultValid = this.validateResult(hasSarcopenia, {
-        sex,
-        age,
-        weight,
-        race,
-        height,
-        measuredMuscleMass,
-        walkingSpeed,
-        handGripStrength,
-        muscleMassIndex,
-        calfCircumference,
-        result,
-      });
+    const validation = SarcopeniaSchema.validate(input);
 
-      if (!isResultValid)
-        throw new BadRequestException(
-          'Resultado da avaliação inválido de acordo com os dados repassados!',
-        );
+    if (validation?.error) {
+      throw new BadRequestException(validation.error.message);
+    }
 
-      const data: CreateSarcopeniaDTO = {
-        date,
-        weight,
-        measuredMuscleMass,
-        estimatedMuscleMass,
-        walkingSpeed,
-        handGripStrength,
-        muscleMassIndex,
-        calfCircumference,
-        result,
-        hasSarcopenia,
-      };
+    const isResultValid = this.validateResult(hasSarcopenia, {
+      sex,
+      age,
+      weight,
+      race,
+      height,
+      measuredMuscleMass,
+      walkingSpeed,
+      handGripStrength,
+      muscleMassIndex,
+      calfCircumference,
+      result,
+    });
 
-      return await this.sarcopeniaFactory.create(data, user, type, student);
-    } catch (error) {
-      throw new InternalServerErrorException(
-        'Algo de errado ocorreu na criação da avaliação.',
+    if (!isResultValid) {
+      throw new BadRequestException(
+        'Resultado da avaliação inválido de acordo com os dados repassados!',
       );
     }
+
+    const data: CreateSarcopeniaDTO = {
+      date,
+      weight,
+      measuredMuscleMass,
+      estimatedMuscleMass,
+      walkingSpeed,
+      handGripStrength,
+      muscleMassIndex,
+      calfCircumference,
+      result,
+      hasSarcopenia,
+    };
+
+    return await this.sarcopeniaFactory.create(data, user, type, student);
   }
 
   async update(
