@@ -9,6 +9,8 @@ import { User } from 'src/modules/infrastructure/user/entities/user.entity';
 import { CardiorespiratoryCapacityStrategy } from './cardiorespiratory-capacity/cardiorespiratory-capacity.strategy';
 import { CardiorespiratoryCapacityFactory } from './cardiorespiratory-capacity/cardiorespiratory-capacity.factory';
 import { Student } from '../student/entities/student.entity';
+import { BodyCompositionStrategy } from './body-composition/body-composition.strategy';
+import { BodyCompositionFactory } from './body-composition/body-composition.factory';
 
 @Module({
   imports: [
@@ -17,8 +19,10 @@ import { Student } from '../student/entities/student.entity';
   controllers: [EvaluationController],
   providers: [
     EvaluationService,
-    CardiorespiratoryCapacityStrategy,
     CardiorespiratoryCapacityFactory,
+    CardiorespiratoryCapacityStrategy,
+    BodyCompositionStrategy,
+    BodyCompositionFactory,
   ],
   exports: [TypeOrmModule],
 })

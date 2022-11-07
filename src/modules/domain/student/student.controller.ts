@@ -54,9 +54,7 @@ export class StudentController {
   }
 
   @Get('index')
-  async index(
-    @AuthUser() user: User,
-  ): Promise<Student[]> {
+  async index(@AuthUser() user: User): Promise<Student[]> {
     return await this.studentService.findAll(user.id);
   }
 }
