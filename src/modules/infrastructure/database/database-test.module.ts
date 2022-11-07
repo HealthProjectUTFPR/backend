@@ -3,6 +3,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Evaluation } from 'src/modules/domain/evaluations/entities/evaluation.entity';
 import { Field } from 'src/modules/domain/evaluations/entities/field.entity';
 import { TestBatteries } from 'src/modules/domain/evaluations/entities/test-batteries.entity';
+import { Sarcopenia } from 'src/modules/domain/evaluations/sarcopenia/entities/sarcopenia.entity';
+import { Student } from 'src/modules/domain/student/entities/student.entity';
 import { User } from '../user/entities/user.entity';
 
 @Module({
@@ -11,7 +13,7 @@ import { User } from '../user/entities/user.entity';
       type: 'sqlite',
       database: ':memory:',
       logging: false,
-      entities: [User, Evaluation, Field, TestBatteries],
+      entities: [User, Evaluation, Field, TestBatteries, Sarcopenia, Student],
       synchronize: true,
     }),
   ],
