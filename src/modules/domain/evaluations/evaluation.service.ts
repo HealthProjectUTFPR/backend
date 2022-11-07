@@ -10,6 +10,9 @@ import { PaginationParams } from 'src/common/interfaces/pagination.interface';
 import { User } from 'src/modules/infrastructure/user/entities/user.entity';
 import { Repository } from 'typeorm';
 import { Student } from '../student/entities/student.entity';
+import { BodyCompositionStrategy } from './body-composition/body-composition.strategy';
+import { CreateBodyCompositionDto } from './body-composition/dto/create-body-composition.dto';
+import { UpdateBodyCompositionDto } from './body-composition/dto/update-body-composition.dto';
 import { CardiorespiratoryCapacityStrategy } from './cardiorespiratory-capacity/cardiorespiratory-capacity.strategy';
 import { CreateCardiorespiratoryCapacityDto } from './cardiorespiratory-capacity/dto/create-cardiorespiratory-capacity.dto';
 import { UpdateCardiorespiratoryCapacityDto } from './cardiorespiratory-capacity/dto/update-cardiorespiratory-capacity.dto';
@@ -28,6 +31,7 @@ export class EvaluationService {
   private readonly studentRepository: Repository<Student>;
 
   constructor(
+    private readonly bodyCompositionStrategy: BodyCompositionStrategy,
     private readonly cardiorespiratoryCapacityStrategy: CardiorespiratoryCapacityStrategy,
   ) {}
 
@@ -56,6 +60,13 @@ export class EvaluationService {
           type,
           student,
         );
+      case 'bodyComposition':
+        return await this.bodyCompositionStrategy.create(
+          data as CreateBodyCompositionDto,
+          user,
+          type,
+          student,
+        );
       default:
         break;
     }
@@ -66,10 +77,27 @@ export class EvaluationService {
     paginationParams: PaginationParams,
     studentID: string,
   ): Promise<PaginationResponseDto<ResponseEvaluation[]>> {
+    const student = await this.studentRepository.findOne({
+      where: { id: studentID },
+    });
+
+    if (!student) {
+      throw new BadRequestException(
+        `Estudante com id ${studentID} não encontrado.`,
+      );
+    }
+
     const isOrderByValid = orderBy in EvaluationOrderBy;
 
     if (!isOrderByValid)
       throw new BadRequestException(`Campo ${orderBy} inválido para orderBy.`);
+
+    const { evaluations: bodyEvaluation, count: countBodyEvaluation } =
+      await this.bodyCompositionStrategy.getAll(
+        orderBy as EvaluationOrderBy,
+        paginationParams,
+        studentID,
+      );
 
     const { evaluations: cardioEvaluation, count: countCardioEvaluation } =
       await this.cardiorespiratoryCapacityStrategy.getAll(
@@ -78,16 +106,18 @@ export class EvaluationService {
         studentID,
       );
 
+    const amountOfEvaluation = countBodyEvaluation + countCardioEvaluation;
+
     const meta = {
       itemsPerPage: +paginationParams.limit,
-      totalItems: +countCardioEvaluation,
+      totalItems: +amountOfEvaluation,
       currentPage: +paginationParams.page,
-      totalPages: +Math.ceil(countCardioEvaluation / paginationParams.limit),
+      totalPages: +Math.ceil(amountOfEvaluation / paginationParams.limit),
     };
 
     return {
       meta: meta,
-      data: cardioEvaluation,
+      data: [...cardioEvaluation, ...bodyEvaluation],
     };
   }
 
@@ -101,6 +131,8 @@ export class EvaluationService {
     switch (type) {
       case 'ACR':
         return await this.cardiorespiratoryCapacityStrategy.getByID(id);
+      case 'bodyComposition':
+        return await this.bodyCompositionStrategy.getByID(id);
       default:
         break;
     }
@@ -124,6 +156,12 @@ export class EvaluationService {
           id,
           type,
           data as UpdateCardiorespiratoryCapacityDto,
+        );
+      case 'bodyComposition':
+        return await this.bodyCompositionStrategy.update(
+          id,
+          type,
+          data as UpdateBodyCompositionDto,
         );
       default:
         break;
