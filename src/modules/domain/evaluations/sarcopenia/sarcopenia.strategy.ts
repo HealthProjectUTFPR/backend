@@ -156,84 +156,73 @@ export class SarcopeniaStrategy {
     type: string,
     input: UpdateSarcopeniaDTO,
   ): Promise<GetSarcopeniaDto> {
-    try {
-      const validation = SarcopeniaSchema.validate(input);
+    const validation = SarcopeniaSchema.validate(input);
 
-      if (validation?.error) {
-        throw new BadRequestException(validation.error.message);
-      }
-
-      const evaluation = await this.evaluationRepository.findOne({
-        where: { id, deletedAt: null },
-        relations: ['fields', 'student'],
-      });
-
-      if (!evaluation) {
-        throw new NotFoundException(`Avaliação com o id ${id} não encontrada.`);
-      }
-
-      const {
-        sex: studentSex,
-        birthDate,
-        stature: height,
-      } = evaluation.student;
-
-      const sex = studentSex === 'H' ? 'Homem' : 'Mulher';
-      const age = dayjs(new Date()).diff(birthDate, 'year');
-      const race = '';
-
-      const {
-        date,
-        weight,
-        measuredMuscleMass,
-        estimatedMuscleMass,
-        walkingSpeed,
-        handGripStrength,
-        muscleMassIndex,
-        calfCircumference,
-        result,
-        hasSarcopenia,
-      } = input;
-
-      const isResultValid = this.validateResult(hasSarcopenia, {
-        sex,
-        age,
-        weight,
-        race,
-        height,
-        measuredMuscleMass,
-        walkingSpeed,
-        handGripStrength,
-        muscleMassIndex,
-        calfCircumference,
-        result,
-      });
-
-      if (!isResultValid)
-        throw new BadRequestException(
-          'Resultado da avaliação inválido de acordo com os dados repassados!',
-        );
-
-      const newData: UpdateSarcopeniaDTO = {
-        date,
-        weight,
-        measuredMuscleMass,
-        estimatedMuscleMass,
-        walkingSpeed,
-        handGripStrength,
-        muscleMassIndex,
-        calfCircumference,
-        result,
-        hasSarcopenia,
-      };
-
-      return await this.sarcopeniaFactory.update(id, type, newData, evaluation);
-    } catch (error) {
-      console.log(error);
-      throw new InternalServerErrorException(
-        'Algo deu errado na atualiazação da avaliação.',
-      );
+    if (validation?.error) {
+      throw new BadRequestException(validation.error.message);
     }
+
+    const evaluation = await this.evaluationRepository.findOne({
+      where: { id, deletedAt: null },
+      relations: ['fields', 'student'],
+    });
+
+    if (!evaluation) {
+      throw new NotFoundException(`Avaliação com o id ${id} não encontrada.`);
+    }
+
+    const { sex: studentSex, birthDate, stature: height } = evaluation.student;
+
+    const sex = studentSex === 'H' ? 'Homem' : 'Mulher';
+    const age = dayjs(new Date()).diff(birthDate, 'year');
+    const race = '';
+
+    const {
+      date,
+      weight,
+      measuredMuscleMass,
+      estimatedMuscleMass,
+      walkingSpeed,
+      handGripStrength,
+      muscleMassIndex,
+      calfCircumference,
+      result,
+      hasSarcopenia,
+    } = input;
+
+    const isResultValid = this.validateResult(hasSarcopenia, {
+      sex,
+      age,
+      weight,
+      race,
+      height,
+      measuredMuscleMass,
+      walkingSpeed,
+      handGripStrength,
+      muscleMassIndex,
+      calfCircumference,
+      result,
+    });
+
+    if (!isResultValid)
+      throw new BadRequestException(
+        'Resultado da avaliação inválido de acordo com os dados repassados!',
+      );
+
+    const newData: UpdateSarcopeniaDTO = {
+      date,
+      weight,
+      measuredMuscleMass,
+      estimatedMuscleMass,
+      walkingSpeed,
+      handGripStrength,
+      muscleMassIndex,
+      calfCircumference,
+      result,
+      hasSarcopenia,
+    };
+
+    return await this.sarcopeniaFactory.update(id, type, newData, evaluation);
   }
 
   async getAll(
