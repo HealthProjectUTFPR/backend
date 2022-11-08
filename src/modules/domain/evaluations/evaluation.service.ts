@@ -88,16 +88,25 @@ export class EvaluationService {
         studentID,
       );
 
+    const { evaluations: balanceEvaluation, count: countBalanceEvaluation } =
+      await this.balanceStrategy.getAll(
+        orderBy as EvaluationOrderBy,
+        paginationParams,
+        studentID,
+      );
+
+    const amountOfEvaluations = countCardioEvaluation + countBalanceEvaluation;
+
     const meta = {
       itemsPerPage: +paginationParams.limit,
-      totalItems: +countCardioEvaluation,
+      totalItems: +amountOfEvaluations,
       currentPage: +paginationParams.page,
-      totalPages: +Math.ceil(countCardioEvaluation / paginationParams.limit),
+      totalPages: +Math.ceil(amountOfEvaluations / paginationParams.limit),
     };
 
     return {
       meta: meta,
-      data: cardioEvaluation,
+      data: [...cardioEvaluation, ...balanceEvaluation],
     };
   }
 
