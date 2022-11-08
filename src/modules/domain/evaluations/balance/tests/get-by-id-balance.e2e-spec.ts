@@ -5,15 +5,23 @@ import { EvaluationModule } from '../../evaluation.module';
 import { DatabaseTestModule } from 'src/modules/infrastructure/database/database-test.module';
 import { AuthModule } from 'src/modules/infrastructure/auth/auth.module';
 import { UserModule } from 'src/modules/infrastructure/user/user.module';
+import { StudentModule } from 'src/modules/domain/student/student.module';
 
 let app: INestApplication;
 let server: request.SuperTest<request.Test>;
 let token: string;
 let id: string;
+let studentId: string;
 
 beforeAll(async () => {
   const module = await Test.createTestingModule({
-    imports: [EvaluationModule, UserModule, DatabaseTestModule, AuthModule],
+    imports: [
+      EvaluationModule,
+      UserModule,
+      DatabaseTestModule,
+      AuthModule,
+      StudentModule,
+    ],
   }).compile();
   app = module.createNestApplication();
   await app.init();
@@ -38,15 +46,29 @@ beforeAll(async () => {
     .expect(200);
 
   token = login.text;
-});
 
-afterAll(async () => {
-  await app.close();
+  const student = await server
+    .post('/student/create')
+    .send({
+      name: 'EstudanteTeste',
+      sex: 'M',
+      breed: 'Amarelo',
+      stature: 179.3,
+      healthPlan: 'free',
+      emergencyContact: '44999999999',
+      contact: '44999999999',
+      address: 'Rua do seu Zé',
+      birthDate: '2000-01-01T01:00:00.000Z',
+      flag: true,
+    })
+    .set('Authorization', `Bearer ${token}`);
+
+  studentId = student.body.id;
 });
 
 describe('Buscar avaliação de Equilibrio', () => {
     it(`/:id?type=AEQ (GET) deve receber erro ao buscar id inválido`, async () => {
-      id = 'aca8e3cd-2c41-4b7e-9e1f-f3d8206064a';
+      id = '6f7b1daf-0ea2-4103-bdd9-c3228e132141';
   
       return await server
         .get(`/evaluation/${id}?type=AEQ`)
@@ -55,7 +77,7 @@ describe('Buscar avaliação de Equilibrio', () => {
     });
   
     it(`/:id?type=AEQ (GET) deve receber erro ao buscar id não válido porém inexistente`, async () => {
-      id = 'aca8e3cd-2c41-4b7e-9e1f-f3d8206064a9';
+      id = '6f7b1daf-0ea2-4103-bdd9-c3228e132141';
   
       return await server
         .get(`/evaluation/${id}?type=AEQ`)
@@ -65,20 +87,29 @@ describe('Buscar avaliação de Equilibrio', () => {
   
     it(`/:id?type=AEQ (GET) deve retornar sucesso ao buscar id válido`, async () => {
       const response = await server
-        .post('/evaluation')
-        .send({
-          type: 'AEQ',
-          data: {
-            weight: 75,
-            time: 10,
-            date: '2022-10-12T03:00:00.000Z',
-            finalFC: 150,
-            vo2Lmin: 3.733740000000001,
-            vo2MlKG: 46.67175000000002,
-            result: 'Muito bom!',
-          },
-        })
-        .set('Authorization', `Bearer ${token}`);
+      .post('/evaluation/${studentId}')
+      .send({
+        "type": "AEQ",
+        "data": {
+            "date" : "2022-11-06T03:00:00.000Z",
+            "campo1" : 4,
+            "campo2" : 4,
+            "campo3" : 3,
+            "campo4" : 1,
+            "campo5" : 0,
+            "campo6" : 1,
+            "campo7" : 2,
+            "campo8" : 4,
+            "campo9" : 3,
+            "campo10" : 2,
+            "campo11" : 1,
+            "campo12" : 4,
+            "campo13" : 2,
+            "campo14" : 1,
+            "result" : 32
+        },
+      })
+      .set('Authorization', `Bearer ${token}`);
   
       id = response.body.id;
   

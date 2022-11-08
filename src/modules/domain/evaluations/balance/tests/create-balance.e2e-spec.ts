@@ -1,25 +1,33 @@
 import request from 'supertest';
 import { Test } from '@nestjs/testing';
-import { INestApplication } from "@nestjs/common";
+import { INestApplication } from '@nestjs/common';
 import { EvaluationModule } from '../../evaluation.module';
-import { UserModule } from 'src/modules/infrastructure/user/user.module';
 import { DatabaseTestModule } from 'src/modules/infrastructure/database/database-test.module';
 import { AuthModule } from 'src/modules/infrastructure/auth/auth.module';
+import { UserModule } from 'src/modules/infrastructure/user/user.module';
+import { StudentModule } from 'src/modules/domain/student/student.module';
 
 let app: INestApplication;
 let server: request.SuperTest<request.Test>;
-let token;
+let token: string;
+let studentId: string;
 
 beforeAll(async () => {
-    const module = await Test.createTestingModule({
-        imports: [EvaluationModule, UserModule, DatabaseTestModule, AuthModule],
-    }).compile();
-    app = module.createNestApplication();
-    await app.init();
+  const module = await Test.createTestingModule({
+    imports: [
+      EvaluationModule,
+      UserModule,
+      DatabaseTestModule,
+      AuthModule,
+      StudentModule,
+    ],
+  }).compile();
+  app = module.createNestApplication();
+  await app.init();
 
-    server = request(app.getHttpServer());
+  server = request(app.getHttpServer());
 
-    await server
+  await server
     .post('/auth/register')
     .send({
       email: 'test@test.com',
@@ -37,16 +45,34 @@ beforeAll(async () => {
     .expect(200);
 
   token = login.text;
+
+  const student = await server
+    .post('/student/create')
+    .send({
+      name: 'EstudanteTeste',
+      sex: 'M',
+      breed: 'Amarelo',
+      stature: 179.3,
+      healthPlan: 'free',
+      emergencyContact: '44999999999',
+      contact: '44999999999',
+      address: 'Rua do seu Zé',
+      birthDate: '2000-01-01T01:00:00.000Z',
+      flag: true,
+    })
+    .set('Authorization', `Bearer ${token}`);
+
+  studentId = student.body.id;
 });
 
 afterAll(async () => {
-    await app.close();
+  await app.close();
 });
 
 describe('Criar avaliações de Equilibrio', () => {
-    it(`/ (CREATE) sucesso na criação`, async () => {
+    it(`/:studentId (CREATE) sucesso na criação`, async () => {
         return await server
-          .post('/evaluation')
+          .post(`/evaluation/${studentId}`)
           .send({
             "type": "AEQ",
             "data": {
