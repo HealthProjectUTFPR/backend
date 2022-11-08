@@ -4,8 +4,8 @@ import { StudentModule } from 'src/modules/domain/student/student.module';
 import { AuthModule } from 'src/modules/infrastructure/auth/auth.module';
 import { DatabaseTestModule } from 'src/modules/infrastructure/database/database-test.module';
 import { UserModule } from 'src/modules/infrastructure/user/user.module';
-import { EvaluationModule } from '../../evaluation.module';
 import request from 'supertest';
+import { EvaluationModule } from '../../evaluation.module';
 
 let app: INestApplication;
 let server: request.SuperTest<request.Test>;
