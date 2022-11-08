@@ -18,6 +18,8 @@ import { UpdateEvaluationDto } from './dto/update-evaluation.dto';
 import { Evaluation } from './entities/evaluation.entity';
 import { EvaluationOrderBy } from './enums/order-by.enum';
 import { ResponseEvaluation } from './types/response-evaluation.type';
+import { MiniCognitionStrategy } from './MiniCognition/MiniCognition.strategy';
+import { CreateMiniCognitionDto } from './MiniCognition/dto/create-MiniCognition.dto';
 
 @Injectable()
 export class EvaluationService {
@@ -29,6 +31,7 @@ export class EvaluationService {
 
   constructor(
     private readonly cardiorespiratoryCapacityStrategy: CardiorespiratoryCapacityStrategy,
+    private readonly minicognitionStrategy: MiniCognitionStrategy,
   ) {}
 
   async create(
@@ -52,6 +55,13 @@ export class EvaluationService {
       case 'ACR':
         return await this.cardiorespiratoryCapacityStrategy.create(
           data as CreateCardiorespiratoryCapacityDto,
+          user,
+          type,
+          student,
+        );
+      case 'MiniCognition':
+        return await this.minicognitionStrategy.create(
+          data as CreateMiniCognitionDto,
           user,
           type,
           student,

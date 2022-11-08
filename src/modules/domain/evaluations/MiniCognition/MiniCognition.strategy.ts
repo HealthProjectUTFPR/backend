@@ -19,7 +19,7 @@ import { GetMiniCognitionDto } from './dto/get-MiniCognition.dto';
 import { UpdateMiniCognitionDto } from './dto/update-MiniCognition.dto';
 
 @Injectable()
-export class BodyCompositionStrategy {
+export class MiniCognitionStrategy {
   @InjectRepository(Evaluation)
   private readonly evaluationRepository: Repository<Evaluation>;
 
