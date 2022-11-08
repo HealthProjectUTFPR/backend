@@ -90,12 +90,11 @@ export class SarcopeniaStrategy {
     type: string,
     student: Student,
   ): Promise<GetSarcopeniaDto> {
-    const { sex: studentSex, birthDate } = student;
+    const { sex: studentSex, birthDate, stature: height } = student;
 
     const sex = studentSex === 'H' ? 'Homem' : 'Mulher';
     const age = dayjs(new Date()).diff(birthDate, 'year');
     const race = '';
-    const height = 1.74;
 
     const {
       date,
@@ -173,12 +172,15 @@ export class SarcopeniaStrategy {
         throw new NotFoundException(`Avaliação com o id ${id} não encontrada.`);
       }
 
-      const { sex: studentSex, birthDate } = evaluation.student;
+      const {
+        sex: studentSex,
+        birthDate,
+        stature: height,
+      } = evaluation.student;
 
       const sex = studentSex === 'H' ? 'Homem' : 'Mulher';
       const age = dayjs(new Date()).diff(birthDate, 'year');
       const race = '';
-      const height = 1.74;
 
       const {
         date,

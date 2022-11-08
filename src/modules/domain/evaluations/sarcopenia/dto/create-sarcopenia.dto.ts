@@ -3,6 +3,7 @@ import Joi from 'joi';
 import { JoiSchema } from 'nestjs-joi';
 
 export class CreateSarcopeniaDTO {
+  @ApiProperty()
   @JoiSchema(Joi.string().required())
   date: Date;
 
