@@ -11,6 +11,8 @@ import { CardiorespiratoryCapacityFactory } from './cardiorespiratory-capacity/c
 import { MiniCognitionStrategy } from './MiniCognition/MiniCognition.strategy';
 import { MiniCognitionFactory } from './MiniCognition/MiniCognition.factory';
 import { Student } from '../student/entities/student.entity';
+import { BodyCompositionStrategy } from './body-composition/body-composition.strategy';
+import { BodyCompositionFactory } from './body-composition/body-composition.factory';
 
 @Module({
   imports: [
@@ -19,10 +21,12 @@ import { Student } from '../student/entities/student.entity';
   controllers: [EvaluationController],
   providers: [
     EvaluationService,
-    CardiorespiratoryCapacityStrategy,
     CardiorespiratoryCapacityFactory,
     MiniCognitionStrategy,
     MiniCognitionFactory,
+    CardiorespiratoryCapacityStrategy,
+    BodyCompositionStrategy,
+    BodyCompositionFactory,
   ],
   exports: [TypeOrmModule],
 })

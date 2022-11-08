@@ -10,6 +10,7 @@ import { StudentModule } from 'src/modules/domain/student/student.module';
 let app: INestApplication;
 let server: request.SuperTest<request.Test>;
 let token: string;
+let id: string;
 let studentId: string;
 
 beforeAll(async () => {
@@ -69,42 +70,62 @@ afterAll(async () => {
   await app.close();
 });
 
-describe('Criar avaliações Cardiorespiratória', () => {
-  it(`/:studentId (CREATE) falha na validação do resultado`, async () => {
+describe('Buscar avaliação Composição Corporal', () => {
+  it(`/:id?type=bodyComposition (GET) deve receber erro ao buscar id inválido`, async () => {
+    id = 'aca8e3cd-2c41-4b7e-9e1f-f3d8206064a';
+
     return await server
-      .post(`/evaluation/${studentId}`)
-      .send({
-        type: 'ACR',
-        data: {
-          weight: 120,
-          time: 20,
-          date: '2022-10-12T03:00:00.000Z',
-          finalFC: 150,
-          vo2Lmin: 3.733740000000001,
-          vo2MlKG: 46.67175000000002,
-          result: 'Muito bom!',
-        },
-      })
+      .get(`/evaluation/${id}?type=bodyComposition`)
       .set('Authorization', `Bearer ${token}`)
       .expect(400);
   });
 
-  it(`/:studentId (CREATE) sucesso na criação`, async () => {
+  it(`/:id?type=bodyComposition (GET) deve receber erro ao buscar id não válido porém inexistente`, async () => {
+    id = 'aca8e3cd-2c41-4b7e-9e1f-f3d8206064a9';
+
     return await server
+      .get(`/evaluation/${id}?type=bodyComposition`)
+      .set('Authorization', `Bearer ${token}`)
+      .expect(404);
+  });
+
+  it(`/:id?type=bodyComposition (GET) deve retornar sucesso ao buscar id válido`, async () => {
+    const response = await server
       .post(`/evaluation/${studentId}`)
       .send({
-        type: 'ACR',
+        type: 'bodyComposition',
         data: {
-          weight: 75,
-          time: 10,
-          date: '2022-10-12T03:00:00.000Z',
-          finalFC: 150,
-          vo2Lmin: 3.733740000000001,
-          vo2MlKG: 46.67175000000002,
-          result: 'Muito bom!',
+          date: '2022-11-18T03:00:00.000Z',
+          weight: 23,
+          waist: 23,
+          hip: 23,
+          waistEstature: 0.11948051948051948,
+          waistHip: 1,
+          imc: 6.206780232754258,
+          scapula: 33,
+          triceps: 33,
+          biceps: 33,
+          suprailiac: 33,
+          sumPleats: 132,
+          density: 1.0063072907590642,
+          bodyFat: 41.89745969803944,
+          mg: 9.636415730549071,
+          mcm: 13.363584269450929,
+          minimumWeight: 18.560533707570883,
+          maximumWeight: 19.65232987090353,
+          cardiovascularRisk: {
+            waistCircumference: 'none',
+            rcq: 'Risco aumentado',
+          },
         },
       })
+      .set('Authorization', `Bearer ${token}`);
+
+    id = response.body.id;
+
+    return await server
+      .get(`/evaluation/${id}?type=bodyComposition`)
       .set('Authorization', `Bearer ${token}`)
-      .expect(201);
+      .expect(200);
   });
 });
