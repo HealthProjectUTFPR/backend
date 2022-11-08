@@ -116,8 +116,18 @@ export class EvaluationService {
         paginationParams,
         studentID,
       );
+    
+    const { evaluations: avdEvaluation, count: countAvdEvaluation } =
+      await this.avdStrategy.getAll(
+        orderBy as EvaluationOrderBy,
+        paginationParams,
+        studentID,
+      );
 
-    const amountOfEvaluation = countBodyEvaluation + countCardioEvaluation;
+    const amountOfEvaluation = 
+    + countBodyEvaluation 
+    + countAvdEvaluation
+    + countCardioEvaluation;
 
     const meta = {
       itemsPerPage: +paginationParams.limit,
@@ -128,7 +138,7 @@ export class EvaluationService {
 
     return {
       meta: meta,
-      data: [...cardioEvaluation, ...bodyEvaluation],
+      data: [...cardioEvaluation, ...bodyEvaluation, ...avdEvaluation],
     };
   }
 

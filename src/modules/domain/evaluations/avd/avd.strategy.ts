@@ -47,7 +47,12 @@ export class avdStrategy {
             result,
         };
 
-        return await this.avdFactory.create(data, user, type, student);
+        return await this.avdFactory.create(
+            data,
+            user,
+            type,
+            student,
+        );
     }
     
     async update(

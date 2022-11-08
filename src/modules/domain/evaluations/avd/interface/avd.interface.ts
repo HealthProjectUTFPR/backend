@@ -1,11 +1,11 @@
 export interface IAVD {
-    bath: boolean;
-    dress: boolean;
-    bathroom: boolean;
-    transfer: boolean;
-    salute: boolean;
-    feeding: boolean;
-    result: string;
+    bath: number;
+    dress: number;
+    bathroom: number;
+    transfer: number;
+    salute: number;
+    feeding: number;
+    result: number;
     date: Date;
 }
   

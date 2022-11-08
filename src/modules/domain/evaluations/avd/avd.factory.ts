@@ -24,12 +24,11 @@ export class avdFactory {
     private parseFieldToString(
         data: Partial<CreateAvdDto>
     )   {
-        const values = Object.values(data);
+        const values = Object.entries(data);
         const inputs = [];
 
-        values.forEach((key, value) => {
+        values.forEach(([key, value]) => {
             let type: string = typeof value;
-            if (type === 'boolean') type = 'boolean';
             if (type === 'number') type = Number.isInteger(value) ? 'int' : 'float';
             if (type === 'string') type = dayjs(value).isValid() ? 'date' : 'string';
         
