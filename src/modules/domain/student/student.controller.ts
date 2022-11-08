@@ -29,7 +29,7 @@ export class StudentController {
     @Body(new JoiPipe({ group: 'CREATE' }))
     createStudentDto: CreateStudentDto,
   ): Promise<Student> {
-    if (!user) throw new ForbiddenException('User not logged in');
+    if (!user) throw new ForbiddenException('Usuário não logado');
 
     return this.studentService.create(createStudentDto, user);
   }
