@@ -35,7 +35,7 @@ export class StudentService {
     let student = await this.studentRepository.findOne({
       where: { id: id },
     });
-    if (student.id !== user.id) throw new ForbiddenException();
+    if (!user) throw new ForbiddenException('Usuário não logado');
     student = await this.studentRepository.findOneBy({ id: id });
     updateStudentDto.flag = false;
     student.flag = updateStudentDto.flag;
