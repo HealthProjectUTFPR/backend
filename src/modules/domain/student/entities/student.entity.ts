@@ -17,7 +17,7 @@ export class Student extends BaseEntity {
   @Column()
   breed: string;
 
-  @Column()
+  @Column({ type: 'real' })
   stature: number;
 
   @Column()
