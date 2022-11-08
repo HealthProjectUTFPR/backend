@@ -47,8 +47,8 @@ export class EvaluationController {
   @Get('/')
   async findAll(
     @AuthUser() user: User,
-    @Param('studentId') studentId: string,
     @Pagination() paginationParams: PaginationParams,
+    @Query('studentId') studentId: string,
     @Query('orderBy') orderBy: EvaluationOrderBy,
   ): Promise<PaginationResponseDto<ResponseEvaluation[]>> {
     if (!user) throw new ForbiddenException('Sessão de usuário inválida');

@@ -10,7 +10,6 @@ import { StudentModule } from 'src/modules/domain/student/student.module';
 let app: INestApplication;
 let server: request.SuperTest<request.Test>;
 let token: string;
-let id: string;
 let studentId: string;
 
 beforeAll(async () => {
@@ -53,7 +52,7 @@ beforeAll(async () => {
       name: 'Estudante',
       sex: 'M',
       breed: 'Branco',
-      stature: 192,
+      stature: 192.5,
       healthPlan: 'free',
       emergencyContact: '449994484848',
       contact: '449994484848',
@@ -70,49 +69,74 @@ afterAll(async () => {
   await app.close();
 });
 
-describe('Buscar avaliação Cardiorespiratória', () => {
-  it(`/:id?type=ACR (GET) deve receber erro ao buscar id inválido`, async () => {
-    id = 'aca8e3cd-2c41-4b7e-9e1f-f3d8206064a';
+describe('Buscar avaliações Composição Corporal', () => {
+  it(`/:studentId (GET) deve receber um array vazio como resultado`, async () => {
+    return await server
+      .get(
+        `/evaluation?studentId=${studentId}&page=1&limit=50&orderBy=updatedAt`,
+      )
+      .set('Authorization', `Bearer ${token}`)
+      .expect((res) => {
+        expect(res.body.data).toStrictEqual([]);
+      })
+      .expect(200);
+  });
+
+  it(`/:studentId (GET) deve receber um array não vazio como resultado`, async () => {
+    for (let i = 0; i < 5; i++) {
+      await server
+        .post(`/evaluation/${studentId}`)
+        .send({
+          type: 'bodyComposition',
+          data: {
+            date: '2022-11-18T03:00:00.000Z',
+            weight: 23,
+            waist: 23,
+            hip: 23,
+            waistEstature: 0.11948051948051948,
+            waistHip: 1,
+            imc: 6.206780232754258,
+            scapula: 33,
+            triceps: 33,
+            biceps: 33,
+            suprailiac: 33,
+            sumPleats: 132,
+            density: 1.0063072907590642,
+            bodyFat: 41.89745969803944,
+            mg: 9.636415730549071,
+            mcm: 13.363584269450929,
+            minimumWeight: 18.560533707570883,
+            maximumWeight: 19.65232987090353,
+            cardiovascularRisk: {
+              waistCircumference: 'none',
+              rcq: 'Risco aumentado',
+            },
+          },
+        })
+        .set('Authorization', `Bearer ${token}`);
+    }
 
     return await server
-      .get(`/evaluation/${id}?type=ACR`)
+      .get(
+        `/evaluation?studentId=${studentId}&page=1&limit=50&orderBy=updatedAt`,
+      )
+      .set('Authorization', `Bearer ${token}`)
+      .expect((res) => {
+        expect(res.body.meta.totalItems).toBe(5);
+      })
+      .expect(200);
+  });
+
+  it(`/:studentId (GET) deve falhar devido a página invalida`, async () => {
+    const page = -1;
+    const limit = 5;
+    const orderBy = 'updatedAt';
+
+    return await server
+      .get(
+        `/evaluation?studentId=${studentId}&page=${page}&limit=${limit}&orderBy=${orderBy}`,
+      )
       .set('Authorization', `Bearer ${token}`)
       .expect(400);
-  });
-
-  it(`/:id?type=ACR (GET) deve receber erro ao buscar id válido porém inexistente`, async () => {
-    id = 'a9cd5ca1-6bba-46a9-ad3e-f7f4bde8eb8f';
-
-    const teste = await server
-      .get(`/evaluation/${id}?type=ACR`)
-      .set('Authorization', `Bearer ${token}`)
-      .expect(404);
-
-    return teste;
-  });
-
-  it(`/:id?type=ACR (GET) deve retornar sucesso ao buscar id válido`, async () => {
-    const response = await server
-      .post(`/evaluation/${studentId}`)
-      .send({
-        type: 'ACR',
-        data: {
-          weight: 75,
-          time: 10,
-          date: '2022-10-12T03:00:00.000Z',
-          finalFC: 150,
-          vo2Lmin: 3.733740000000001,
-          vo2MlKG: 46.67175000000002,
-          result: 'Muito bom!',
-        },
-      })
-      .set('Authorization', `Bearer ${token}`);
-
-    id = response.body.id;
-
-    return await server
-      .get(`/evaluation/${id}?type=ACR`)
-      .set('Authorization', `Bearer ${token}`)
-      .expect(200);
   });
 });

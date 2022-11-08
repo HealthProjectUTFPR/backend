@@ -29,7 +29,7 @@ export class StudentController {
     @Body(new JoiPipe({ group: 'CREATE' }))
     createStudentDto: CreateStudentDto,
   ): Promise<Student> {
-    if (!user) throw new ForbiddenException('User not logged in');
+    if (!user) throw new ForbiddenException('Usuário não logado');
 
     return this.studentService.create(createStudentDto, user);
   }
@@ -54,9 +54,7 @@ export class StudentController {
   }
 
   @Get('index')
-  async index(
-    @AuthUser() user: User,
-  ): Promise<Student[]> {
+  async index(@AuthUser() user: User): Promise<Student[]> {
     return await this.studentService.findAll(user.id);
   }
 }

@@ -4,6 +4,7 @@ import { Evaluation } from 'src/modules/domain/evaluations/entities/evaluation.e
 import { User } from '../user/entities/user.entity';
 import { Field } from 'src/modules/domain/evaluations/entities/field.entity';
 import { TestBatteries } from 'src/modules/domain/evaluations/entities/test-batteries.entity';
+import { Student } from 'src/modules/domain/student/entities/student.entity';
 
 @Module({
   imports: [
@@ -11,7 +12,7 @@ import { TestBatteries } from 'src/modules/domain/evaluations/entities/test-batt
       type: 'sqlite',
       database: ':memory:',
       logging: false,
-      entities: [User, Evaluation, Field, TestBatteries],
+      entities: [User, Evaluation, Field, TestBatteries, Student],
       synchronize: true,
     }),
   ],
