@@ -27,13 +27,3 @@ export interface ISarcopenia {
 
   result: string;
 }
-
-export interface ISarcopeniaResult {
-  title: string;
-
-  description: string;
-
-  type: string;
-
-  hasSarcopenia: boolean;
-}

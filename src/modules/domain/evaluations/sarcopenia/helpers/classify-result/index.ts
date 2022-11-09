@@ -1,7 +1,4 @@
-import {
-  ISarcopenia,
-  ISarcopeniaResult,
-} from '../../interfaces/sarcopenia.interface';
+import { ISarcopenia } from '../../interfaces/sarcopenia.interface';
 
 const verifySarcopeniaOfMan = ({
   walkingSpeed,
