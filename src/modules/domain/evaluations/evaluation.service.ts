@@ -33,6 +33,7 @@ export class EvaluationService {
   constructor(
     private readonly bodyCompositionStrategy: BodyCompositionStrategy,
     private readonly cardiorespiratoryCapacityStrategy: CardiorespiratoryCapacityStrategy,
+    private readonly functionalBatteryStrategy: FunctionalBatteryStrategy,
   ) {}
 
   async create(
@@ -67,6 +68,13 @@ export class EvaluationService {
           type,
           student,
         );
+      case 'functionalBattery':
+        return await this.functionalBatteryStrategy.create(
+          data as CreateFunctionalBatteryDto,
+          user,
+          type,
+          student,
+        )
       default:
         break;
     }
@@ -106,7 +114,14 @@ export class EvaluationService {
         studentID,
       );
 
-    const amountOfEvaluation = countBodyEvaluation + countCardioEvaluation;
+      const { evaluations: batteryEvalution, count: countBatteryEvalution } =
+      await this.functionalBatteryStrategy.getAll(
+        orderBy as EvaluationOrderBy,
+        paginationParams,
+        studentID,
+      );
+
+    const amountOfEvaluation = countBodyEvaluation + countCardioEvaluation + countBatteryEvalution;
 
     const meta = {
       itemsPerPage: +paginationParams.limit,
@@ -117,7 +132,7 @@ export class EvaluationService {
 
     return {
       meta: meta,
-      data: [...cardioEvaluation, ...bodyEvaluation],
+      data: [...cardioEvaluation, ...bodyEvaluation, ...batteryEvalution],
     };
   }
 
@@ -133,6 +148,8 @@ export class EvaluationService {
         return await this.cardiorespiratoryCapacityStrategy.getByID(id);
       case 'bodyComposition':
         return await this.bodyCompositionStrategy.getByID(id);
+      case 'functionalBattery':
+        return await this.functionalBatteryStrategy.getByID(id)
       default:
         break;
     }
@@ -163,6 +180,12 @@ export class EvaluationService {
           type,
           data as UpdateBodyCompositionDto,
         );
+      case 'functionalBattery':
+        return await this.functionalBatteryStrategy.update(
+          id,
+          type,
+          data as UpdateFunctionalBatteryDto,
+        )
       default:
         break;
     }
