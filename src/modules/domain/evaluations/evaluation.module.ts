@@ -10,6 +10,10 @@ import { CardiorespiratoryCapacityStrategy } from './cardiorespiratory-capacity/
 import { CardiorespiratoryCapacityFactory } from './cardiorespiratory-capacity/cardiorespiratory-capacity.factory';
 import { MiniCognitionStrategy } from './mini-cognition/mini-cognition.strategy';
 import { MiniCognitionFactory } from './mini-cognition/mini-cognition.factory';
+import { avdStrategy } from './avd/avd.strategy';
+import { avdFactory } from './avd/avd.factory';
+import { BalanceStrategy } from './balance/balance.strategy';
+import { BalanceFactory } from './balance/balance.factory';
 import { Student } from '../student/entities/student.entity';
 import { BodyCompositionStrategy } from './body-composition/body-composition.strategy';
 import { BodyCompositionFactory } from './body-composition/body-composition.factory';
@@ -21,10 +25,15 @@ import { BodyCompositionFactory } from './body-composition/body-composition.fact
   controllers: [EvaluationController],
   providers: [
     EvaluationService,
+    avdStrategy,
+    avdFactory,
+    BalanceStrategy,
+    BalanceFactory,
     CardiorespiratoryCapacityFactory,
     MiniCognitionStrategy,
     MiniCognitionFactory,
     CardiorespiratoryCapacityStrategy,
+    CardiorespiratoryCapacityFactory,
     BodyCompositionStrategy,
     BodyCompositionFactory,
   ],
