@@ -13,6 +13,9 @@ import { Student } from '../student/entities/student.entity';
 import { BodyCompositionStrategy } from './body-composition/body-composition.strategy';
 import { CreateBodyCompositionDto } from './body-composition/dto/create-body-composition.dto';
 import { UpdateBodyCompositionDto } from './body-composition/dto/update-body-composition.dto';
+import { avdStrategy } from './avd/avd.strategy';
+import { CreateAvdDto } from './avd/dto/create-avd.dto';
+import { UpdateAvdDto } from './avd/dto/update-avd.dto';
 import { CardiorespiratoryCapacityStrategy } from './cardiorespiratory-capacity/cardiorespiratory-capacity.strategy';
 import { CreateCardiorespiratoryCapacityDto } from './cardiorespiratory-capacity/dto/create-cardiorespiratory-capacity.dto';
 import { UpdateCardiorespiratoryCapacityDto } from './cardiorespiratory-capacity/dto/update-cardiorespiratory-capacity.dto';
@@ -23,6 +26,7 @@ import { UpdateEvaluationDto } from './dto/update-evaluation.dto';
 import { Evaluation } from './entities/evaluation.entity';
 import { EvaluationOrderBy } from './enums/order-by.enum';
 import { ResponseEvaluation } from './types/response-evaluation.type';
+import { UpdateBalanceDto } from './balance/dto/update-balance.dto';
 
 @Injectable()
 export class EvaluationService {
@@ -35,6 +39,7 @@ export class EvaluationService {
   constructor(
     private readonly bodyCompositionStrategy: BodyCompositionStrategy,
     private readonly cardiorespiratoryCapacityStrategy: CardiorespiratoryCapacityStrategy,
+    private readonly avdStrategy: avdStrategy,
     private readonly balanceStrategy: BalanceStrategy,
   ) {}
 
@@ -66,6 +71,13 @@ export class EvaluationService {
       case 'bodyComposition':
         return await this.bodyCompositionStrategy.create(
           data as CreateBodyCompositionDto,
+          user,
+          type,
+          student,
+        );
+      case 'AVD':
+        return await this.avdStrategy.create(
+          data as CreateAvdDto,
           user,
           type,
           student,
@@ -115,8 +127,15 @@ export class EvaluationService {
         paginationParams,
         studentID,
       );
-    
-    const { evaluations: balanceEvaluation, count: countBalanceEvaluation } =
+
+    const { evaluations: avdEvaluation, count: countAvdEvaluation } =
+      await this.avdStrategy.getAll(
+        orderBy as EvaluationOrderBy,
+        paginationParams,
+        studentID,
+      );
+      
+      const { evaluations: balanceEvaluation, count: countBalanceEvaluation } =
     await this.balanceStrategy.getAll(
       orderBy as EvaluationOrderBy,
       paginationParams,
@@ -125,7 +144,8 @@ export class EvaluationService {
 
     const amountOfEvaluations = 
     + countBodyEvaluation 
-    + countCardioEvaluation 
+    + countCardioEvaluation
+    + countAvdEvaluation
     + countBalanceEvaluation;
 
     const meta = {
@@ -137,7 +157,7 @@ export class EvaluationService {
 
     return {
       meta: meta,
-      data: [...cardioEvaluation, ...bodyEvaluation, ...balanceEvaluation],
+      data: [...cardioEvaluation, ...bodyEvaluation, ...balanceEvaluation, ...avdEvaluation],
     };
   }
 
@@ -153,6 +173,8 @@ export class EvaluationService {
         return await this.cardiorespiratoryCapacityStrategy.getByID(id);
       case 'bodyComposition':
         return await this.bodyCompositionStrategy.getByID(id);
+      case 'AVD':
+        return await this.avdStrategy.getByID(id);
       case 'AEQ':
         return await this.balanceStrategy.getById(id);
       default:
@@ -185,11 +207,17 @@ export class EvaluationService {
           type,
           data as UpdateBodyCompositionDto,
         );
+      case 'AVD':
+        return await this.avdStrategy.update(
+          id,
+          type,
+          data as UpdateAvdDto,
+        );
       case 'AEQ':
         return await this.balanceStrategy.update(
           id,
           type,
-          data as CreateBalanceDto
+          data as UpdateBalanceDto,
         );
       default:
         break;
