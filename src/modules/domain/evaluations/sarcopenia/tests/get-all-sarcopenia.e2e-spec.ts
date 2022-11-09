@@ -70,7 +70,7 @@ describe('Buscar avaliações Sarcopenia', () => {
   it(`/:studentId (GET) deve receber um array vazio como resultado`, async () => {
     return await server
       .get(
-        `/evaluation?studentId=${studentId}page=1&limit=50&orderBy=updatedAt`,
+        `/evaluation?studentId=${studentId}&page=1&limit=50&orderBy=updatedAt`,
       )
       .set('Authorization', `Bearer ${token}`)
       .expect((result) => {
@@ -103,10 +103,11 @@ describe('Buscar avaliações Sarcopenia', () => {
 
     return await server
       .get(
-        `/evaluation?studentId=${studentId}page=1&limit=50&orderBy=updatedAt`,
+        `/evaluation?studentId=${studentId}&page=1&limit=50&orderBy=updatedAt`,
       )
       .set('Authorization', `Bearer ${token}`)
       .expect((res) => {
+        console.log(res);
         expect(res.body.meta.totalItems).toBe(5);
       })
       .expect(200);
