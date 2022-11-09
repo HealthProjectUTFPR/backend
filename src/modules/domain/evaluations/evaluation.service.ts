@@ -26,6 +26,7 @@ import { UpdateEvaluationDto } from './dto/update-evaluation.dto';
 import { Evaluation } from './entities/evaluation.entity';
 import { EvaluationOrderBy } from './enums/order-by.enum';
 import { ResponseEvaluation } from './types/response-evaluation.type';
+import { UpdateBalanceDto } from './balance/dto/update-balance.dto';
 
 @Injectable()
 export class EvaluationService {
@@ -216,7 +217,7 @@ export class EvaluationService {
         return await this.balanceStrategy.update(
           id,
           type,
-          data as CreateBalanceDto
+          data as UpdateBalanceDto,
         );
       default:
         break;
