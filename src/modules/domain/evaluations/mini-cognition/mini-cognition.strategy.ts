@@ -10,7 +10,6 @@ import { Repository } from 'typeorm';
 import { Student } from '../../student/entities/student.entity';
 import { Evaluation } from '../entities/evaluation.entity';
 import { EvaluationOrderBy } from '../enums/order-by.enum';
-
 import { MiniCognitionFactory } from './mini-cognition.factory';
 import { MiniCognitionSchema } from './dto/mini-cognition.dto';
 import { CreateMiniCognitionDto } from './dto/create-mini-cognition.dto';
@@ -41,4 +40,24 @@ export class MiniCognitionStrategy {
 
     return await this.MiniCognitionFactory.create(input, user, type, student);
   }
-}
+  
+  async update(
+  async getAll(
+    orderBy: EvaluationOrderBy,
+    paginationParams: PaginationParams,
+    studentID: string,
+  ): Promise<GetAllMiniCognitionDto> {
+    const evaluations = await this.MiniCognitionFactory.getAll(
+      orderBy,
+      paginationParams,
+      studentID,
+    );
+
+    const returnedData: GetAllMiniCognitionDto = {
+      evaluations,
+      count: evaluations.length,
+    };
+
+    return returnedData;
+  }
+/*

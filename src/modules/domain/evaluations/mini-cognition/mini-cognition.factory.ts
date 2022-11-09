@@ -2,12 +2,14 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
+import { parseType } from 'src/common/utils/parse-type.util';
 import { User } from 'src/modules/infrastructure/user/entities/user.entity';
 import { Repository } from 'typeorm';
 import { Student } from '../../student/entities/student.entity';
 import { Evaluation } from '../entities/evaluation.entity';
 import { Field } from '../entities/field.entity';
-
+import { PaginationParams } from 'src/common/interfaces/pagination.interface';
+import { EvaluationOrderBy } from '../enums/order-by.enum';
 import { CreateMiniCognitionDto } from './dto/create-mini-cognition.dto';
 import { GetMiniCognitionDto } from './dto/get-mini-cognition.dto';
 dayjs.extend(customParseFormat);
@@ -111,4 +113,41 @@ export class MiniCognitionFactory {
 
     return returnEvaluation;
   }
+
+  async getAll(
+    orderBy: EvaluationOrderBy,
+    paginationParams: PaginationParams,
+    studentID: string,
+  ): Promise<GetMiniCognitionDto[]> {
+    const { page, limit } = paginationParams;
+
+    const evaluations = await this.evaluationsRepository.find({
+      where: {
+        name: 'MiniCognition',
+        deletedAt: null,
+        student: {
+          id: studentID,
+        },
+      },
+      skip: (page - 1) * limit,
+      take: limit,
+      relations: ['fields'],
+      order: {
+        [orderBy]: 'DESC',
+      },
+    });
+
+    const parsedEvaluations: GetMiniCognitionDto[] = 
+      evaluations.map((item) => {
+        let field = {};
+        item.fields.forEach(({ name, value, dataType }) => {
+          field[name] = parseType(dataType, value);
+        });
+        return field as GetMiniCognitionDto;
+      });
+
+    return parsedEvaluations;
+  }
+/*
+
 }
