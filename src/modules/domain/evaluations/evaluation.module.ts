@@ -8,6 +8,8 @@ import { TestBatteries } from './entities/test-batteries.entity';
 import { User } from 'src/modules/infrastructure/user/entities/user.entity';
 import { CardiorespiratoryCapacityStrategy } from './cardiorespiratory-capacity/cardiorespiratory-capacity.strategy';
 import { CardiorespiratoryCapacityFactory } from './cardiorespiratory-capacity/cardiorespiratory-capacity.factory';
+import { BalanceStrategy } from './balance/balance.strategy';
+import { BalanceFactory } from './balance/balance.factory';
 import { Student } from '../student/entities/student.entity';
 import { BodyCompositionStrategy } from './body-composition/body-composition.strategy';
 import { BodyCompositionFactory } from './body-composition/body-composition.factory';
@@ -19,6 +21,8 @@ import { BodyCompositionFactory } from './body-composition/body-composition.fact
   controllers: [EvaluationController],
   providers: [
     EvaluationService,
+    BalanceStrategy,
+    BalanceFactory,
     CardiorespiratoryCapacityFactory,
     CardiorespiratoryCapacityStrategy,
     BodyCompositionStrategy,

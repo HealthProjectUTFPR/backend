@@ -16,6 +16,8 @@ import { UpdateBodyCompositionDto } from './body-composition/dto/update-body-com
 import { CardiorespiratoryCapacityStrategy } from './cardiorespiratory-capacity/cardiorespiratory-capacity.strategy';
 import { CreateCardiorespiratoryCapacityDto } from './cardiorespiratory-capacity/dto/create-cardiorespiratory-capacity.dto';
 import { UpdateCardiorespiratoryCapacityDto } from './cardiorespiratory-capacity/dto/update-cardiorespiratory-capacity.dto';
+import { BalanceStrategy } from './balance/balance.strategy';
+import { CreateBalanceDto } from './balance/dto/create-balance.dto';
 import { CreateEvaluationDto } from './dto/create-evaluation.dto';
 import { UpdateEvaluationDto } from './dto/update-evaluation.dto';
 import { Evaluation } from './entities/evaluation.entity';
@@ -33,6 +35,7 @@ export class EvaluationService {
   constructor(
     private readonly bodyCompositionStrategy: BodyCompositionStrategy,
     private readonly cardiorespiratoryCapacityStrategy: CardiorespiratoryCapacityStrategy,
+    private readonly balanceStrategy: BalanceStrategy,
   ) {}
 
   async create(
@@ -63,6 +66,13 @@ export class EvaluationService {
       case 'bodyComposition':
         return await this.bodyCompositionStrategy.create(
           data as CreateBodyCompositionDto,
+          user,
+          type,
+          student,
+        );
+      case 'AEQ':
+        return await this.balanceStrategy.create(
+          data as CreateBalanceDto,
           user,
           type,
           student,
@@ -105,19 +115,29 @@ export class EvaluationService {
         paginationParams,
         studentID,
       );
+    
+    const { evaluations: balanceEvaluation, count: countBalanceEvaluation } =
+    await this.balanceStrategy.getAll(
+      orderBy as EvaluationOrderBy,
+      paginationParams,
+      studentID,
+    );
 
-    const amountOfEvaluation = countBodyEvaluation + countCardioEvaluation;
+    const amountOfEvaluations = 
+    + countBodyEvaluation 
+    + countCardioEvaluation 
+    + countBalanceEvaluation;
 
     const meta = {
       itemsPerPage: +paginationParams.limit,
-      totalItems: +amountOfEvaluation,
+      totalItems: +amountOfEvaluations,
       currentPage: +paginationParams.page,
-      totalPages: +Math.ceil(amountOfEvaluation / paginationParams.limit),
+      totalPages: +Math.ceil(amountOfEvaluations / paginationParams.limit),
     };
 
     return {
       meta: meta,
-      data: [...cardioEvaluation, ...bodyEvaluation],
+      data: [...cardioEvaluation, ...bodyEvaluation, ...balanceEvaluation],
     };
   }
 
@@ -133,6 +153,8 @@ export class EvaluationService {
         return await this.cardiorespiratoryCapacityStrategy.getByID(id);
       case 'bodyComposition':
         return await this.bodyCompositionStrategy.getByID(id);
+      case 'AEQ':
+        return await this.balanceStrategy.getById(id);
       default:
         break;
     }
@@ -162,6 +184,12 @@ export class EvaluationService {
           id,
           type,
           data as UpdateBodyCompositionDto,
+        );
+      case 'AEQ':
+        return await this.balanceStrategy.update(
+          id,
+          type,
+          data as CreateBalanceDto
         );
       default:
         break;
