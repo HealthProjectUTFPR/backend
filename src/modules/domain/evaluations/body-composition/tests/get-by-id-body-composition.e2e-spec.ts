@@ -53,7 +53,7 @@ beforeAll(async () => {
       name: 'Estudante',
       sex: 'M',
       breed: 'Branco',
-      stature: 192,
+      stature: 192.5,
       healthPlan: 'free',
       emergencyContact: '449994484848',
       contact: '449994484848',
@@ -70,40 +70,53 @@ afterAll(async () => {
   await app.close();
 });
 
-describe('Buscar avaliação Cardiorespiratória', () => {
-  it(`/:id?type=ACR (GET) deve receber erro ao buscar id inválido`, async () => {
+describe('Buscar avaliação Composição Corporal', () => {
+  it(`/:id?type=bodyComposition (GET) deve receber erro ao buscar id inválido`, async () => {
     id = 'aca8e3cd-2c41-4b7e-9e1f-f3d8206064a';
 
     return await server
-      .get(`/evaluation/${id}?type=ACR`)
+      .get(`/evaluation/${id}?type=bodyComposition`)
       .set('Authorization', `Bearer ${token}`)
       .expect(400);
   });
 
-  it(`/:id?type=ACR (GET) deve receber erro ao buscar id válido porém inexistente`, async () => {
-    id = 'a9cd5ca1-6bba-46a9-ad3e-f7f4bde8eb8f';
+  it(`/:id?type=bodyComposition (GET) deve receber erro ao buscar id não válido porém inexistente`, async () => {
+    id = 'aca8e3cd-2c41-4b7e-9e1f-f3d8206064a9';
 
-    const teste = await server
-      .get(`/evaluation/${id}?type=ACR`)
+    return await server
+      .get(`/evaluation/${id}?type=bodyComposition`)
       .set('Authorization', `Bearer ${token}`)
       .expect(404);
-
-    return teste;
   });
 
-  it(`/:id?type=ACR (GET) deve retornar sucesso ao buscar id válido`, async () => {
+  it(`/:id?type=bodyComposition (GET) deve retornar sucesso ao buscar id válido`, async () => {
     const response = await server
       .post(`/evaluation/${studentId}`)
       .send({
-        type: 'ACR',
+        type: 'bodyComposition',
         data: {
-          weight: 75,
-          time: 10,
-          date: '2022-10-12T03:00:00.000Z',
-          finalFC: 150,
-          vo2Lmin: 3.733740000000001,
-          vo2MlKG: 46.67175000000002,
-          result: 'Muito bom!',
+          date: '2022-11-18T03:00:00.000Z',
+          weight: 23,
+          waist: 23,
+          hip: 23,
+          waistEstature: 0.11948051948051948,
+          waistHip: 1,
+          imc: 6.206780232754258,
+          scapula: 33,
+          triceps: 33,
+          biceps: 33,
+          suprailiac: 33,
+          sumPleats: 132,
+          density: 1.0063072907590642,
+          bodyFat: 41.89745969803944,
+          mg: 9.636415730549071,
+          mcm: 13.363584269450929,
+          minimumWeight: 18.560533707570883,
+          maximumWeight: 19.65232987090353,
+          cardiovascularRisk: {
+            waistCircumference: 'none',
+            rcq: 'Risco aumentado',
+          },
         },
       })
       .set('Authorization', `Bearer ${token}`);
@@ -111,7 +124,7 @@ describe('Buscar avaliação Cardiorespiratória', () => {
     id = response.body.id;
 
     return await server
-      .get(`/evaluation/${id}?type=ACR`)
+      .get(`/evaluation/${id}?type=bodyComposition`)
       .set('Authorization', `Bearer ${token}`)
       .expect(200);
   });

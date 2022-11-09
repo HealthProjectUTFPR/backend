@@ -11,6 +11,12 @@ import { EvaluationController } from './evaluation.controller';
 import { EvaluationService } from './evaluation.service';
 import { SarcopeniaFactory } from './sarcopenia/sarcopenia.factory';
 import { SarcopeniaStrategy } from './sarcopenia/sarcopenia.strategy';
+import { avdStrategy } from './avd/avd.strategy';
+import { avdFactory } from './avd/avd.factory';
+import { BalanceStrategy } from './balance/balance.strategy';
+import { BalanceFactory } from './balance/balance.factory';
+import { BodyCompositionStrategy } from './body-composition/body-composition.strategy';
+import { BodyCompositionFactory } from './body-composition/body-composition.factory';
 
 @Module({
   imports: [
@@ -21,8 +27,15 @@ import { SarcopeniaStrategy } from './sarcopenia/sarcopenia.strategy';
     EvaluationService,
     SarcopeniaFactory,
     SarcopeniaStrategy,
+    avdStrategy,
+    avdFactory,
+    BalanceStrategy,
+    BalanceFactory,
+    CardiorespiratoryCapacityFactory,
     CardiorespiratoryCapacityStrategy,
     CardiorespiratoryCapacityFactory,
+    BodyCompositionStrategy,
+    BodyCompositionFactory,
   ],
   exports: [TypeOrmModule],
 })

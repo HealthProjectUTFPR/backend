@@ -10,7 +10,6 @@ import { StudentModule } from 'src/modules/domain/student/student.module';
 let app: INestApplication;
 let server: request.SuperTest<request.Test>;
 let token: string;
-let id: string;
 let studentId: string;
 
 beforeAll(async () => {
@@ -50,15 +49,15 @@ beforeAll(async () => {
   const student = await server
     .post('/student/create')
     .send({
-      name: 'Estudante',
+      name: 'EstudanteTeste',
       sex: 'M',
-      breed: 'Branco',
-      stature: 192,
+      breed: 'Amarelo',
+      stature: 179.3,
       healthPlan: 'free',
-      emergencyContact: '449994484848',
-      contact: '449994484848',
-      address: 'Rua 123',
-      birthDate: '1980-10-12T03:00:00.000Z',
+      emergencyContact: '44999999999',
+      contact: '44999999999',
+      address: 'Rua do seu Zé',
+      birthDate: '2000-01-01T01:00:00.000Z',
       flag: true,
     })
     .set('Authorization', `Bearer ${token}`);
@@ -70,49 +69,32 @@ afterAll(async () => {
   await app.close();
 });
 
-describe('Buscar avaliação Cardiorespiratória', () => {
-  it(`/:id?type=ACR (GET) deve receber erro ao buscar id inválido`, async () => {
-    id = 'aca8e3cd-2c41-4b7e-9e1f-f3d8206064a';
-
-    return await server
-      .get(`/evaluation/${id}?type=ACR`)
-      .set('Authorization', `Bearer ${token}`)
-      .expect(400);
-  });
-
-  it(`/:id?type=ACR (GET) deve receber erro ao buscar id válido porém inexistente`, async () => {
-    id = 'a9cd5ca1-6bba-46a9-ad3e-f7f4bde8eb8f';
-
-    const teste = await server
-      .get(`/evaluation/${id}?type=ACR`)
-      .set('Authorization', `Bearer ${token}`)
-      .expect(404);
-
-    return teste;
-  });
-
-  it(`/:id?type=ACR (GET) deve retornar sucesso ao buscar id válido`, async () => {
-    const response = await server
-      .post(`/evaluation/${studentId}`)
-      .send({
-        type: 'ACR',
-        data: {
-          weight: 75,
-          time: 10,
-          date: '2022-10-12T03:00:00.000Z',
-          finalFC: 150,
-          vo2Lmin: 3.733740000000001,
-          vo2MlKG: 46.67175000000002,
-          result: 'Muito bom!',
-        },
-      })
-      .set('Authorization', `Bearer ${token}`);
-
-    id = response.body.id;
-
-    return await server
-      .get(`/evaluation/${id}?type=ACR`)
-      .set('Authorization', `Bearer ${token}`)
-      .expect(200);
-  });
+describe('Criar avaliações de Equilibrio', () => {
+    it(`/:studentId (CREATE) sucesso na criação`, async () => {
+        return await server
+          .post(`/evaluation/${studentId}`)
+          .send({
+            "type": "AEQ",
+            "data": {
+                "date" : "2022-11-06T03:00:00.000Z",
+                "campo1" : 4,
+                "campo2" : 4,
+                "campo3" : 3,
+                "campo4" : 1,
+                "campo5" : 0,
+                "campo6" : 1,
+                "campo7" : 2,
+                "campo8" : 4,
+                "campo9" : 3,
+                "campo10" : 2,
+                "campo11" : 1,
+                "campo12" : 4,
+                "campo13" : 2,
+                "campo14" : 1,
+                "result" : 32
+            },
+          })
+          .set('Authorization', `Bearer ${token}`)
+          .expect(201);
+      });
 });
