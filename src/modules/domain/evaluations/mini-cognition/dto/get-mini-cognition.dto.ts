@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import * as Joi from 'joi';
 import { JoiSchema } from 'nestjs-joi';
-import { CreateMiniCognitionDto } from './create-MiniCognition.dto';
+import { CreateMiniCognitionDto } from './create-mini-cognition.dto';
 
 export class GetMiniCognitionDto extends CreateMiniCognitionDto {
   @ApiProperty()

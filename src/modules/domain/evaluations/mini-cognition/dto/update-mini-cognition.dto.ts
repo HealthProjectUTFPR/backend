@@ -1,3 +1,3 @@
-import { CreateMiniCognitionDto } from './create-MiniCognition.dto';
+import { CreateMiniCognitionDto } from './create-mini-cognition.dto';
 
 export class UpdateMiniCognitionDto extends CreateMiniCognitionDto {}

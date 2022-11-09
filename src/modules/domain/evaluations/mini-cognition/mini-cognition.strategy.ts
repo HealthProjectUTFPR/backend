@@ -11,12 +11,12 @@ import { Student } from '../../student/entities/student.entity';
 import { Evaluation } from '../entities/evaluation.entity';
 import { EvaluationOrderBy } from '../enums/order-by.enum';
 
-import { MiniCognitionFactory } from './MiniCognition.factory';
-import { MiniCognitionSchema } from './dto/MiniCognition.dto';
-import { CreateMiniCognitionDto } from './dto/create-MiniCognition.dto';
-import { GetAllMiniCognitionDto } from './dto/get-all-MiniCognition.dto';
-import { GetMiniCognitionDto } from './dto/get-MiniCognition.dto';
-import { UpdateMiniCognitionDto } from './dto/update-MiniCognition.dto';
+import { MiniCognitionFactory } from './mini-cognition.factory';
+import { MiniCognitionSchema } from './dto/mini-cognition.dto';
+import { CreateMiniCognitionDto } from './dto/create-mini-cognition.dto';
+import { GetMiniCognitionDto } from './dto/get-mini-cognition.dto';
+import { GetAllMiniCognitionDto } from './dto/get-all-mini-cognition.dto';
+import { UpdateMiniCognitionDto } from './dto/update-mini-cognition.dto';
 
 @Injectable()
 export class MiniCognitionStrategy {

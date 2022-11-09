@@ -21,8 +21,8 @@ import { UpdateEvaluationDto } from './dto/update-evaluation.dto';
 import { Evaluation } from './entities/evaluation.entity';
 import { EvaluationOrderBy } from './enums/order-by.enum';
 import { ResponseEvaluation } from './types/response-evaluation.type';
-import { MiniCognitionStrategy } from './MiniCognition/MiniCognition.strategy';
-import { CreateMiniCognitionDto } from './MiniCognition/dto/create-MiniCognition.dto';
+import { MiniCognitionStrategy } from './mini-cognition/mini-cognition.strategy';
+import { CreateMiniCognitionDto } from './mini-cognition/dto/create-mini-cognition.dto';
 
 @Injectable()
 export class EvaluationService {
