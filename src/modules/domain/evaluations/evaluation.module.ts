@@ -10,6 +10,8 @@ import { CardiorespiratoryCapacityStrategy } from './cardiorespiratory-capacity/
 import { CardiorespiratoryCapacityFactory } from './cardiorespiratory-capacity/cardiorespiratory-capacity.factory';
 import { avdStrategy } from './avd/avd.strategy';
 import { avdFactory } from './avd/avd.factory';
+import { BalanceStrategy } from './balance/balance.strategy';
+import { BalanceFactory } from './balance/balance.factory';
 import { Student } from '../student/entities/student.entity';
 import { BodyCompositionStrategy } from './body-composition/body-composition.strategy';
 import { BodyCompositionFactory } from './body-composition/body-composition.factory';
@@ -23,6 +25,9 @@ import { BodyCompositionFactory } from './body-composition/body-composition.fact
     EvaluationService,
     avdStrategy,
     avdFactory,
+    BalanceStrategy,
+    BalanceFactory,
+    CardiorespiratoryCapacityFactory,
     CardiorespiratoryCapacityStrategy,
     CardiorespiratoryCapacityFactory,
     BodyCompositionStrategy,

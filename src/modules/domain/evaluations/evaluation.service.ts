@@ -19,6 +19,8 @@ import { UpdateAvdDto } from './avd/dto/update-avd.dto';
 import { CardiorespiratoryCapacityStrategy } from './cardiorespiratory-capacity/cardiorespiratory-capacity.strategy';
 import { CreateCardiorespiratoryCapacityDto } from './cardiorespiratory-capacity/dto/create-cardiorespiratory-capacity.dto';
 import { UpdateCardiorespiratoryCapacityDto } from './cardiorespiratory-capacity/dto/update-cardiorespiratory-capacity.dto';
+import { BalanceStrategy } from './balance/balance.strategy';
+import { CreateBalanceDto } from './balance/dto/create-balance.dto';
 import { CreateEvaluationDto } from './dto/create-evaluation.dto';
 import { UpdateEvaluationDto } from './dto/update-evaluation.dto';
 import { Evaluation } from './entities/evaluation.entity';
@@ -37,6 +39,7 @@ export class EvaluationService {
     private readonly bodyCompositionStrategy: BodyCompositionStrategy,
     private readonly cardiorespiratoryCapacityStrategy: CardiorespiratoryCapacityStrategy,
     private readonly avdStrategy: avdStrategy,
+    private readonly balanceStrategy: BalanceStrategy,
   ) {}
 
   async create(
@@ -74,6 +77,13 @@ export class EvaluationService {
       case 'AVD':
         return await this.avdStrategy.create(
           data as CreateAvdDto,
+          user,
+          type,
+          student,
+        );
+      case 'AEQ':
+        return await this.balanceStrategy.create(
+          data as CreateBalanceDto,
           user,
           type,
           student,
@@ -116,29 +126,37 @@ export class EvaluationService {
         paginationParams,
         studentID,
       );
-    
+
     const { evaluations: avdEvaluation, count: countAvdEvaluation } =
       await this.avdStrategy.getAll(
         orderBy as EvaluationOrderBy,
         paginationParams,
         studentID,
       );
+      
+      const { evaluations: balanceEvaluation, count: countBalanceEvaluation } =
+    await this.balanceStrategy.getAll(
+      orderBy as EvaluationOrderBy,
+      paginationParams,
+      studentID,
+    );
 
-    const amountOfEvaluation = 
+    const amountOfEvaluations = 
     + countBodyEvaluation 
+    + countCardioEvaluation
     + countAvdEvaluation
-    + countCardioEvaluation;
+    + countBalanceEvaluation;
 
     const meta = {
       itemsPerPage: +paginationParams.limit,
-      totalItems: +amountOfEvaluation,
+      totalItems: +amountOfEvaluations,
       currentPage: +paginationParams.page,
-      totalPages: +Math.ceil(amountOfEvaluation / paginationParams.limit),
+      totalPages: +Math.ceil(amountOfEvaluations / paginationParams.limit),
     };
 
     return {
       meta: meta,
-      data: [...cardioEvaluation, ...bodyEvaluation, ...avdEvaluation],
+      data: [...cardioEvaluation, ...bodyEvaluation, ...balanceEvaluation, ...avdEvaluation],
     };
   }
 
@@ -156,6 +174,8 @@ export class EvaluationService {
         return await this.bodyCompositionStrategy.getByID(id);
       case 'AVD':
         return await this.avdStrategy.getByID(id);
+      case 'AEQ':
+        return await this.balanceStrategy.getById(id);
       default:
         break;
     }
@@ -191,6 +211,12 @@ export class EvaluationService {
           id,
           type,
           data as UpdateAvdDto,
+        );
+      case 'AEQ':
+        return await this.balanceStrategy.update(
+          id,
+          type,
+          data as CreateBalanceDto
         );
       default:
         break;
