@@ -1,21 +1,18 @@
-import { DataType } from 'src/modules/domain/field/entities/field.entity';
-import { FieldType } from '../enums/field-type';
-
-export const parseType = (type: DataType, value: any) => {
+export const parseType = (type: string, value: any) => {
   switch (type) {
-    case DataType.Dt_int:
+    case 'int':
       return parseInt(value);
 
-    case DataType.Dt_string:
+    case 'string':
       return String(value);
 
-    case DataType.Dt_float:
+    case 'float':
       return parseFloat(value);
 
-    case DataType.Dt_boolean:
+    case 'boolean':
       return Boolean(value);
 
-    case DataType.Dt_date:
+    case 'date':
       return new Date(value);
 
     default:
