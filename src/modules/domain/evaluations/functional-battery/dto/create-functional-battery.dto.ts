@@ -33,9 +33,5 @@ export class CreateFunctionalBatteryDto {
 
     @ApiProperty()
     @JoiSchema(Joi.number().required())
-    result: number;
-
-    @ApiProperty()
-    @JoiSchema(Joi.number().required())
     getBack: number;
 }

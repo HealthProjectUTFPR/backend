@@ -3,11 +3,10 @@ export interface IFunctionalBattery {
     age: number;
 
     date: Date;
-    SitGetUp: number;
+    sitGetUp: number;
     elbowFlexion: number;
     stationaryMarch: number;
     sitFeet: number;
     TUG: number;
-    result: number;
     getBack: number;
 }
