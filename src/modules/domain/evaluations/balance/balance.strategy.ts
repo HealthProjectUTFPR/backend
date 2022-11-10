@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
+import { BadRequestException, Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { PaginationParams } from "src/common/interfaces/pagination.interface";
 import { User } from "src/modules/infrastructure/user/entities/user.entity";
@@ -31,7 +31,7 @@ export class BalanceStrategy {
         const validate = BalanceSchema.validate(input)
         
         if (validate?.error) {
-            throw new Error(validate.error.message)
+            throw new BadRequestException(validate.error.message)
         }
 
         const { date, campo1, campo2, campo3, campo4, campo5, campo6, campo7, campo8,
