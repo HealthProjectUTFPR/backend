@@ -27,6 +27,8 @@ import { Evaluation } from './entities/evaluation.entity';
 import { EvaluationOrderBy } from './enums/order-by.enum';
 import { ResponseEvaluation } from './types/response-evaluation.type';
 import { UpdateBalanceDto } from './balance/dto/update-balance.dto';
+import { DepressionStrategy } from './depression/depression.strategy';
+import { CreateDepressionDto } from './depression/dto/create-depression.dto';
 
 @Injectable()
 export class EvaluationService {
@@ -41,6 +43,7 @@ export class EvaluationService {
     private readonly cardiorespiratoryCapacityStrategy: CardiorespiratoryCapacityStrategy,
     private readonly avdStrategy: avdStrategy,
     private readonly balanceStrategy: BalanceStrategy,
+    private readonly depressionStrategy: DepressionStrategy,
   ) {}
 
   async create(
@@ -85,6 +88,13 @@ export class EvaluationService {
       case 'AEQ':
         return await this.balanceStrategy.create(
           data as CreateBalanceDto,
+          user,
+          type,
+          student,
+        );
+      case 'Depression':
+        return await this.depressionStrategy.create(
+          data as CreateDepressionDto,
           user,
           type,
           student,
@@ -177,6 +187,8 @@ export class EvaluationService {
         return await this.avdStrategy.getByID(id);
       case 'AEQ':
         return await this.balanceStrategy.getById(id);
+      case 'Depression':
+        return await this.depressionStrategy.getByID(id);
       default:
         break;
     }

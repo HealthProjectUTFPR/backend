@@ -30,12 +30,12 @@ export class DepressionFactory {
         fields.forEach(([key, value]) => {
             let type: string = typeof value;
             if (type === 'number') type = Number.isInteger(value) ? 'int' : 'float';
-            if (type === 'string') type = dayjs(value).isValid() ? 'date' : 'string';
-        
+            if (type === 'string') type = dayjs(value as string).isValid() ? 'date' : 'string';
+      
             inputs.push({
-                name: key,
-                value: String(value),
-                dataType: type 
+              name: key,
+              value: String(value),
+              dataType: type,
             });
         });
 
@@ -58,7 +58,7 @@ export class DepressionFactory {
         const { date, campo1, campo2, campo3, campo4, campo5, campo6, campo7, campo8, campo9, 
                 campo10, campo11, campo12, campo13, campo14, campo15} = parsedFields;
     
-        const returnBalance: GetDepressionDto = {
+        const returnedValues: GetDepressionDto = {
             id,
             name,
             date,
@@ -83,7 +83,7 @@ export class DepressionFactory {
             deletedAt,
         };
     
-        return returnBalance;
+        return returnedValues;
     }
 
     async create(
