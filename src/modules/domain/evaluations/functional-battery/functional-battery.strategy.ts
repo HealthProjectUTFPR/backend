@@ -34,5 +34,177 @@ export class FunctionalBatteryStrategy {
         private readonly functionalBatteryFactory: FunctionalBatteryFactory,
     ) {}
 
-} 
+    // private recalculateResult({
+    //     age,
+    //     sex,
+    //     TUG,
+    //     sitFeet,
+    //     getBack,
+    //     sitGetUp,
+    //     stationaryMarch,
+    //     elbowFlexion,
+    // }:Partial<IFunctionalBattery>){
+    //     const percentTUG = calculatePercentTug({age,sex,TUG});
+    //     const percentSitFeet = calculatePercentSitFeet ({age,sex,sitFeet});
+    //     const percentSitGetUp = calculatePercentSitGetUp({age,sex,sitGetUp});
+    //     const percentGetBack = calculatePercentGetBack({age,sex,getBack});
+    //     const percentStationaryMarch = calculatePercentStationaryMarch({age,sex,stationaryMarch});
+    //     const percentElbowFlexion = calculatePercentElbowFlexion({age,sex,elbowFlexion});
+
+    //     if (percentTUG > 70) {
+
+    //     }
+    // } da pra tentar validar um por um
+
+    async create(
+        input: CreateFunctionalBatteryDto,
+        user: User,
+        type: string,
+        student: Student,
+      ): Promise<GetFunctionalBatteryDto> {
+        const validation = functionalBatterySchema.validate(input);
+    
+        if (validation?.error) {
+          throw new BadRequestException(validation.error.message);
+        }
+    
+        const { sex: studentSex, birthDate } = student;
+    
+        const sex = studentSex === 'H' ? 'Homem' : 'Mulher';
+        const age = dayjs(new Date()).diff(birthDate, 'year');
+    
+        const { date, TUG, getBack, sitFeet, sitGetUp, stationaryMarch, elbowFlexion, result } = input;
+    
+        // const isResultValid = this.validateResult(result, {
+        //     //     age,
+        //     //     sex,
+        //     //     TUG,
+        //     //     sitFeet,
+        //     //     getBack,
+        //     //     sitGetUp,
+        //     //     stationaryMarch,
+        //     //     elbowFlexion,
+        // });
+    
+        // if (!isResultValid)
+        //   throw new BadRequestException(
+        //     'Resultado inválido',
+        //   );
+    
+        const data: CreateFunctionalBatteryDto = {
+          date,
+          sitGetUp,
+          sitFeet,
+          elbowFlexion,
+          stationaryMarch,
+          TUG,
+          result,
+          getBack,
+        };
+    
+        return await this.functionalBatteryFactory.create(
+          data,
+          user,
+          type,
+          student,
+        );
+      }
+
+      async update(
+        id: string,
+        type: string,
+        input: UpdateFunctionalBatteryDto,
+      ): Promise<GetFunctionalBatteryDto> {
+        const validation = functionalBatterySchema.validate(input);
+    
+        // if (validation?.error) {
+        //   throw new BadRequestException(validation.error.message);
+        // }
+    
+        const evaluation = await this.evaluationRepository.findOne({
+          where: {
+            id,
+            deletedAt: null,
+          },
+          relations: ['fields', 'student'],
+        });
+    
+        if (!evaluation) {
+          throw new NotFoundException(`Avaliação com id ${id} não encontrada`);
+        }
+    
+        const { sex: studentSex, birthDate } = evaluation.student;
+    
+        const sex = studentSex === 'H' ? 'Homem' : 'Mulher';
+        const age = dayjs(new Date()).diff(birthDate, 'year');
+    
+        const { date, TUG, getBack, sitFeet, sitGetUp, stationaryMarch, elbowFlexion, result } = input;
+    
+        // const isResultValid = this.validateResult(result, {
+        //   weight,
+        //   finalFC,
+        //   time,
+        //   age,
+        //   sex,
+        // });
+    
+        // if (!isResultValid)
+        //   throw new BadRequestException(
+        //     'Resultado inválido de acordo com os dados repassados',
+        //   );
+    
+        const newData: UpdateFunctionalBatteryDto = {
+          date,
+          sitGetUp,
+          sitFeet,
+          elbowFlexion,
+          stationaryMarch,
+          TUG,
+          result,
+          getBack,
+        };
+    
+        return await this.functionalBatteryFactory.update(
+          id,
+          type,
+          newData,
+          evaluation,
+        );
+      }
+    
+      async getAll(
+        orderBy: EvaluationOrderBy,
+        paginationParams: PaginationParams,
+        studentID: string,
+      ): Promise<GetAllFunctionalBatteryDto> {
+        const evaluations = await this.functionalBatteryFactory.getAll(
+          orderBy,
+          paginationParams,
+          studentID,
+        );
+    
+        const returnedData: GetAllFunctionalBatteryDto = {
+          evaluations,
+          count: evaluations.length,
+        };
+    
+        return returnedData;
+      }
+    
+      async getByID(id: string): Promise<GetFunctionalBatteryDto> {
+        const evaluation = await this.evaluationRepository.findOne({
+          where: { id, deletedAt: null },
+          relations: ['fields'],
+        });
+    
+        if (!evaluation) {
+          throw new NotFoundException(`Avaliação com id ${id} não encontrada`);
+        }
+    
+        return this.functionalBatteryFactory.getOne(evaluation);
+      }
+    }
+    
+
+
   

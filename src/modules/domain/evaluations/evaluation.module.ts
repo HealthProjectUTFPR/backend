@@ -11,6 +11,8 @@ import { CardiorespiratoryCapacityFactory } from './cardiorespiratory-capacity/c
 import { Student } from '../student/entities/student.entity';
 import { BodyCompositionStrategy } from './body-composition/body-composition.strategy';
 import { BodyCompositionFactory } from './body-composition/body-composition.factory';
+import { FunctionalBatteryFactory } from './functional-battery/functional-battery-factory';
+import { FunctionalBatteryStrategy } from './functional-battery/functional-battery.strategy'
 
 @Module({
   imports: [
@@ -23,6 +25,8 @@ import { BodyCompositionFactory } from './body-composition/body-composition.fact
     CardiorespiratoryCapacityStrategy,
     BodyCompositionStrategy,
     BodyCompositionFactory,
+    FunctionalBatteryStrategy,
+    FunctionalBatteryFactory,
   ],
   exports: [TypeOrmModule],
 })

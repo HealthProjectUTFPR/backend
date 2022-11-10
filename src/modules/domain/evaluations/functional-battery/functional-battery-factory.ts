@@ -124,6 +124,8 @@ export class FunctionalBatteryFactory {
     }
 
     async update(
+        id: string,
+        qtype: string,
         input: CreateFunctionalBatteryDto,
         evaluation: Evaluation,
     ): Promise<GetFunctionalBatteryDto> {

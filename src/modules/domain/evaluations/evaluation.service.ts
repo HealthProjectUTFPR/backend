@@ -21,6 +21,9 @@ import { UpdateEvaluationDto } from './dto/update-evaluation.dto';
 import { Evaluation } from './entities/evaluation.entity';
 import { EvaluationOrderBy } from './enums/order-by.enum';
 import { ResponseEvaluation } from './types/response-evaluation.type';
+import { FunctionalBatteryStrategy } from './functional-battery/functional-battery.strategy';
+import { CreateFunctionalBatteryDto } from './functional-battery/dto/create-functional-battery.dto';
+import { UpdateFunctionalBatteryDto } from './functional-battery/dto/update-functional-battery.dto';
 
 @Injectable()
 export class EvaluationService {
@@ -54,6 +57,13 @@ export class EvaluationService {
     }
 
     switch (type) {
+      case 'functionalBattery':
+        return await this.functionalBatteryStrategy.create(
+          data as CreateFunctionalBatteryDto,
+          user,
+          type,
+          student,
+        )
       case 'ACR':
         return await this.cardiorespiratoryCapacityStrategy.create(
           data as CreateCardiorespiratoryCapacityDto,
@@ -68,13 +78,6 @@ export class EvaluationService {
           type,
           student,
         );
-      case 'functionalBattery':
-        return await this.functionalBatteryStrategy.create(
-          data as CreateFunctionalBatteryDto,
-          user,
-          type,
-          student,
-        )
       default:
         break;
     }
@@ -149,7 +152,7 @@ export class EvaluationService {
       case 'bodyComposition':
         return await this.bodyCompositionStrategy.getByID(id);
       case 'functionalBattery':
-        return await this.functionalBatteryStrategy.getByID(id)
+        return await this.functionalBatteryStrategy.getByID(id);
       default:
         break;
     }
@@ -185,7 +188,7 @@ export class EvaluationService {
           id,
           type,
           data as UpdateFunctionalBatteryDto,
-        )
+        );
       default:
         break;
     }

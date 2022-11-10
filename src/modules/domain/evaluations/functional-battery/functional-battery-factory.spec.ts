@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { FunctionalBatteryFactory } from './functional-battery-factory';
 
-describe('CardiorespiratoryCapacityFactory', () => {
+describe('FunctionalBatteryFactory', () => {
   let service: FunctionalBatteryFactory;
 
   beforeEach(async () => {
@@ -9,7 +9,9 @@ describe('CardiorespiratoryCapacityFactory', () => {
       providers: [FunctionalBatteryFactory],
     }).compile();
 
-    service = module.get<FunctionalBatteryFactory>(FunctionalBatteryFactory);
+    service = module.get<FunctionalBatteryFactory>(
+      FunctionalBatteryFactory
+      );
   });
 
   it('should be defined', () => {
