@@ -1,4 +1,18 @@
-const calculateEstimatedMuscleMass = ({ weight, sex, race, height, age }) => {
+interface IEstimatedMuscleMass {
+  weight: number;
+  sex: string;
+  race: string;
+  height: number;
+  age: number;
+}
+
+const calculateEstimatedMuscleMass = ({
+  weight,
+  sex,
+  race,
+  height,
+  age,
+}: IEstimatedMuscleMass) => {
   if (!weight) return 0;
 
   const sexValue = sex === 'Homem' ? 1 : 0;
