@@ -21,6 +21,6 @@ export class GetMiniCognitionDto extends CreateMiniCognitionDto {
   updatedAt: Date;
 
   @ApiProperty()
-  @JoiSchema(Joi.number().required())
-  result: number;
+  @JoiSchema(Joi.date().allow(null))
+  deletedAt: Date;
 }

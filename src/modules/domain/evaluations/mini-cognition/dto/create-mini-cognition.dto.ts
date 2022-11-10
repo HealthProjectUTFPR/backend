@@ -4,6 +4,10 @@ import { JoiSchema } from 'nestjs-joi';
 
 export class CreateMiniCognitionDto {
   @ApiProperty()
+  @JoiSchema(Joi.number().required())
+  scholarity: Number;
+
+  @ApiProperty()
   @JoiSchema(Joi.boolean().required())
   checked1_1: Boolean;
 
@@ -144,6 +148,6 @@ export class CreateMiniCognitionDto {
   checked12_1: Boolean;
 
   @ApiProperty()
-  @JoiSchema(Joi.number().required())
-  result: number;
+  @JoiSchema(Joi.string().required())
+  result: String;
 }

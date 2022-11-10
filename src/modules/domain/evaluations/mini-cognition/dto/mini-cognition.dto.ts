@@ -1,6 +1,7 @@
 import Joi from 'joi';
 
 export const MiniCognitionSchema = Joi.object({
+  scholarity: Joi.number().required(),
   checked1_1: Joi.boolean().required(),
   checked1_2: Joi.boolean().required(),
   checked1_3: Joi.boolean().required(),
@@ -36,7 +37,7 @@ export const MiniCognitionSchema = Joi.object({
   checked10_1: Joi.boolean().required(),
   checked11_1: Joi.boolean().required(),
   checked12_1: Joi.boolean().required(),
-  result: Joi.number().required()
+  result: Joi.string().required()
 }).options({
   abortEarly: false,
 });
