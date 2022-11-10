@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, ForbiddenException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateStudentDto } from './dto/create-student.dto';
@@ -35,7 +35,7 @@ export class StudentService {
     let student = await this.studentRepository.findOne({
       where: { id: id },
     });
-    // if (student.id !== user.id) throw new ForbiddenException();
+    if (student.id !== user.id) throw new ForbiddenException();
     student = await this.studentRepository.findOneBy({ id: id });
     updateStudentDto.flag = false;
     student.flag = updateStudentDto.flag;

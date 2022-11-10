@@ -8,7 +8,9 @@ export class Student extends BaseEntity {
   @Column()
   name: string;
 
-  @Column()
+  @Column({
+    length: 1,
+  })
   sex: string;
 
   @Column()
@@ -28,6 +30,9 @@ export class Student extends BaseEntity {
 
   @Column()
   address: string;
+
+  @Column()
+  birthDate: Date;
 
   @Column()
   flag: boolean;

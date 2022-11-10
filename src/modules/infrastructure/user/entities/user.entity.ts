@@ -2,7 +2,10 @@ import { BaseEntity } from 'src/common/entities/base.entity';
 import { generateHash } from 'src/common/utils/hash.util';
 import { PrePos } from 'src/modules/domain/pre-pos/entities/pre-pos.entity';
 import { Student } from 'src/modules/domain/student/entities/student.entity';
-import { BeforeInsert, BeforeUpdate, Column, Entity, OneToMany } from 'typeorm';
+import { Evaluation } from 'src/modules/domain/evaluations/entities/evaluation.entity';
+import { TodoItem } from 'src/modules/domain/todo-item/entities/todo-item.entity';
+import { BeforeInsert, BeforeUpdate, Column, Entity, OneToMany, CreateDateColumn } from 'typeorm';
+
 
 @Entity()
 export class User extends BaseEntity {
@@ -20,6 +23,9 @@ export class User extends BaseEntity {
 
   @OneToMany(() => Student, (student) => student.user)
   students: Student[];
+
+  @OneToMany(() => Evaluation, (evaluation) => evaluation.createdBy)
+  evaluations: Evaluation[];
 
   @BeforeInsert()
   @BeforeUpdate()

@@ -8,6 +8,7 @@ import { DatabaseModule } from 'src/modules/infrastructure/database/database.mod
 import { UserModule } from 'src/modules/infrastructure/user/user.module';
 import { AppController } from './app.controller';
 import { StudentModule } from 'src/modules/domain/student/student.module';
+import { EvaluationModule } from 'src/modules/domain/evaluations/evaluation.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { StudentModule } from 'src/modules/domain/student/student.module';
     StudentModule,
     TodoItemModule,
     CategoryModule,
+    EvaluationModule,
     DatabaseModule,
     PrePosModule,
   ],
