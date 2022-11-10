@@ -16,6 +16,7 @@ let testdata: Object;
 
 beforeAll(async () => {
     testdata = {
+      scholarity: 1,
       checked1_1: true,
       checked1_2: false,
       checked1_3: true,
@@ -110,7 +111,7 @@ afterAll(async () => {
 });
 
 describe('Buscar avaliação mini cognição', () => {
-  it(`/:id?type=ACR (GET) deve retornar sucesso ao buscar id válido`, async () => {
+  it(`/:id?type=MiniCognition (GET) deve retornar sucesso ao buscar id válido`, async () => {
     const response = await server
       .post(`/evaluation/${studentId}`)
       .send({

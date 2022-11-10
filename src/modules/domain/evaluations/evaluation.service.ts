@@ -29,6 +29,7 @@ import { ResponseEvaluation } from './types/response-evaluation.type';
 import { MiniCognitionStrategy } from './mini-cognition/mini-cognition.strategy';
 import { CreateMiniCognitionDto } from './mini-cognition/dto/create-mini-cognition.dto';
 import { UpdateBalanceDto } from './balance/dto/update-balance.dto';
+import { UpdateMiniCognitionDto } from './mini-cognition/dto/update-mini-cognition.dto';
 
 @Injectable()
 export class EvaluationService {
@@ -201,6 +202,8 @@ export class EvaluationService {
         return await this.avdStrategy.getByID(id);
       case 'AEQ':
         return await this.balanceStrategy.getById(id);
+      case 'MiniCognition':
+          return await this.minicognitionStrategy.getByID(id);
       default:
         break;
     }
@@ -242,6 +245,12 @@ export class EvaluationService {
           id,
           type,
           data as UpdateBalanceDto,
+        );
+      case 'MiniCognition':
+        return await this.minicognitionStrategy.update(
+          id,
+          type,
+          data as UpdateMiniCognitionDto,
         );
       default:
         break;

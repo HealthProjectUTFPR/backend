@@ -176,11 +176,6 @@ export class MiniCognitionFactory {
   async getOne(
     evaluation: Evaluation,
   ): Promise<GetMiniCognitionDto> {
-    let miniCognition = {};
-    evaluation.fields.forEach(({ name, value, dataType }) => {
-      miniCognition[name] = parseType( dataType, value )
-    });
-    miniCognition['result'] = parseInt(evaluation.result);
-    return miniCognition as GetMiniCognitionDto;
+    return this.parseFieldsToCorrectType(evaluation);
   }
 }
