@@ -29,7 +29,10 @@ import { CreateSarcopeniaDTO } from './sarcopenia/dto/create-sarcopenia.dto';
 import { UpdateSarcopeniaDTO } from './sarcopenia/dto/update-sarcopenia.dto';
 import { SarcopeniaStrategy } from './sarcopenia/sarcopenia.strategy';
 import { ResponseEvaluation } from './types/response-evaluation.type';
+import { MiniCognitionStrategy } from './mini-cognition/mini-cognition.strategy';
+import { CreateMiniCognitionDto } from './mini-cognition/dto/create-mini-cognition.dto';
 import { UpdateBalanceDto } from './balance/dto/update-balance.dto';
+import { UpdateMiniCognitionDto } from './mini-cognition/dto/update-mini-cognition.dto';
 
 @Injectable()
 export class EvaluationService {
@@ -42,6 +45,7 @@ export class EvaluationService {
   constructor(
     private readonly bodyCompositionStrategy: BodyCompositionStrategy,
     private readonly cardiorespiratoryCapacityStrategy: CardiorespiratoryCapacityStrategy,
+    private readonly minicognitionStrategy: MiniCognitionStrategy,
     private readonly sarcopeniaStrategy: SarcopeniaStrategy,
     private readonly avdStrategy: avdStrategy,
     private readonly balanceStrategy: BalanceStrategy,
@@ -75,6 +79,13 @@ export class EvaluationService {
       case 'ACR':
         return await this.cardiorespiratoryCapacityStrategy.create(
           data as CreateCardiorespiratoryCapacityDto,
+          user,
+          type,
+          student,
+        );
+      case 'MiniCognition':
+        return await this.minicognitionStrategy.create(
+          data as CreateMiniCognitionDto,
           user,
           type,
           student,
@@ -162,11 +173,19 @@ export class EvaluationService {
         studentID,
       );
 
+    const { evaluations: MiniCognitionEvaluation, count: countMiniCognitionEvaluation } =
+      await this.minicognitionStrategy.getAll(
+        orderBy as EvaluationOrderBy,
+        paginationParams,
+        studentID,
+      );
+
     const amountOfEvaluations =
       countSarcopeniaEvaluation +
       countBodyEvaluation +
       countCardioEvaluation +
       countAvdEvaluation +
+      countMiniCognitionEvaluation +
       countBalanceEvaluation;
 
     const meta = {
@@ -183,6 +202,7 @@ export class EvaluationService {
         ...sarcopeniaEvaluation,
         ...bodyEvaluation,
         ...balanceEvaluation,
+        ...MiniCognitionEvaluation,
         ...avdEvaluation,
       ],
     };
@@ -206,6 +226,8 @@ export class EvaluationService {
         return await this.avdStrategy.getByID(id);
       case 'AEQ':
         return await this.balanceStrategy.getById(id);
+      case 'MiniCognition':
+          return await this.minicognitionStrategy.getByID(id);
       default:
         break;
     }
@@ -249,6 +271,12 @@ export class EvaluationService {
           id,
           type,
           data as UpdateBalanceDto,
+        );
+      case 'MiniCognition':
+        return await this.minicognitionStrategy.update(
+          id,
+          type,
+          data as UpdateMiniCognitionDto,
         );
       default:
         break;
