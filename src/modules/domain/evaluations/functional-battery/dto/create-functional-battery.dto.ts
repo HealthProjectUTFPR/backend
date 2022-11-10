@@ -29,7 +29,7 @@ export class CreateFunctionalBatteryDto {
 
     @ApiProperty()
     @JoiSchema(Joi.string().required())
-    classification: string;
+    result: string;
 
     @ApiProperty()
     @JoiSchema(Joi.number().required())

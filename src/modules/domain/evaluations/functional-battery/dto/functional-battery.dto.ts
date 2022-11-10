@@ -8,7 +8,7 @@ export const functionalBatterySchema = Joi.object({
     sitFeet: Joi.number().required(),
     TUG: Joi.number().required(),
     getBack:Joi.number().required,
-    classification: Joi.string().required(),
+    result: Joi.string().required(),
 
 }). options({
     abortEarly: false,
