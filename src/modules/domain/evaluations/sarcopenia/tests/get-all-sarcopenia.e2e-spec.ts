@@ -107,7 +107,6 @@ describe('Buscar avaliações Sarcopenia', () => {
       )
       .set('Authorization', `Bearer ${token}`)
       .expect((res) => {
-        console.log(res);
         expect(res.body.meta.totalItems).toBe(5);
       })
       .expect(200);

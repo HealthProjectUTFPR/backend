@@ -10,7 +10,7 @@ export const parseType = (type: string, value: any) => {
       return parseFloat(value);
 
     case 'boolean':
-      return value === 'true';
+      return value === 'false' ? false : true;
 
     case 'date':
       return new Date(value);
