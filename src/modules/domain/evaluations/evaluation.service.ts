@@ -25,6 +25,9 @@ import { CreateEvaluationDto } from './dto/create-evaluation.dto';
 import { UpdateEvaluationDto } from './dto/update-evaluation.dto';
 import { Evaluation } from './entities/evaluation.entity';
 import { EvaluationOrderBy } from './enums/order-by.enum';
+import { CreateSarcopeniaDTO } from './sarcopenia/dto/create-sarcopenia.dto';
+import { UpdateSarcopeniaDTO } from './sarcopenia/dto/update-sarcopenia.dto';
+import { SarcopeniaStrategy } from './sarcopenia/sarcopenia.strategy';
 import { ResponseEvaluation } from './types/response-evaluation.type';
 import { UpdateBalanceDto } from './balance/dto/update-balance.dto';
 
@@ -39,6 +42,7 @@ export class EvaluationService {
   constructor(
     private readonly bodyCompositionStrategy: BodyCompositionStrategy,
     private readonly cardiorespiratoryCapacityStrategy: CardiorespiratoryCapacityStrategy,
+    private readonly sarcopeniaStrategy: SarcopeniaStrategy,
     private readonly avdStrategy: avdStrategy,
     private readonly balanceStrategy: BalanceStrategy,
   ) {}
@@ -61,6 +65,13 @@ export class EvaluationService {
     }
 
     switch (type) {
+      case 'sarcopenia':
+        return await this.sarcopeniaStrategy.create(
+          data as CreateSarcopeniaDTO,
+          user,
+          type,
+          student,
+        );
       case 'ACR':
         return await this.cardiorespiratoryCapacityStrategy.create(
           data as CreateCardiorespiratoryCapacityDto,
@@ -128,25 +139,35 @@ export class EvaluationService {
         studentID,
       );
 
+    const {
+      evaluations: sarcopeniaEvaluation,
+      count: countSarcopeniaEvaluation,
+    } = await this.sarcopeniaStrategy.getAll(
+      orderBy as EvaluationOrderBy,
+      paginationParams,
+      studentID,
+    );
+
     const { evaluations: avdEvaluation, count: countAvdEvaluation } =
       await this.avdStrategy.getAll(
         orderBy as EvaluationOrderBy,
         paginationParams,
         studentID,
       );
-      
-      const { evaluations: balanceEvaluation, count: countBalanceEvaluation } =
-    await this.balanceStrategy.getAll(
-      orderBy as EvaluationOrderBy,
-      paginationParams,
-      studentID,
-    );
 
-    const amountOfEvaluations = 
-    + countBodyEvaluation 
-    + countCardioEvaluation
-    + countAvdEvaluation
-    + countBalanceEvaluation;
+    const { evaluations: balanceEvaluation, count: countBalanceEvaluation } =
+      await this.balanceStrategy.getAll(
+        orderBy as EvaluationOrderBy,
+        paginationParams,
+        studentID,
+      );
+
+    const amountOfEvaluations =
+      countSarcopeniaEvaluation +
+      countBodyEvaluation +
+      countCardioEvaluation +
+      countAvdEvaluation +
+      countBalanceEvaluation;
 
     const meta = {
       itemsPerPage: +paginationParams.limit,
@@ -157,7 +178,13 @@ export class EvaluationService {
 
     return {
       meta: meta,
-      data: [...cardioEvaluation, ...bodyEvaluation, ...balanceEvaluation, ...avdEvaluation],
+      data: [
+        ...cardioEvaluation,
+        ...sarcopeniaEvaluation,
+        ...bodyEvaluation,
+        ...balanceEvaluation,
+        ...avdEvaluation,
+      ],
     };
   }
 
@@ -169,6 +196,8 @@ export class EvaluationService {
       throw new BadRequestException('ID inválido.');
 
     switch (type) {
+      case 'sarcopenia':
+        return await this.sarcopeniaStrategy.getByID(id);
       case 'ACR':
         return await this.cardiorespiratoryCapacityStrategy.getByID(id);
       case 'bodyComposition':
@@ -195,6 +224,12 @@ export class EvaluationService {
     const { type, data } = input;
 
     switch (type) {
+      case 'sarcopenia':
+        return await this.sarcopeniaStrategy.update(
+          id,
+          type,
+          data as UpdateSarcopeniaDTO,
+        );
       case 'ACR':
         return await this.cardiorespiratoryCapacityStrategy.update(
           id,
@@ -208,11 +243,7 @@ export class EvaluationService {
           data as UpdateBodyCompositionDto,
         );
       case 'AVD':
-        return await this.avdStrategy.update(
-          id,
-          type,
-          data as UpdateAvdDto,
-        );
+        return await this.avdStrategy.update(id, type, data as UpdateAvdDto);
       case 'AEQ':
         return await this.balanceStrategy.update(
           id,
