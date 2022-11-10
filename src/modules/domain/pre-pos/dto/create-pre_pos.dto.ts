@@ -8,7 +8,7 @@ export class CreatePrePosDto{
   @JoiSchema(['CREATE'], Joi.date().optional())
   horarioPos: Date;
 
-  @JoiSchema(['CREATE'], Joi.date().required())
+  @JoiSchema(['CREATE'], Joi.date().optional())
   horarioPre: Date;
 
   @JoiSchema(['CREATE'], Joi.number().optional())

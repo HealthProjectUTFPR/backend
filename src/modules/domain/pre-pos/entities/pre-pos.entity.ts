@@ -6,40 +6,40 @@ export class PrePos extends BaseEntity {
   @Column()
   date: Date;
 
-  @Column()
+  @Column({nullable:true})
   horarioPos: Date;
 
-  @Column()
+  @Column({nullable:true})
   horarioPre: Date;
  
-  @Column()
+  @Column({nullable:true})
   pasPre: number;
  
-  @Column()
+  @Column({nullable:true})
   pasPos: number;
 
-  @Column()
+  @Column({nullable:true})
   padPre: number;
  
-  @Column()
+  @Column({nullable:true})
   padPos: number;
 
-  @Column()
+  @Column({nullable:true})
   glicemiaPre: number;
  
-  @Column()
+  @Column({nullable:true})
   glicemiaPos: number;
 
-  @Column()
+  @Column({nullable:true})
   horarioTreino: number;
 
-  @Column()
+  @Column({nullable:true})
   pseEPre: number;
 
-  @Column()
+  @Column({nullable:true})
   pseEPos: number;
 
-  @Column()
+  @Column({nullable:true})
   observacao: string;
 
 }
