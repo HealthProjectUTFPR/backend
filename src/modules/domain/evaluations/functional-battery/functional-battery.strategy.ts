@@ -34,28 +34,6 @@ export class FunctionalBatteryStrategy {
         private readonly functionalBatteryFactory: FunctionalBatteryFactory,
     ) {}
 
-    // private recalculateResult({
-    //     age,
-    //     sex,
-    //     TUG,
-    //     sitFeet,
-    //     getBack,
-    //     sitGetUp,
-    //     stationaryMarch,
-    //     elbowFlexion,
-    // }:Partial<IFunctionalBattery>){
-    //     const percentTUG = calculatePercentTug({age,sex,TUG});
-    //     const percentSitFeet = calculatePercentSitFeet ({age,sex,sitFeet});
-    //     const percentSitGetUp = calculatePercentSitGetUp({age,sex,sitGetUp});
-    //     const percentGetBack = calculatePercentGetBack({age,sex,getBack});
-    //     const percentStationaryMarch = calculatePercentStationaryMarch({age,sex,stationaryMarch});
-    //     const percentElbowFlexion = calculatePercentElbowFlexion({age,sex,elbowFlexion});
-
-    //     if (percentTUG > 70) {
-
-    //     }
-    // } da pra tentar validar um por um
-
     async create(
         input: CreateFunctionalBatteryDto,
         user: User,
@@ -81,22 +59,7 @@ export class FunctionalBatteryStrategy {
                 TUGResult, TUGPercent, TUGClassification, 
                 getBackResult, getBackPercent, getBackClassification,
                 result, } = input;
-    
-        // const isResultValid = this.validateResult(result, {
-        //     //     age,
-        //     //     sex,
-        //     //     TUG,
-        //     //     sitFeet,
-        //     //     getBack,
-        //     //     sitGetUp,
-        //     //     stationaryMarch,
-        //     //     elbowFlexion,
-        // });
-    
-        // if (!isResultValid)
-        //   throw new BadRequestException(
-        //     'Resultado inválido',
-        //   );
+   
     
         const data: CreateFunctionalBatteryDto = {
           date,
@@ -135,10 +98,7 @@ export class FunctionalBatteryStrategy {
         input: UpdateFunctionalBatteryDto,
       ): Promise<GetFunctionalBatteryDto> {
         const validation = functionalBatterySchema.validate(input);
-    
-        // if (validation?.error) {
-        //   throw new BadRequestException(validation.error.message);
-        // }
+   
     
         const evaluation = await this.evaluationRepository.findOne({
           where: {
@@ -166,18 +126,7 @@ export class FunctionalBatteryStrategy {
           getBackResult, getBackPercent, getBackClassification,
           result, } = input;
     
-        // const isResultValid = this.validateResult(result, {
-        //   weight,
-        //   finalFC,
-        //   time,
-        //   age,
-        //   sex,
-        // });
-    
-        // if (!isResultValid)
-        //   throw new BadRequestException(
-        //     'Resultado inválido de acordo com os dados repassados',
-        //   );
+        
     
         const newData: UpdateFunctionalBatteryDto = {
           date,
