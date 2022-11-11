@@ -96,7 +96,7 @@ export class SarcopeniaStrategy {
       breed: race,
     } = student;
 
-    const sex = studentSex === 'H' ? 'Homem' : 'Mulher';
+    const sex = studentSex === 'M' ? 'Homem' : 'Mulher';
     const age = dayjs(new Date()).diff(birthDate, 'year');
 
     const {
@@ -176,7 +176,7 @@ export class SarcopeniaStrategy {
 
     const { sex: studentSex, birthDate, stature: height } = evaluation.student;
 
-    const sex = studentSex === 'H' ? 'Homem' : 'Mulher';
+    const sex = studentSex === 'M' ? 'Homem' : 'Mulher';
     const age = dayjs(new Date()).diff(birthDate, 'year');
     const race = '';
 
