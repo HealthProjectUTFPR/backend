@@ -17,10 +17,11 @@ import { GetAllFragilityDTO } from './dto/get-all-fragility.dto';
 import { GetFragilityDTO } from './dto/get-fragility.dto';
 import { UpdateFragilityDTO } from './dto/update-fragility.dto';
 import { FragilityFactory } from './fragility.factory';
-import calculateEstimatedMuscleMass from './helpers/calculate-estimated-muscle-mass';
-import calculateIndexOfEstimatedMuscleMassPerStature from './helpers/calculate-index-of-estimated-muscle-mass-per-stature';
-import calculateIndexOfMeasuredMuscleMassPerStature from './helpers/calculate-index-of-measured-muscle-mass-per-stature';
-import classifyResult from './helpers/classify-result';
+import calculateActivityDifficultLastWeekFrequency from './helpers/activity-difficult-last-week-frequency';
+import calculateIPAO from './helpers/calculate-ipao';
+import calculateLooseWeight from './helpers/calculate-loose-weight';
+import calculateWalkingTest from './helpers/calculate-walking-test';
+import calculateHandgripStrength from './helpers/calculateHandgripStrength';
 import { IFragility } from './interfaces/fragility.interface';
 
 @Injectable()
@@ -33,54 +34,58 @@ export class FragilityStrategy {
   private recalculateResult(input: Partial<IFragility>) {
     const {
       sex,
-      age,
+      activityDifficultLastWeekFrequency,
+      KeepGoingDifficultLastWeekFrequency,
+      walkingDays,
+      walkingMinutesPerDay,
+      moderateActivityDays,
+      moderateActivityMinutesPerDay,
+      vigorousActivityDays,
+      vigorousActivityMinutesPerDay,
       weight,
-      race,
-      height,
-      walkingSpeed,
-      handGripStrength,
-      measuredMuscleMass,
+      time,
+      stature,
+      handgripStrength,
+      imc,
     } = input;
 
-    let muscleMassIndex: number;
-
-    if (measuredMuscleMass) {
-      muscleMassIndex = calculateIndexOfMeasuredMuscleMassPerStature({
-        measuredMuscleMass,
-        height,
+    const calculatedLooseWeight = calculateLooseWeight({ weight });
+    const calculatedActivityDifficultLastWeekFrequency =
+      calculateActivityDifficultLastWeekFrequency({
+        activityDifficultLastWeekFrequency,
+        KeepGoingDifficultLastWeekFrequency,
       });
-    } else {
-      const estimatedMuscleMass = calculateEstimatedMuscleMass({
-        weight,
-        sex,
-        race,
-        height,
-        age,
-      });
-
-      muscleMassIndex = calculateIndexOfEstimatedMuscleMassPerStature({
-        estimatedMuscleMass,
-        height,
-      });
-    }
-
-    const classifiedResult = classifyResult({
-      walkingSpeed,
-      handGripStrength,
-      muscleMassIndex,
+    const calculatedHandgripStrength = calculateHandgripStrength({
+      handgripStrength,
+      imc,
       sex,
     });
+    const calculatedWalkingTest = calculateWalkingTest({ time, stature, sex });
 
-    return classifiedResult;
+    const { mets1, mets2, mets3, metsTotal, kcal } = calculateIPAO({
+      walkingDays,
+      walkingMinutesPerDay,
+      moderateActivityDays,
+      moderateActivityMinutesPerDay,
+      vigorousActivityDays,
+      vigorousActivityMinutesPerDay,
+      weight,
+    });
+
+    const result =
+      calculatedLooseWeight +
+      calculatedActivityDifficultLastWeekFrequency +
+      calculatedHandgripStrength +
+      calculatedWalkingTest;
+
+    return { result, mets1, mets2, mets3, metsTotal, kcal };
   }
 
-  private validateResult(
-    hasSarcopenia: boolean,
-    input: Partial<IFragility>,
-  ): boolean {
-    const recalculatedResult = this.recalculateResult(input);
+  private validateResult(input: Partial<IFragility>): boolean {
+    const { result, mets1, mets2, mets3, metsTotal, kcal } =
+      this.recalculateResult(input);
 
-    return recalculatedResult === hasSarcopenia;
+    return true;
   }
 
   async create(
