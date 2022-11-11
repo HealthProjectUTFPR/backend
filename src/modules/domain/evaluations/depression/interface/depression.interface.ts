@@ -15,4 +15,5 @@ export interface IDepression {
     campo13: boolean;
     campo14: boolean;
     campo15: boolean;
+    result: number;
 }
