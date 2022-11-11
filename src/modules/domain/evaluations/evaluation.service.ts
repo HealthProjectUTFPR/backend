@@ -13,14 +13,26 @@ import { Student } from '../student/entities/student.entity';
 import { BodyCompositionStrategy } from './body-composition/body-composition.strategy';
 import { CreateBodyCompositionDto } from './body-composition/dto/create-body-composition.dto';
 import { UpdateBodyCompositionDto } from './body-composition/dto/update-body-composition.dto';
+import { avdStrategy } from './avd/avd.strategy';
+import { CreateAvdDto } from './avd/dto/create-avd.dto';
+import { UpdateAvdDto } from './avd/dto/update-avd.dto';
 import { CardiorespiratoryCapacityStrategy } from './cardiorespiratory-capacity/cardiorespiratory-capacity.strategy';
 import { CreateCardiorespiratoryCapacityDto } from './cardiorespiratory-capacity/dto/create-cardiorespiratory-capacity.dto';
 import { UpdateCardiorespiratoryCapacityDto } from './cardiorespiratory-capacity/dto/update-cardiorespiratory-capacity.dto';
+import { BalanceStrategy } from './balance/balance.strategy';
+import { CreateBalanceDto } from './balance/dto/create-balance.dto';
 import { CreateEvaluationDto } from './dto/create-evaluation.dto';
 import { UpdateEvaluationDto } from './dto/update-evaluation.dto';
 import { Evaluation } from './entities/evaluation.entity';
 import { EvaluationOrderBy } from './enums/order-by.enum';
+import { CreateSarcopeniaDTO } from './sarcopenia/dto/create-sarcopenia.dto';
+import { UpdateSarcopeniaDTO } from './sarcopenia/dto/update-sarcopenia.dto';
+import { SarcopeniaStrategy } from './sarcopenia/sarcopenia.strategy';
 import { ResponseEvaluation } from './types/response-evaluation.type';
+import { MiniCognitionStrategy } from './mini-cognition/mini-cognition.strategy';
+import { CreateMiniCognitionDto } from './mini-cognition/dto/create-mini-cognition.dto';
+import { UpdateBalanceDto } from './balance/dto/update-balance.dto';
+import { UpdateMiniCognitionDto } from './mini-cognition/dto/update-mini-cognition.dto';
 
 @Injectable()
 export class EvaluationService {
@@ -33,6 +45,10 @@ export class EvaluationService {
   constructor(
     private readonly bodyCompositionStrategy: BodyCompositionStrategy,
     private readonly cardiorespiratoryCapacityStrategy: CardiorespiratoryCapacityStrategy,
+    private readonly minicognitionStrategy: MiniCognitionStrategy,
+    private readonly sarcopeniaStrategy: SarcopeniaStrategy,
+    private readonly avdStrategy: avdStrategy,
+    private readonly balanceStrategy: BalanceStrategy,
   ) {}
 
   async create(
@@ -53,6 +69,13 @@ export class EvaluationService {
     }
 
     switch (type) {
+      case 'sarcopenia':
+        return await this.sarcopeniaStrategy.create(
+          data as CreateSarcopeniaDTO,
+          user,
+          type,
+          student,
+        );
       case 'ACR':
         return await this.cardiorespiratoryCapacityStrategy.create(
           data as CreateCardiorespiratoryCapacityDto,
@@ -60,9 +83,30 @@ export class EvaluationService {
           type,
           student,
         );
+      case 'MiniCognition':
+        return await this.minicognitionStrategy.create(
+          data as CreateMiniCognitionDto,
+          user,
+          type,
+          student,
+        );
       case 'bodyComposition':
         return await this.bodyCompositionStrategy.create(
           data as CreateBodyCompositionDto,
+          user,
+          type,
+          student,
+        );
+      case 'AVD':
+        return await this.avdStrategy.create(
+          data as CreateAvdDto,
+          user,
+          type,
+          student,
+        );
+      case 'AEQ':
+        return await this.balanceStrategy.create(
+          data as CreateBalanceDto,
           user,
           type,
           student,
@@ -106,18 +150,61 @@ export class EvaluationService {
         studentID,
       );
 
-    const amountOfEvaluation = countBodyEvaluation + countCardioEvaluation;
+    const {
+      evaluations: sarcopeniaEvaluation,
+      count: countSarcopeniaEvaluation,
+    } = await this.sarcopeniaStrategy.getAll(
+      orderBy as EvaluationOrderBy,
+      paginationParams,
+      studentID,
+    );
+
+    const { evaluations: avdEvaluation, count: countAvdEvaluation } =
+      await this.avdStrategy.getAll(
+        orderBy as EvaluationOrderBy,
+        paginationParams,
+        studentID,
+      );
+
+    const { evaluations: balanceEvaluation, count: countBalanceEvaluation } =
+      await this.balanceStrategy.getAll(
+        orderBy as EvaluationOrderBy,
+        paginationParams,
+        studentID,
+      );
+
+    const { evaluations: MiniCognitionEvaluation, count: countMiniCognitionEvaluation } =
+      await this.minicognitionStrategy.getAll(
+        orderBy as EvaluationOrderBy,
+        paginationParams,
+        studentID,
+      );
+
+    const amountOfEvaluations =
+      countSarcopeniaEvaluation +
+      countBodyEvaluation +
+      countCardioEvaluation +
+      countAvdEvaluation +
+      countMiniCognitionEvaluation +
+      countBalanceEvaluation;
 
     const meta = {
       itemsPerPage: +paginationParams.limit,
-      totalItems: +amountOfEvaluation,
+      totalItems: +amountOfEvaluations,
       currentPage: +paginationParams.page,
-      totalPages: +Math.ceil(amountOfEvaluation / paginationParams.limit),
+      totalPages: +Math.ceil(amountOfEvaluations / paginationParams.limit),
     };
 
     return {
       meta: meta,
-      data: [...cardioEvaluation, ...bodyEvaluation],
+      data: [
+        ...cardioEvaluation,
+        ...sarcopeniaEvaluation,
+        ...bodyEvaluation,
+        ...balanceEvaluation,
+        ...MiniCognitionEvaluation,
+        ...avdEvaluation,
+      ],
     };
   }
 
@@ -129,10 +216,18 @@ export class EvaluationService {
       throw new BadRequestException('ID inválido.');
 
     switch (type) {
+      case 'sarcopenia':
+        return await this.sarcopeniaStrategy.getByID(id);
       case 'ACR':
         return await this.cardiorespiratoryCapacityStrategy.getByID(id);
       case 'bodyComposition':
         return await this.bodyCompositionStrategy.getByID(id);
+      case 'AVD':
+        return await this.avdStrategy.getByID(id);
+      case 'AEQ':
+        return await this.balanceStrategy.getById(id);
+      case 'MiniCognition':
+          return await this.minicognitionStrategy.getByID(id);
       default:
         break;
     }
@@ -151,6 +246,12 @@ export class EvaluationService {
     const { type, data } = input;
 
     switch (type) {
+      case 'sarcopenia':
+        return await this.sarcopeniaStrategy.update(
+          id,
+          type,
+          data as UpdateSarcopeniaDTO,
+        );
       case 'ACR':
         return await this.cardiorespiratoryCapacityStrategy.update(
           id,
@@ -162,6 +263,20 @@ export class EvaluationService {
           id,
           type,
           data as UpdateBodyCompositionDto,
+        );
+      case 'AVD':
+        return await this.avdStrategy.update(id, type, data as UpdateAvdDto);
+      case 'AEQ':
+        return await this.balanceStrategy.update(
+          id,
+          type,
+          data as UpdateBalanceDto,
+        );
+      case 'MiniCognition':
+        return await this.minicognitionStrategy.update(
+          id,
+          type,
+          data as UpdateMiniCognitionDto,
         );
       default:
         break;
