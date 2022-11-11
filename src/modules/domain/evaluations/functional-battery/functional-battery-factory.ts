@@ -55,7 +55,14 @@ export class FunctionalBatteryFactory {
             parsedFields[name] = formattedValue;
         });
 
-        const {date, sitGetUp,elbowFlexion,stationaryMarch, sitFeet,TUG,getBack } = parsedFields;
+        const {date, 
+              sitGetUpResult, sitGetUpPercent, sitGetUpClassification, 
+              elbowFlexionResult, elbowFlexionPercent, elbowFlexionClassification,
+              stationaryMarchResult, stationaryMarchPercent, stationaryMarchClassification,
+              sitFeetResult, sitFeetPercent, sitFeetClassification,
+              TUGResult, TUGPercent, TUGClassification, 
+              getBackResult, getBackPercent, getBackClassification,
+              } = parsedFields;
 
         const returnedValues: GetFunctionalBatteryDto = {
             id,
@@ -65,12 +72,24 @@ export class FunctionalBatteryFactory {
             deletedAt,
             result,
             date,
-            sitGetUp,
-            elbowFlexion,
-            stationaryMarch,
-            sitFeet,
-            TUG,
-            getBack,
+            sitGetUpResult,
+            sitGetUpPercent,
+            sitGetUpClassification,
+            elbowFlexionResult,
+            elbowFlexionPercent,
+            elbowFlexionClassification,
+            stationaryMarchResult,
+            stationaryMarchPercent,
+            stationaryMarchClassification,
+            sitFeetResult,
+            sitFeetPercent,
+            sitFeetClassification,
+            TUGResult,
+            TUGPercent,
+            TUGClassification,
+            getBackResult,
+            getBackPercent,
+            getBackClassification,
         }
 
         return returnedValues;

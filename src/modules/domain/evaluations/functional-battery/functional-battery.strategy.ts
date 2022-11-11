@@ -73,7 +73,14 @@ export class FunctionalBatteryStrategy {
         const sex = studentSex === 'H' ? 'Homem' : 'Mulher';
         const age = dayjs(new Date()).diff(birthDate, 'year');
     
-        const { date, TUG, getBack, sitFeet, sitGetUp, stationaryMarch, elbowFlexion, result } = input;
+        const { date,
+                sitGetUpResult, sitGetUpPercent, sitGetUpClassification, 
+                elbowFlexionResult, elbowFlexionPercent, elbowFlexionClassification,
+                stationaryMarchResult, stationaryMarchPercent, stationaryMarchClassification,
+                sitFeetResult, sitFeetPercent, sitFeetClassification,
+                TUGResult, TUGPercent, TUGClassification, 
+                getBackResult, getBackPercent, getBackClassification,
+                result, } = input;
     
         // const isResultValid = this.validateResult(result, {
         //     //     age,
@@ -93,13 +100,25 @@ export class FunctionalBatteryStrategy {
     
         const data: CreateFunctionalBatteryDto = {
           date,
-          sitGetUp,
-          sitFeet,
-          elbowFlexion,
-          stationaryMarch,
-          TUG,
+          sitGetUpResult,
+          sitGetUpPercent,
+          sitGetUpClassification,
+          sitFeetResult,
+          sitFeetPercent,
+          sitFeetClassification,
+          elbowFlexionResult,
+          elbowFlexionPercent,
+          elbowFlexionClassification,
+          stationaryMarchResult,
+          stationaryMarchPercent,
+          stationaryMarchClassification,
+          TUGResult,
+          TUGPercent,
+          TUGClassification,
           result,
-          getBack,
+          getBackResult,
+          getBackPercent,
+          getBackClassification,
         };
     
         return await this.functionalBatteryFactory.create(
@@ -138,7 +157,14 @@ export class FunctionalBatteryStrategy {
         const sex = studentSex === 'H' ? 'Homem' : 'Mulher';
         const age = dayjs(new Date()).diff(birthDate, 'year');
     
-        const { date, TUG, getBack, sitFeet, sitGetUp, stationaryMarch, elbowFlexion, result } = input;
+        const { date,
+          sitGetUpResult, sitGetUpPercent, sitGetUpClassification, 
+          elbowFlexionResult, elbowFlexionPercent, elbowFlexionClassification,
+          stationaryMarchResult, stationaryMarchPercent, stationaryMarchClassification,
+          sitFeetResult, sitFeetPercent, sitFeetClassification,
+          TUGResult, TUGPercent, TUGClassification, 
+          getBackResult, getBackPercent, getBackClassification,
+          result, } = input;
     
         // const isResultValid = this.validateResult(result, {
         //   weight,
@@ -155,13 +181,25 @@ export class FunctionalBatteryStrategy {
     
         const newData: UpdateFunctionalBatteryDto = {
           date,
-          sitGetUp,
-          sitFeet,
-          elbowFlexion,
-          stationaryMarch,
-          TUG,
+          sitGetUpResult,
+          sitGetUpPercent,
+          sitGetUpClassification,
+          sitFeetResult,
+          sitFeetPercent,
+          sitFeetClassification,
+          elbowFlexionResult,
+          elbowFlexionPercent,
+          elbowFlexionClassification,
+          stationaryMarchResult,
+          stationaryMarchPercent,
+          stationaryMarchClassification,
+          TUGResult,
+          TUGPercent,
+          TUGClassification,
           result,
-          getBack,
+          getBackResult,
+          getBackPercent,
+          getBackClassification,
         };
     
         return await this.functionalBatteryFactory.update(
