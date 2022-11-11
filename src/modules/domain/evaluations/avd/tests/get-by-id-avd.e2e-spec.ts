@@ -51,7 +51,7 @@ beforeAll(async () => {
     .post('/student/create')
     .send({
       name: 'EstudanteTeste',
-      sex: 'M',
+      sex: 'H',
       breed: 'Amarelo',
       stature: 179.3,
       healthPlan: 'free',
