@@ -40,6 +40,7 @@ export class EvaluationController {
     input: CreateEvaluationDto,
   ): Promise<ResponseEvaluation> {
     if (!user) throw new ForbiddenException('Sessão de usuário inválida');
+    if (!studentId) throw new ForbiddenException('Informe o ID do aluno');
 
     return await this.evaluationService.create(input, user, studentId);
   }
