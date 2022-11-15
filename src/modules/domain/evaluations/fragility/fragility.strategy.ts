@@ -116,10 +116,9 @@ export class FragilityStrategy {
     type: string,
     student: Student,
   ): Promise<GetFragilityDTO> {
-    const { sex: studentSex, birthDate, stature } = student;
+    const { sex: studentSex, stature } = student;
 
     const sex = studentSex === 'H' ? 'Homem' : 'Mulher';
-    const age = dayjs(new Date()).diff(birthDate, 'year');
 
     const {
       date,
@@ -226,36 +225,54 @@ export class FragilityStrategy {
       throw new NotFoundException(`Avaliação com o id ${id} não encontrada.`);
     }
 
-    const { sex: studentSex, birthDate, stature: height } = evaluation.student;
+    const { sex: studentSex, stature } = evaluation.student;
 
     const sex = studentSex === 'H' ? 'Homem' : 'Mulher';
-    const age = dayjs(new Date()).diff(birthDate, 'year');
-    const race = '';
 
     const {
       date,
+      activityDifficultLastWeekFrequency,
+      KeepGoingDifficultLastWeekFrequency,
+      walkingDays,
+      walkingMinutesPerDay,
+      moderateActivityDays,
+      moderateActivityMinutesPerDay,
+      vigorousActivityDays,
+      vigorousActivityMinutesPerDay,
       weight,
-      measuredMuscleMass,
-      estimatedMuscleMass,
-      walkingSpeed,
-      handGripStrength,
-      muscleMassIndex,
-      calfCircumference,
+      time,
+      handgripStrength,
+      imc,
+      mets1,
+      mets2,
+      mets3,
+      metsTotal,
+      kcal,
+      score,
       result,
-      hasSarcopenia,
     } = input;
 
-    const isResultValid = this.validateResult(hasSarcopenia, {
+    const isResultValid = this.validateResult({
       sex,
-      age,
+      activityDifficultLastWeekFrequency,
+      KeepGoingDifficultLastWeekFrequency,
+      walkingDays,
+      walkingMinutesPerDay,
+      moderateActivityDays,
+      moderateActivityMinutesPerDay,
+      vigorousActivityDays,
+      vigorousActivityMinutesPerDay,
       weight,
-      race,
-      height,
-      measuredMuscleMass,
-      walkingSpeed,
-      handGripStrength,
-      muscleMassIndex,
-      calfCircumference,
+      time,
+      stature,
+      handgripStrength,
+      imc,
+      mets1,
+      mets2,
+      mets3,
+      metsTotal,
+      score,
+      kcal,
       result,
     });
 
@@ -266,15 +283,25 @@ export class FragilityStrategy {
 
     const newData: UpdateFragilityDTO = {
       date,
+      activityDifficultLastWeekFrequency,
+      KeepGoingDifficultLastWeekFrequency,
+      walkingDays,
+      walkingMinutesPerDay,
+      moderateActivityDays,
+      moderateActivityMinutesPerDay,
+      vigorousActivityDays,
+      vigorousActivityMinutesPerDay,
       weight,
-      measuredMuscleMass,
-      estimatedMuscleMass,
-      walkingSpeed,
-      handGripStrength,
-      muscleMassIndex,
-      calfCircumference,
+      time,
+      handgripStrength,
+      imc,
+      mets1,
+      mets2,
+      mets3,
+      metsTotal,
+      kcal,
+      score,
       result,
-      hasSarcopenia,
     };
 
     return await this.fragilityFactory.update(id, type, newData, evaluation);
