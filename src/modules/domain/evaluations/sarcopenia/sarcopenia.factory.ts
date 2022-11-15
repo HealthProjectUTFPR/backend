@@ -11,6 +11,7 @@ import { Field } from '../entities/field.entity';
 import { EvaluationOrderBy } from '../enums/order-by.enum';
 import { CreateSarcopeniaDTO } from './dto/create-sarcopenia.dto';
 import { GetSarcopeniaDto } from './dto/get-sarcopenia.dto';
+import { UpdateSarcopeniaDTO } from './dto/update-sarcopenia.dto';
 import { ISarcopenia } from './interfaces/sarcopenia.interface';
 
 @Injectable()
@@ -131,7 +132,7 @@ export class SarcopeniaFactory {
   async update(
     id: string,
     type: string,
-    input: CreateSarcopeniaDTO,
+    input: UpdateSarcopeniaDTO,
     evaluation: Evaluation,
   ): Promise<GetSarcopeniaDto> {
     const { result, ...rest } = input;

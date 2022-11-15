@@ -72,18 +72,40 @@ export class FragilityStrategy {
       weight,
     });
 
-    const result =
+    const score =
       calculatedLooseWeight +
       calculatedActivityDifficultLastWeekFrequency +
       calculatedHandgripStrength +
       calculatedWalkingTest;
 
-    return { result, mets1, mets2, mets3, metsTotal, kcal };
+    let result = 'não-frágil';
+    if (score <= 2 && score > 0) result = 'pré-frágil';
+    else if (score > 2) result = 'frágil';
+
+    return { result, score, mets1, mets2, mets3, metsTotal, kcal };
   }
 
   private validateResult(input: Partial<IFragility>): boolean {
-    const { result, mets1, mets2, mets3, metsTotal, kcal } =
+    const {
+      score: originalScore,
+      result: originalResult,
+      mets1: originalMets1,
+      mets2: originalMets2,
+      mets3: originalMets3,
+      metsTotal: originalMetsTotal,
+      kcal: originalKcal,
+    } = input;
+
+    const { result, score, mets1, mets2, mets3, metsTotal, kcal } =
       this.recalculateResult(input);
+
+    if (result !== originalResult) return false;
+    if (score !== originalScore) return false;
+    if (mets1 !== originalMets1) return false;
+    if (mets2 !== originalMets2) return false;
+    if (mets3 !== originalMets3) return false;
+    if (metsTotal !== originalMetsTotal) return false;
+    if (kcal !== originalKcal) return false;
 
     return true;
   }
@@ -94,27 +116,32 @@ export class FragilityStrategy {
     type: string,
     student: Student,
   ): Promise<GetFragilityDTO> {
-    const {
-      sex: studentSex,
-      birthDate,
-      stature: height,
-      breed: race,
-    } = student;
+    const { sex: studentSex, birthDate, stature } = student;
 
     const sex = studentSex === 'H' ? 'Homem' : 'Mulher';
     const age = dayjs(new Date()).diff(birthDate, 'year');
 
     const {
       date,
+      activityDifficultLastWeekFrequency,
+      KeepGoingDifficultLastWeekFrequency,
+      walkingDays,
+      walkingMinutesPerDay,
+      moderateActivityDays,
+      moderateActivityMinutesPerDay,
+      vigorousActivityDays,
+      vigorousActivityMinutesPerDay,
       weight,
-      measuredMuscleMass,
-      estimatedMuscleMass,
-      walkingSpeed,
-      handGripStrength,
-      muscleMassIndex,
-      calfCircumference,
+      time,
+      handgripStrength,
+      imc,
+      mets1,
+      mets2,
+      mets3,
+      metsTotal,
+      kcal,
+      score,
       result,
-      hasSarcopenia,
     } = input;
 
     const validation = FragilitySchema.validate(input);
@@ -123,17 +150,27 @@ export class FragilityStrategy {
       throw new BadRequestException(validation.error.message);
     }
 
-    const isResultValid = this.validateResult(hasSarcopenia, {
+    const isResultValid = this.validateResult({
       sex,
-      age,
+      activityDifficultLastWeekFrequency,
+      KeepGoingDifficultLastWeekFrequency,
+      walkingDays,
+      walkingMinutesPerDay,
+      moderateActivityDays,
+      moderateActivityMinutesPerDay,
+      vigorousActivityDays,
+      vigorousActivityMinutesPerDay,
       weight,
-      race,
-      height,
-      measuredMuscleMass,
-      walkingSpeed,
-      handGripStrength,
-      muscleMassIndex,
-      calfCircumference,
+      time,
+      stature,
+      handgripStrength,
+      imc,
+      mets1,
+      mets2,
+      mets3,
+      metsTotal,
+      score,
+      kcal,
       result,
     });
 
@@ -145,15 +182,25 @@ export class FragilityStrategy {
 
     const data: CreateFragilityDTO = {
       date,
+      activityDifficultLastWeekFrequency,
+      KeepGoingDifficultLastWeekFrequency,
+      walkingDays,
+      walkingMinutesPerDay,
+      moderateActivityDays,
+      moderateActivityMinutesPerDay,
+      vigorousActivityDays,
+      vigorousActivityMinutesPerDay,
       weight,
-      measuredMuscleMass,
-      estimatedMuscleMass,
-      walkingSpeed,
-      handGripStrength,
-      muscleMassIndex,
-      calfCircumference,
+      time,
+      handgripStrength,
+      imc,
+      mets1,
+      mets2,
+      mets3,
+      metsTotal,
+      kcal,
+      score,
       result,
-      hasSarcopenia,
     };
 
     return await this.fragilityFactory.create(data, user, type, student);

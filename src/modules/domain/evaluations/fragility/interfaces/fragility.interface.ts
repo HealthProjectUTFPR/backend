@@ -1,4 +1,5 @@
 export interface IFragility {
+  date: string;
   sex: string;
   activityDifficultLastWeekFrequency: number;
   KeepGoingDifficultLastWeekFrequency: number;
@@ -18,4 +19,6 @@ export interface IFragility {
   stature: number;
   handgripStrength: number;
   imc: number;
+  score: number;
+  result: string;
 }
