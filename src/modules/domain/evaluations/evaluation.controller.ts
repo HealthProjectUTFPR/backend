@@ -52,6 +52,7 @@ export class EvaluationController {
     @Query('orderBy') orderBy: EvaluationOrderBy,
   ): Promise<PaginationResponseDto<ResponseEvaluation[]>> {
     if (!user) throw new ForbiddenException('Sessão de usuário inválida');
+    if (!studentId) throw new ForbiddenException('Informe o ID do aluno');
 
     return new PaginationResponseDto<ResponseEvaluation[]>(
       await this.evaluationService.findAll(
