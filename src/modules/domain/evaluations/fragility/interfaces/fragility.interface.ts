@@ -1,6 +1,7 @@
 export interface IFragility {
   date: string;
   sex: string;
+  looseWeight: number;
   activityDifficultLastWeekFrequency: number;
   KeepGoingDifficultLastWeekFrequency: number;
   walkingDays: number;

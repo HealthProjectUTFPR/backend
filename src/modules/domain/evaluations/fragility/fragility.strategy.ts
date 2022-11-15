@@ -33,6 +33,7 @@ export class FragilityStrategy {
   private recalculateResult(input: Partial<IFragility>) {
     const {
       sex,
+      looseWeight,
       activityDifficultLastWeekFrequency,
       KeepGoingDifficultLastWeekFrequency,
       walkingDays,
@@ -48,7 +49,7 @@ export class FragilityStrategy {
       imc,
     } = input;
 
-    const calculatedLooseWeight = calculateLooseWeight({ weight });
+    const calculatedLooseWeight = calculateLooseWeight({ looseWeight });
     const calculatedActivityDifficultLastWeekFrequency =
       calculateActivityDifficultLastWeekFrequency({
         activityDifficultLastWeekFrequency,
@@ -121,6 +122,7 @@ export class FragilityStrategy {
 
     const {
       date,
+      looseWeight,
       activityDifficultLastWeekFrequency,
       KeepGoingDifficultLastWeekFrequency,
       walkingDays,
@@ -180,6 +182,7 @@ export class FragilityStrategy {
 
     const data: CreateFragilityDTO = {
       date,
+      looseWeight,
       activityDifficultLastWeekFrequency,
       KeepGoingDifficultLastWeekFrequency,
       walkingDays,
@@ -230,6 +233,7 @@ export class FragilityStrategy {
 
     const {
       date,
+      looseWeight,
       activityDifficultLastWeekFrequency,
       KeepGoingDifficultLastWeekFrequency,
       walkingDays,
@@ -282,6 +286,7 @@ export class FragilityStrategy {
 
     const newData: UpdateFragilityDTO = {
       date,
+      looseWeight,
       activityDifficultLastWeekFrequency,
       KeepGoingDifficultLastWeekFrequency,
       walkingDays,

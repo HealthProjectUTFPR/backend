@@ -2,6 +2,7 @@ import Joi from 'joi';
 
 export const FragilitySchema = Joi.object({
   date: Joi.string().required(),
+  looseWeight: Joi.number().required().strict(),
   activityDifficultLastWeekFrequency: Joi.number().required().strict(),
   KeepGoingDifficultLastWeekFrequency: Joi.number().required().strict(),
   walkingDays: Joi.number().required().strict(),

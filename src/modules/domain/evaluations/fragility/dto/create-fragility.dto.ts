@@ -9,6 +9,10 @@ export class CreateFragilityDTO {
 
   @ApiProperty()
   @JoiSchema(Joi.number().required())
+  looseWeight: number;
+
+  @ApiProperty()
+  @JoiSchema(Joi.number().required())
   activityDifficultLastWeekFrequency: number;
 
   @ApiProperty()

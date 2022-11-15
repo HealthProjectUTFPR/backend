@@ -53,6 +53,7 @@ export class FragilityFactory {
 
     const {
       date,
+      looseWeight,
       activityDifficultLastWeekFrequency,
       KeepGoingDifficultLastWeekFrequency,
       walkingDays,
@@ -77,6 +78,7 @@ export class FragilityFactory {
       id,
       name,
       date,
+      looseWeight,
       activityDifficultLastWeekFrequency,
       KeepGoingDifficultLastWeekFrequency,
       walkingDays,
