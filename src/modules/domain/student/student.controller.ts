@@ -57,4 +57,11 @@ export class StudentController {
   async index(@AuthUser() user: User): Promise<Student[]> {
     return await this.studentService.findAll(user.id);
   }
+
+  @Get('show/:id')
+  async show(
+    @Param('id') id: string,
+  ): Promise<Student> {
+    return await this.studentService.findOne(id);
+  }
 }
