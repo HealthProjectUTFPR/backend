@@ -27,6 +27,7 @@ import { UpdateEvaluationDto } from './dto/update-evaluation.dto';
 import { Evaluation } from './entities/evaluation.entity';
 import { EvaluationOrderBy } from './enums/order-by.enum';
 import { CreateFragilityDTO } from './fragility/dto/create-fragility.dto';
+import { UpdateFragilityDTO } from './fragility/dto/update-fragility.dto';
 import { FragilityStrategy } from './fragility/fragility.strategy';
 import { CreateSarcopeniaDTO } from './sarcopenia/dto/create-sarcopenia.dto';
 import { UpdateSarcopeniaDTO } from './sarcopenia/dto/update-sarcopenia.dto';
@@ -173,12 +174,22 @@ export class EvaluationService {
         studentID,
       );
 
+    const {
+      evaluations: fragilityEvaluation,
+      count: countFragilityEvaluation,
+    } = await this.fragilityStrategy.getAll(
+      orderBy as EvaluationOrderBy,
+      paginationParams,
+      studentID,
+    );
+
     const amountOfEvaluations =
       countSarcopeniaEvaluation +
       countBodyEvaluation +
       countCardioEvaluation +
       countAvdEvaluation +
-      countBalanceEvaluation;
+      countBalanceEvaluation +
+      countFragilityEvaluation;
 
     const meta = {
       itemsPerPage: +paginationParams.limit,
@@ -195,11 +206,12 @@ export class EvaluationService {
         ...bodyEvaluation,
         ...balanceEvaluation,
         ...avdEvaluation,
+        ...fragilityEvaluation,
       ],
     };
   }
 
-  async getByID(id: string, type: string): Promise<ResponseEvaluation> {
+  async getById(id: string, type: string): Promise<ResponseEvaluation> {
     const scheme = Joi.string().guid().required();
     const isValidUUID = scheme.validate(id);
 
@@ -217,6 +229,8 @@ export class EvaluationService {
         return await this.avdStrategy.getByID(id);
       case 'AEQ':
         return await this.balanceStrategy.getById(id);
+      case 'fragilidade':
+        return await this.fragilityStrategy.getById(id);
       default:
         break;
     }
@@ -260,6 +274,12 @@ export class EvaluationService {
           id,
           type,
           data as UpdateBalanceDto,
+        );
+      case 'fragilidade':
+        return await this.fragilityStrategy.update(
+          id,
+          type,
+          data as UpdateFragilityDTO,
         );
       default:
         break;

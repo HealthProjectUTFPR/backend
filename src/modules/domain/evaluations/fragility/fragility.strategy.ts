@@ -330,7 +330,7 @@ export class FragilityStrategy {
     return returnedData;
   }
 
-  async getByID(id: string): Promise<GetFragilityDTO> {
+  async getById(id: string): Promise<GetFragilityDTO> {
     const evaluation = await this.evaluationRepository.findOne({
       where: { id, deletedAt: null },
       relations: ['fields'],
