@@ -1,4 +1,4 @@
-import { Injectable, ForbiddenException } from '@nestjs/common';
+import { Injectable, ForbiddenException, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateStudentDto } from './dto/create-student.dto';
@@ -24,7 +24,13 @@ export class StudentService {
   }
 
   async findOne(id: string) {
-    return await this.studentRepository.findOneBy({ id });
+    const student = await this.studentRepository.findOneBy({ id });
+    if (!student) {
+      throw new BadRequestException(
+        `Estudante com id ${id} não encontrado.`,
+      );
+    }
+    return student;
   }
 
   async delete(
