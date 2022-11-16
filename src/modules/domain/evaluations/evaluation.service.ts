@@ -10,26 +10,28 @@ import { PaginationParams } from 'src/common/interfaces/pagination.interface';
 import { User } from 'src/modules/infrastructure/user/entities/user.entity';
 import { Repository } from 'typeorm';
 import { Student } from '../student/entities/student.entity';
-import { BodyCompositionStrategy } from './body-composition/body-composition.strategy';
-import { CreateBodyCompositionDto } from './body-composition/dto/create-body-composition.dto';
-import { UpdateBodyCompositionDto } from './body-composition/dto/update-body-composition.dto';
 import { avdStrategy } from './avd/avd.strategy';
 import { CreateAvdDto } from './avd/dto/create-avd.dto';
 import { UpdateAvdDto } from './avd/dto/update-avd.dto';
+import { BalanceStrategy } from './balance/balance.strategy';
+import { CreateBalanceDto } from './balance/dto/create-balance.dto';
+import { UpdateBalanceDto } from './balance/dto/update-balance.dto';
+import { BodyCompositionStrategy } from './body-composition/body-composition.strategy';
+import { CreateBodyCompositionDto } from './body-composition/dto/create-body-composition.dto';
+import { UpdateBodyCompositionDto } from './body-composition/dto/update-body-composition.dto';
 import { CardiorespiratoryCapacityStrategy } from './cardiorespiratory-capacity/cardiorespiratory-capacity.strategy';
 import { CreateCardiorespiratoryCapacityDto } from './cardiorespiratory-capacity/dto/create-cardiorespiratory-capacity.dto';
 import { UpdateCardiorespiratoryCapacityDto } from './cardiorespiratory-capacity/dto/update-cardiorespiratory-capacity.dto';
-import { BalanceStrategy } from './balance/balance.strategy';
-import { CreateBalanceDto } from './balance/dto/create-balance.dto';
 import { CreateEvaluationDto } from './dto/create-evaluation.dto';
 import { UpdateEvaluationDto } from './dto/update-evaluation.dto';
 import { Evaluation } from './entities/evaluation.entity';
 import { EvaluationOrderBy } from './enums/order-by.enum';
+import { CreateFragilityDTO } from './fragility/dto/create-fragility.dto';
+import { FragilityStrategy } from './fragility/fragility.strategy';
 import { CreateSarcopeniaDTO } from './sarcopenia/dto/create-sarcopenia.dto';
 import { UpdateSarcopeniaDTO } from './sarcopenia/dto/update-sarcopenia.dto';
 import { SarcopeniaStrategy } from './sarcopenia/sarcopenia.strategy';
 import { ResponseEvaluation } from './types/response-evaluation.type';
-import { UpdateBalanceDto } from './balance/dto/update-balance.dto';
 
 @Injectable()
 export class EvaluationService {
@@ -45,6 +47,7 @@ export class EvaluationService {
     private readonly sarcopeniaStrategy: SarcopeniaStrategy,
     private readonly avdStrategy: avdStrategy,
     private readonly balanceStrategy: BalanceStrategy,
+    private readonly fragilityStrategy: FragilityStrategy,
   ) {}
 
   async create(
@@ -96,6 +99,14 @@ export class EvaluationService {
       case 'AEQ':
         return await this.balanceStrategy.create(
           data as CreateBalanceDto,
+          user,
+          type,
+          student,
+        );
+
+      case 'fragilidade':
+        return await this.fragilityStrategy.create(
+          data as CreateFragilityDTO,
           user,
           type,
           student,

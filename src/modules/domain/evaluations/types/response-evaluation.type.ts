@@ -3,10 +3,12 @@ import { GetCardiorespiratoryCapacityDto } from '../cardiorespiratory-capacity/d
 import { GetSarcopeniaDto } from '../sarcopenia/dto/get-sarcopenia.dto';
 import { GetBalanceDto } from '../balance/dto/get-balance.dto';
 import { GetAvdDto } from '../avd/dto/get-avd.dto';
+import { GetFragilityDTO } from '../fragility/dto/get-fragility.dto';
 
 export type ResponseEvaluation =
   | GetSarcopeniaDto
   | GetCardiorespiratoryCapacityDto
   | GetAvdDto
   | GetBalanceDto
-  | GetBodyCompositionDto;
+  | GetBodyCompositionDto
+  | GetFragilityDTO;
