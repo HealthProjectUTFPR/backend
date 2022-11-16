@@ -60,8 +60,11 @@ export class StudentController {
 
   @Get('show/:id')
   async show(
+    @AuthUser() user: User,
     @Param('id') id: string,
   ): Promise<Student> {
+    if (!user) throw new ForbiddenException('Sessão de usuário inválida');
+    if (!id) throw new ForbiddenException('Informe o ID do aluno');
     return await this.studentService.findOne(id);
   }
 }
