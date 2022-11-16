@@ -55,6 +55,7 @@ export class StudentController {
 
   @Get('index')
   async index(@AuthUser() user: User): Promise<Student[]> {
+    if (!user) throw new ForbiddenException('Sessão de usuário inválida');
     return await this.studentService.findAll(user.id);
   }
 

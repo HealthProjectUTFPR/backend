@@ -9,8 +9,6 @@ import { StudentModule } from 'src/modules/domain/student/student.module';
 let app: INestApplication;
 let server: request.SuperTest<request.Test>;
 let token: string;
-let id: string;
-let studentId: string;
 
 beforeAll(async () => {
   const module = await Test.createTestingModule({
@@ -40,7 +38,7 @@ beforeAll(async () => {
 
   token = login.text;
 
-  const student = await server
+  await server
     .post('/student/create')
     .send({
       name: 'EstudanteTeste',
@@ -56,22 +54,36 @@ beforeAll(async () => {
     })
     .set('Authorization', `Bearer ${token}`);
 
-  studentId = student.body.id;
+  await server
+    .post('/student/create')
+    .send({
+      name: 'EstudanteTeste',
+      sex: 'H',
+      breed: 'Amarelo',
+      stature: 179.3,
+      healthPlan: 'free',
+      emergencyContact: '44999999999',
+      contact: '44999999999',
+      address: 'Rua do seu Zé',
+      birthDate: '2000-01-01T01:00:00.000Z',
+      flag: true,
+    })
+    .set('Authorization', `Bearer ${token}`);
 });
 
-describe('Buscar aluno por ID', () => {
-  it(`/:id (GET) deve receber erro ao buscar id inválido`, async () => {
-    id = 'aca8e3cd-2c41-4b7e-9e1f-f3d8206064a';
-
+describe('Buscar todos os alunos de um professor logado', () => {
+  const tokenFalse =
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImJjMjYzYWNhLTgyOTctNDA2ZS1iNTk2LTAzNmY0NzY0YTVhZSIsImVtYWlsIjoiYXNkQGdtYWlsLmNvbSIsImlhdCI6MTY2ODYxMTA1MCwiZXhwIjoxNjY5MjE1ODUwfQ.rE8K0lHuoPMvbhKOAkqye7O8PtIIRct3c3rESohCxvj';
+  it(`/index (GET) deve retornar erro em caso do ID do professor ser inválido `, async () => {
     return await server
-      .get(`/student/show/${id}`)
-      .set('Authorization', `Bearer ${token}`)
-      .expect(400);
+      .get(`/student/index`)
+      .set('Authorization', `Bearer ${tokenFalse}`)
+      .expect(403);
   });
 
-  it(`/:id (GET) deve retornar sucesso ao buscar id válido`, async () => {
+  it(`/:id (GET) deve retornar sucesso caso o professor esteja logado e válido`, async () => {
     return await server
-      .get(`/student/show/${studentId}`)
+      .get(`/student/index`)
       .set('Authorization', `Bearer ${token}`)
       .expect(200);
   });
