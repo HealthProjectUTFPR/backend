@@ -55,10 +55,10 @@ export class StudentService {
     id: string,
     updateStudentDto: UpdateStudentDto,
   ): Promise<Student> {
-    let student = await this.studentRepository.findOne({
-      where: { id: id },
-    });
-    student = await this.studentRepository.findOneBy({ id: id });
+    const student = await this.studentRepository.findOneBy({ id: id });
+    if (!student) {
+      throw new BadRequestException(`Id do aluno ${id} inválido.`);
+    }
     const {
       name,
       breed,
