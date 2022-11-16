@@ -47,9 +47,11 @@ export class StudentController {
   @Patch('update/:id')
   async update(
     @Param('id') id: string,
+    @AuthUser() user: User,
     @Body(new JoiPipe({ group: 'UPDATE' }))
     updateStudentDto: UpdateStudentDto,
   ): Promise<Student> {
+    if (!user) throw new ForbiddenException('Sessão de usuário inválida');
     return await this.studentService.update(id, updateStudentDto);
   }
 
