@@ -1,4 +1,8 @@
-import { Injectable, ForbiddenException, BadRequestException } from '@nestjs/common';
+import {
+  Injectable,
+  ForbiddenException,
+  BadRequestException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateStudentDto } from './dto/create-student.dto';
@@ -26,9 +30,7 @@ export class StudentService {
   async findOne(id: string) {
     const student = await this.studentRepository.findOneBy({ id });
     if (!student) {
-      throw new BadRequestException(
-        `Estudante com id ${id} não encontrado.`,
-      );
+      throw new BadRequestException(`Estudante com id ${id} não encontrado.`);
     }
     return student;
   }
@@ -57,34 +59,47 @@ export class StudentService {
       where: { id: id },
     });
     student = await this.studentRepository.findOneBy({ id: id });
-    const {name, breed, stature, contact, healthPlan, emergencyContact, address, birthDate, flag} = updateStudentDto;
+    const {
+      name,
+      breed,
+      stature,
+      contact,
+      healthPlan,
+      emergencyContact,
+      address,
+      birthDate,
+      flag,
+    } = updateStudentDto;
 
-    student.name = name? name : student.name;
-    student.breed = breed? breed : student.breed;
-    student.stature = stature? stature : student.stature;
-    student.contact = contact? contact : student.contact;
-    student.healthPlan = healthPlan? healthPlan : student.healthPlan;
-    student.emergencyContact = emergencyContact? emergencyContact : student.emergencyContact;
-    student.address = address? address : student.address;
-    student.birthDate = birthDate? birthDate : student.birthDate;
-    student.flag = flag? flag : student.flag;
+    student.name = name ? name : student.name;
+    student.breed = breed ? breed : student.breed;
+    student.stature = stature ? stature : student.stature;
+    student.contact = contact ? contact : student.contact;
+    student.healthPlan = healthPlan ? healthPlan : student.healthPlan;
+    student.emergencyContact = emergencyContact
+      ? emergencyContact
+      : student.emergencyContact;
+    student.address = address ? address : student.address;
+    student.birthDate = birthDate ? birthDate : student.birthDate;
+    student.flag = flag ? flag : student.flag;
 
     return await this.studentRepository.save(student);
   }
 
-  async findAll(
-    id: string,
-  ): Promise<Student[]> {
-    let student = await this.studentRepository.find({
+  async findAll(id: string): Promise<Student[]> {
+    const student = await this.studentRepository.find({
       relations: {
-        user: true
+        user: true,
       },
       where: {
         user: {
-          id: id
-        }
+          id: id,
+        },
       },
     });
+    if (!student) {
+      throw new BadRequestException(`Id do professor ${id} inválido.`);
+    }
     return student;
   }
 }
