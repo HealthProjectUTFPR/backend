@@ -7,8 +7,10 @@ import {
   Param,
   Patch,
   Post,
+  Query,
   UseGuards,
 } from '@nestjs/common';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { JoiPipe } from 'nestjs-joi';
 import { AuthUser } from 'src/common/decorators/auth-user.decorator';
 import { Pagination } from 'src/common/decorators/pagination.decorator';
@@ -17,57 +19,70 @@ import { PaginationParams } from 'src/common/interfaces/pagination.interface';
 import { JwtAuthGuard } from 'src/modules/infrastructure/auth/auth.guard';
 import { User } from 'src/modules/infrastructure/user/entities/user.entity';
 import { CreateEvaluationDto } from './dto/create-evaluation.dto';
-import { FindAllEvaluationDto } from './dto/findall-evaluation.dto';
-import { FindOneEvaluationDto } from './dto/findone-evaluation.dto';
 import { UpdateEvaluationDto } from './dto/update-evaluation.dto';
 import { Evaluation } from './entities/evaluation.entity';
+import { EvaluationOrderBy } from './enums/order-by.enum';
 import { EvaluationService } from './evaluation.service';
+import { ResponseEvaluation } from './types/response-evaluation.type';
 
+@ApiBearerAuth()
+@ApiTags('evaluation')
 @Controller('evaluation')
 @UseGuards(JwtAuthGuard)
 export class EvaluationController {
   constructor(private readonly evaluationService: EvaluationService) {}
 
-  @Post('create')
+  @Post('/:studentId')
   async create(
     @AuthUser() user: User,
+    @Param('studentId') studentId: string,
     @Body(new JoiPipe({ group: 'CREATE' }))
-    createEvaluationDto: CreateEvaluationDto,
-  ): Promise<Evaluation> {
-    if (!user) throw new ForbiddenException('User not logged in');
+    input: CreateEvaluationDto,
+  ): Promise<ResponseEvaluation> {
+    if (!user) throw new ForbiddenException('Sessão de usuário inválida');
 
-    return await this.evaluationService.create(createEvaluationDto, user);
+    return await this.evaluationService.create(input, user, studentId);
   }
 
-  @Get('list')
+  @Get('/')
   async findAll(
     @AuthUser() user: User,
     @Pagination() paginationParams: PaginationParams,
-    @Body(new JoiPipe({ group: 'FIND' }))
-    input: FindAllEvaluationDto,
-  ): Promise<PaginationResponseDto<Evaluation>> {
-    return new PaginationResponseDto<Evaluation>(
-      await this.evaluationService.findAll(input, paginationParams, user),
+    @Query('studentId') studentId: string,
+    @Query('orderBy') orderBy: EvaluationOrderBy,
+  ): Promise<PaginationResponseDto<ResponseEvaluation[]>> {
+    if (!user) throw new ForbiddenException('Sessão de usuário inválida');
+
+    return new PaginationResponseDto<ResponseEvaluation[]>(
+      await this.evaluationService.findAll(
+        orderBy,
+        paginationParams,
+        studentId,
+      ),
     );
   }
 
-  @Get('get/:id')
+  @Get('/:id')
   async findOne(
+    @AuthUser() user: User,
     @Param('id') id: string,
-    @Body(new JoiPipe({ group: 'FIND' }))
-    input: FindOneEvaluationDto,
-  ): Promise<Evaluation> {
-    return await this.evaluationService.findOne(input);
+    @Query('type') type: string,
+  ): Promise<ResponseEvaluation> {
+    if (!user) throw new ForbiddenException('Sessão de usuário inválida');
+
+    return await this.evaluationService.getByID(id, type);
   }
 
-  @Patch('update/:id')
+  @Patch('/:id')
   async update(
     @AuthUser() user: User,
     @Param('id') id: string,
     @Body(new JoiPipe({ group: 'UPDATE' }))
     input: UpdateEvaluationDto,
-  ): Promise<Evaluation> {
-    return await this.evaluationService.update(id, input, user);
+  ): Promise<ResponseEvaluation> {
+    if (!user) throw new ForbiddenException('Sessão de usuário inválida');
+
+    return await this.evaluationService.update(id, input);
   }
 
   @Delete('/:id')
