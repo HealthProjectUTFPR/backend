@@ -99,13 +99,27 @@ export class FragilityStrategy {
     const { result, score, mets1, mets2, mets3, metsTotal, kcal } =
       this.recalculateResult(input);
 
-    if (result !== originalResult) return false;
-    if (score !== originalScore) return false;
-    if (mets1 !== originalMets1) return false;
-    if (mets2 !== originalMets2) return false;
-    if (mets3 !== originalMets3) return false;
-    if (metsTotal !== originalMetsTotal) return false;
-    if (kcal !== originalKcal) return false;
+    if (result !== originalResult) {
+      return false;
+    }
+    if (score !== originalScore) {
+      return false;
+    }
+    if (mets1 !== originalMets1) {
+      return false;
+    }
+    if (mets2 !== originalMets2) {
+      return false;
+    }
+    if (mets3 !== originalMets3) {
+      return false;
+    }
+    if (metsTotal !== originalMetsTotal) {
+      return false;
+    }
+    if (kcal !== originalKcal) {
+      return false;
+    }
 
     return true;
   }
@@ -161,6 +175,7 @@ export class FragilityStrategy {
       vigorousActivityDays,
       vigorousActivityMinutesPerDay,
       weight,
+      looseWeight,
       time,
       stature,
       handgripStrength,
@@ -330,7 +345,7 @@ export class FragilityStrategy {
     return returnedData;
   }
 
-  async getById(id: string): Promise<GetFragilityDTO> {
+  async getByID(id: string): Promise<GetFragilityDTO> {
     const evaluation = await this.evaluationRepository.findOne({
       where: { id, deletedAt: null },
       relations: ['fields'],

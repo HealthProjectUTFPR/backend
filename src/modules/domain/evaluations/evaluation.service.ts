@@ -211,7 +211,7 @@ export class EvaluationService {
     };
   }
 
-  async getById(id: string, type: string): Promise<ResponseEvaluation> {
+  async getByID(id: string, type: string): Promise<ResponseEvaluation> {
     const scheme = Joi.string().guid().required();
     const isValidUUID = scheme.validate(id);
 
@@ -230,7 +230,7 @@ export class EvaluationService {
       case 'AEQ':
         return await this.balanceStrategy.getById(id);
       case 'fragilidade':
-        return await this.fragilityStrategy.getById(id);
+        return await this.fragilityStrategy.getByID(id);
       default:
         break;
     }
