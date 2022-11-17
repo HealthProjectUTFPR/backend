@@ -173,12 +173,14 @@ export class EvaluationService {
         studentID,
       );
 
-    const { evaluations: MiniCognitionEvaluation, count: countMiniCognitionEvaluation } =
-      await this.minicognitionStrategy.getAll(
-        orderBy as EvaluationOrderBy,
-        paginationParams,
-        studentID,
-      );
+    const {
+      evaluations: MiniCognitionEvaluation,
+      count: countMiniCognitionEvaluation,
+    } = await this.minicognitionStrategy.getAll(
+      orderBy as EvaluationOrderBy,
+      paginationParams,
+      studentID,
+    );
 
     const amountOfEvaluations =
       countSarcopeniaEvaluation +
@@ -227,7 +229,7 @@ export class EvaluationService {
       case 'AEQ':
         return await this.balanceStrategy.getById(id);
       case 'MiniCognition':
-          return await this.minicognitionStrategy.getByID(id);
+        return await this.minicognitionStrategy.getByID(id);
       default:
         break;
     }
