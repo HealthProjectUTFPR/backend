@@ -3,7 +3,6 @@ interface ICalculateLooseWeight {
 }
 
 const calculateLooseWeight = ({ looseWeight }: ICalculateLooseWeight) => {
-  console.log('LOOSE WEIGHT', looseWeight);
   return looseWeight >= 4.5 ? 1 : 0;
 };
 

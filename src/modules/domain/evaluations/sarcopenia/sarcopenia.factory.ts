@@ -158,8 +158,6 @@ export class SarcopeniaFactory {
 
     evaluation.save();
 
-    console.log('TESTE', evaluation);
-
     return this.parseFieldsToCorrectType(evaluation);
   }
 
