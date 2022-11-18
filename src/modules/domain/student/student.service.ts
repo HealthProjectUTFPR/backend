@@ -92,6 +92,7 @@ export class StudentService {
         user: true,
       },
       where: {
+        flag: true,
         user: {
           id: id,
         },
