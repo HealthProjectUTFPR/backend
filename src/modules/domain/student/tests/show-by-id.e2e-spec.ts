@@ -1,7 +1,6 @@
 import request from 'supertest';
 import { Test } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
-import { EvaluationModule } from '../../evaluation.module';
 import { DatabaseTestModule } from 'src/modules/infrastructure/database/database-test.module';
 import { AuthModule } from 'src/modules/infrastructure/auth/auth.module';
 import { UserModule } from 'src/modules/infrastructure/user/user.module';
@@ -15,13 +14,7 @@ let studentId: string;
 
 beforeAll(async () => {
   const module = await Test.createTestingModule({
-    imports: [
-      EvaluationModule,
-      UserModule,
-      DatabaseTestModule,
-      AuthModule,
-      StudentModule,
-    ],
+    imports: [UserModule, DatabaseTestModule, AuthModule, StudentModule],
   }).compile();
   app = module.createNestApplication();
   await app.init();
@@ -50,15 +43,15 @@ beforeAll(async () => {
   const student = await server
     .post('/student/create')
     .send({
-      name: 'Estudante',
+      name: 'EstudanteTeste',
       sex: 'H',
-      breed: 'Branco',
-      stature: 192,
+      breed: 'Amarelo',
+      stature: 179.3,
       healthPlan: 'free',
-      emergencyContact: '449994484848',
-      contact: '449994484848',
-      address: 'Rua 123',
-      birthDate: '1980-10-12T03:00:00.000Z',
+      emergencyContact: '44999999999',
+      contact: '44999999999',
+      address: 'Rua do seu Zé',
+      birthDate: '2000-01-01T01:00:00.000Z',
       flag: true,
     })
     .set('Authorization', `Bearer ${token}`);
@@ -66,52 +59,19 @@ beforeAll(async () => {
   studentId = student.body.id;
 });
 
-afterAll(async () => {
-  await app.close();
-});
-
-describe('Buscar avaliação Cardiorespiratória', () => {
-  it(`/:id?type=ACR (GET) deve receber erro ao buscar id inválido`, async () => {
+describe('Buscar aluno por ID', () => {
+  it(`/:id (GET) deve receber erro ao buscar id inválido`, async () => {
     id = 'aca8e3cd-2c41-4b7e-9e1f-f3d8206064a';
 
     return await server
-      .get(`/evaluation/${id}?type=ACR`)
+      .get(`/student/show/${id}`)
       .set('Authorization', `Bearer ${token}`)
       .expect(400);
   });
 
-  it(`/:id?type=ACR (GET) deve receber erro ao buscar id válido porém inexistente`, async () => {
-    id = 'a9cd5ca1-6bba-46a9-ad3e-f7f4bde8eb8f';
-
-    const teste = await server
-      .get(`/evaluation/${id}?type=ACR`)
-      .set('Authorization', `Bearer ${token}`)
-      .expect(404);
-
-    return teste;
-  });
-
-  it(`/:id?type=ACR (GET) deve retornar sucesso ao buscar id válido`, async () => {
-    const response = await server
-      .post(`/evaluation/${studentId}`)
-      .send({
-        type: 'ACR',
-        data: {
-          weight: 75,
-          time: 10,
-          date: '2022-10-12T03:00:00.000Z',
-          finalFC: 150,
-          vo2Lmin: 3.733740000000001,
-          vo2MlKG: 46.67175000000002,
-          result: 'Muito bom!',
-        },
-      })
-      .set('Authorization', `Bearer ${token}`);
-
-    id = response.body.id;
-
+  it(`/:id (GET) deve retornar sucesso ao buscar id válido`, async () => {
     return await server
-      .get(`/evaluation/${id}?type=ACR`)
+      .get(`/student/show/${studentId}`)
       .set('Authorization', `Bearer ${token}`)
       .expect(200);
   });

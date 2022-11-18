@@ -1,7 +1,6 @@
 import request from 'supertest';
 import { Test } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
-import { EvaluationModule } from '../../evaluation.module';
 import { DatabaseTestModule } from 'src/modules/infrastructure/database/database-test.module';
 import { AuthModule } from 'src/modules/infrastructure/auth/auth.module';
 import { UserModule } from 'src/modules/infrastructure/user/user.module';
@@ -10,17 +9,10 @@ import { StudentModule } from 'src/modules/domain/student/student.module';
 let app: INestApplication;
 let server: request.SuperTest<request.Test>;
 let token: string;
-let studentId: string;
 
 beforeAll(async () => {
   const module = await Test.createTestingModule({
-    imports: [
-      EvaluationModule,
-      UserModule,
-      DatabaseTestModule,
-      AuthModule,
-      StudentModule,
-    ],
+    imports: [UserModule, DatabaseTestModule, AuthModule, StudentModule],
   }).compile();
   app = module.createNestApplication();
   await app.init();
@@ -46,7 +38,7 @@ beforeAll(async () => {
 
   token = login.text;
 
-  const student = await server
+  await server
     .post('/student/create')
     .send({
       name: 'EstudanteTeste',
@@ -62,39 +54,37 @@ beforeAll(async () => {
     })
     .set('Authorization', `Bearer ${token}`);
 
-  studentId = student.body.id;
+  await server
+    .post('/student/create')
+    .send({
+      name: 'EstudanteTeste',
+      sex: 'H',
+      breed: 'Amarelo',
+      stature: 179.3,
+      healthPlan: 'free',
+      emergencyContact: '44999999999',
+      contact: '44999999999',
+      address: 'Rua do seu Zé',
+      birthDate: '2000-01-01T01:00:00.000Z',
+      flag: true,
+    })
+    .set('Authorization', `Bearer ${token}`);
 });
 
-afterAll(async () => {
-  await app.close();
-});
-
-describe('Criar avaliações de Equilibrio', () => {
-  it(`/:studentId (CREATE) sucesso na criação`, async () => {
+describe('Buscar todos os alunos de um professor logado', () => {
+  const tokenFalse =
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImJjMjYzYWNhLTgyOTctNDA2ZS1iNTk2LTAzNmY0NzY0YTVhZSIsImVtYWlsIjoiYXNkQGdtYWlsLmNvbSIsImlhdCI6MTY2ODYxMTA1MCwiZXhwIjoxNjY5MjE1ODUwfQ.rE8K0lHuoPMvbhKOAkqye7O8PtIIRct3c3rESohCxvj';
+  it(`/index (GET) deve retornar erro em caso do ID do professor ser inválido `, async () => {
     return await server
-      .post(`/evaluation/${studentId}`)
-      .send({
-        type: 'AEQ',
-        data: {
-          date: '2022-11-06T03:00:00.000Z',
-          campo1: 4,
-          campo2: 4,
-          campo3: 3,
-          campo4: 1,
-          campo5: 0,
-          campo6: 1,
-          campo7: 2,
-          campo8: 4,
-          campo9: 3,
-          campo10: 2,
-          campo11: 1,
-          campo12: 4,
-          campo13: 2,
-          campo14: 1,
-          result: 32,
-        },
-      })
+      .get(`/student/index`)
+      .set('Authorization', `Bearer ${tokenFalse}`)
+      .expect(403);
+  });
+
+  it(`/:id (GET) deve retornar sucesso caso o professor esteja logado e válido`, async () => {
+    return await server
+      .get(`/student/index`)
       .set('Authorization', `Bearer ${token}`)
-      .expect(201);
+      .expect(200);
   });
 });

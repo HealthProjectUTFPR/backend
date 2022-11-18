@@ -182,7 +182,7 @@ export class EvaluationService {
         paginationParams,
         studentID,
       );
-
+      
     const { evaluations: DepressionEvaluation, count: countDepressionEvaluation } =
       await this.depressionStrategy.getAll(
         orderBy as EvaluationOrderBy,
@@ -196,6 +196,7 @@ export class EvaluationService {
         paginationParams,
         studentID,
       );
+
 
     const amountOfEvaluations =
       countSarcopeniaEvaluation +
@@ -246,9 +247,10 @@ export class EvaluationService {
       case 'AEQ':
         return await this.balanceStrategy.getById(id);
       case 'MiniCognition':
-          return await this.minicognitionStrategy.getByID(id);
+        return await this.minicognitionStrategy.getByID(id);
       case 'Depression':
-          return await this.depressionStrategy.getByID(id);
+        return await this.depressionStrategy.getByID(id);
+
       default:
         break;
     }
