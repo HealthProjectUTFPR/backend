@@ -93,7 +93,7 @@ describe('Criar avaliações de Depressão', () => {
                 "campo14" : false,
                 "campo15" : true,
                 "result" : 5
-            },
+            }
           })
           .set('Authorization', `Bearer ${token}`)
           .expect(201);

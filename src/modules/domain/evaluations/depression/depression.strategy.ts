@@ -126,21 +126,21 @@ export class DepressionStrategy {
 
     async getAll(
         orderBy: EvaluationOrderBy,
-        paginationParams: PaginationParams,
-        studentID: string,
+        PaginationParams: PaginationParams,
+        studentId: string,
       ): Promise<GetAllDepressionDto> {
         const evaluations = await this.depressionFactory.getAll(
           orderBy,
-          paginationParams,
-          studentID,
+          PaginationParams,
+          studentId,
         );
     
-        const returnedData: GetAllDepressionDto = {
+        const returnData: GetAllDepressionDto = {
           evaluations,
           count: evaluations.length,
         };
     
-        return returnedData;
+        return returnData;
       }
     
       async getByID(id: string): Promise<GetDepressionDto> {

@@ -1,6 +1,6 @@
 import request from 'supertest';
 import { Test } from '@nestjs/testing';
-import { INestApplication } from "@nestjs/common";
+import { INestApplication } from '@nestjs/common';
 import { EvaluationModule } from '../../evaluation.module';
 import { UserModule } from 'src/modules/infrastructure/user/user.module';
 import { DatabaseTestModule } from 'src/modules/infrastructure/database/database-test.module';
@@ -72,7 +72,9 @@ afterAll(async () => {
 describe('Buscar avaliações de Depressão', () => {
     it(`/:studentId (GET) deve receber um array vazio como resultado`, async () => {
       return await server
-        .get(`/evaluation?studentId=${studentId}&page=1&limit=50&orderBy=updatedAt`,)
+        .get(
+          `/evaluation?studentId=${studentId}&page=1&limit=50&orderBy=updatedAt`,
+        )
         .set('Authorization', `Bearer ${token}`)
         .expect((res) => {
           expect(res.body.data).toStrictEqual([]);
@@ -85,32 +87,34 @@ describe('Buscar avaliações de Depressão', () => {
         await server
           .post(`/evaluation/${studentId}`)
           .send({
-            "type": "Depression",
-            "data": {
-                "date" : "2022-11-10T03:00:00.000Z",
-                "campo1" : true,
-                "campo2" : false,
-                "campo3" : false,
-                "campo4" : false,
-                "campo5" : false,
-                "campo6" : true,
-                "campo7" : false,
-                "campo8" : false,
-                "campo9" : false,
-                "campo10" : true,
-                "campo11" : true,
-                "campo12" : false,
-                "campo13" : false,
-                "campo14" : false,
-                "campo15" : true,
-                "result" : 5
-            },
+            type: 'Depression',
+            data: {
+                date : '2022-11-10T03:00:00.000Z',
+                campo1 : true,
+                campo2 : false,
+                campo3 : false,
+                campo4 : false,
+                campo5 : false,
+                campo6 : true,
+                campo7 : false,
+                campo8 : false,
+                campo9 : false,
+                campo10 : true,
+                campo11 : true,
+                campo12 : false,
+                campo13 : false,
+                campo14 : false,
+                campo15 : true,
+                result : 5,
+            }
           })
         .set('Authorization', `Bearer ${token}`);
       }
-  
+      
       return await server
-        .get(`/evaluation?studentId=${studentId}&page=1&limit=50&orderBy=updatedAt`,)
+        .get(
+          `/evaluation?studentId=${studentId}&page=1&limit=50&orderBy=updatedAt`,
+        )
         .set('Authorization', `Bearer ${token}`)
         .expect((res) => {
           expect(res.body.meta.totalItems).toBe(5);
@@ -124,7 +128,9 @@ describe('Buscar avaliações de Depressão', () => {
       const orderBy = 'updatedAt';
   
       return await server
-        .get(`/evaluation?studentId=${studentId}&page=${page}&limit=${limit}&orderBy=${orderBy}`)
+        .get(
+          `/evaluation?studentId=${studentId}&page=${page}&limit=${limit}&orderBy=${orderBy}`,
+        )
         .set('Authorization', `Bearer ${token}`)
         .expect(400);
     });

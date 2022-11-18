@@ -13,7 +13,9 @@ import { User } from "src/modules/infrastructure/user/entities/user.entity";
 import { UpdateDepressionDto } from "./dto/update-depression.dto";
 import { EvaluationOrderBy } from "../enums/order-by.enum";
 import { PaginationParams } from "src/common/interfaces/pagination.interface";
+import customParseFormat from 'dayjs/plugin/customParseFormat';
 
+dayjs.extend(customParseFormat);
 @Injectable()
 export class DepressionFactory {
     @InjectRepository(Evaluation)
@@ -30,12 +32,12 @@ export class DepressionFactory {
         fields.forEach(([key, value]) => {
             let type: string = typeof value;
             if (type === 'number') type = Number.isInteger(value) ? 'int' : 'float';
-            if (type === 'string') type = dayjs(value as string).isValid() ? 'date' : 'string';
+            if (type === 'string') type = dayjs(String(value)).isValid() ? 'date' : 'string';
       
             inputs.push({
               name: key,
               value: String(value),
-              dataType: type,
+              dataType: type
             });
         });
 
@@ -43,7 +45,7 @@ export class DepressionFactory {
     }
 
     private parseFieldsToCorrectType(
-        data: Evaluation,
+        data: Evaluation
       ): GetDepressionDto {
         const { id, name, createdAt, updatedAt, result, deletedAt, fields } = data;
     
@@ -57,7 +59,7 @@ export class DepressionFactory {
     
         const { date, campo1, campo2, campo3, campo4, campo5, campo6, campo7, campo8, campo9, 
                 campo10, campo11, campo12, campo13, campo14, campo15} = parsedFields;
-    
+            
         const returnedValues: GetDepressionDto = {
             id,
             name,
@@ -110,7 +112,7 @@ export class DepressionFactory {
                 const entityField = this.fieldRepository.create({
                     ...field,
                     evaluation,
-                }as Field);
+                } as Field);
 
                 return await this.fieldRepository.save(entityField);
             }),
@@ -192,8 +194,8 @@ export class DepressionFactory {
     }
 
     async getOne(
-        evaluation: Evaluation,
+        evaluationId: Evaluation,
     ): Promise<GetDepressionDto> {
-        return this.parseFieldsToCorrectType(evaluation);
+        return this.parseFieldsToCorrectType(evaluationId);
     }
 }
