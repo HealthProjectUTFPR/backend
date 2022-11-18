@@ -33,7 +33,9 @@ import { MiniCognitionStrategy } from './mini-cognition/mini-cognition.strategy'
 import { CreateMiniCognitionDto } from './mini-cognition/dto/create-mini-cognition.dto';
 import { UpdateBalanceDto } from './balance/dto/update-balance.dto';
 import { UpdateMiniCognitionDto } from './mini-cognition/dto/update-mini-cognition.dto';
-
+import { DepressionStrategy } from './depression/depression.strategy';
+import { CreateDepressionDto } from './depression/dto/create-depression.dto';
+import { UpdateDepressionDto } from './depression/dto/update-depression.dto';
 @Injectable()
 export class EvaluationService {
   @InjectRepository(Evaluation)
@@ -49,6 +51,7 @@ export class EvaluationService {
     private readonly sarcopeniaStrategy: SarcopeniaStrategy,
     private readonly avdStrategy: avdStrategy,
     private readonly balanceStrategy: BalanceStrategy,
+    private readonly depressionStrategy: DepressionStrategy,
   ) {}
 
   async create(
@@ -107,6 +110,13 @@ export class EvaluationService {
       case 'AEQ':
         return await this.balanceStrategy.create(
           data as CreateBalanceDto,
+          user,
+          type,
+          student,
+        );
+      case 'Depression':
+        return await this.depressionStrategy.create(
+          data as CreateDepressionDto,
           user,
           type,
           student,
@@ -172,15 +182,21 @@ export class EvaluationService {
         paginationParams,
         studentID,
       );
+      
+    const { evaluations: DepressionEvaluation, count: countDepressionEvaluation } =
+      await this.depressionStrategy.getAll(
+        orderBy as EvaluationOrderBy,
+        paginationParams,
+        studentID,
+      );
 
-    const {
-      evaluations: MiniCognitionEvaluation,
-      count: countMiniCognitionEvaluation,
-    } = await this.minicognitionStrategy.getAll(
-      orderBy as EvaluationOrderBy,
-      paginationParams,
-      studentID,
-    );
+    const { evaluations: MiniCognitionEvaluation, count: countMiniCognitionEvaluation } =
+      await this.minicognitionStrategy.getAll(
+        orderBy as EvaluationOrderBy,
+        paginationParams,
+        studentID,
+      );
+
 
     const amountOfEvaluations =
       countSarcopeniaEvaluation +
@@ -188,6 +204,7 @@ export class EvaluationService {
       countCardioEvaluation +
       countAvdEvaluation +
       countMiniCognitionEvaluation +
+      countDepressionEvaluation +
       countBalanceEvaluation;
 
     const meta = {
@@ -206,6 +223,7 @@ export class EvaluationService {
         ...balanceEvaluation,
         ...MiniCognitionEvaluation,
         ...avdEvaluation,
+        ...DepressionEvaluation,
       ],
     };
   }
@@ -230,6 +248,9 @@ export class EvaluationService {
         return await this.balanceStrategy.getById(id);
       case 'MiniCognition':
         return await this.minicognitionStrategy.getByID(id);
+      case 'Depression':
+        return await this.depressionStrategy.getByID(id);
+
       default:
         break;
     }
@@ -274,6 +295,12 @@ export class EvaluationService {
           type,
           data as UpdateBalanceDto,
         );
+      case 'Depression':
+          return await this.depressionStrategy.update(
+            id,
+            type,
+            data as UpdateDepressionDto,
+          );
       case 'MiniCognition':
         return await this.minicognitionStrategy.update(
           id,
