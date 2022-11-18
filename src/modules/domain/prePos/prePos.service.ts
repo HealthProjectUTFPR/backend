@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { CreatePrePosDto } from './dto/create-pre_pos.dto';
-import { UpdatePrePosDto } from './dto/update-pre_pos.dto';
-import { PrePos } from './entities/pre-pos.entity';
+import { CreatePrePosDto } from './dto/create-prePos.dto';
+import { UpdatePrePosDto } from './dto/update-prePos.dto';
+import { PrePos } from './entities/prePos.entity';
 
 @Injectable()
 export class PrePosService {

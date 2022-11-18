@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { PrePos } from './entities/pre-pos.entity';
-import { PrePosController } from './pre-pos.controller';
-import { PrePosService } from './pre-pos.service';
+import { PrePos } from './entities/prePos.entity';
+import { PrePosController } from './prePos.controller';
+import { PrePosService } from './prePos.service';
 
 @Module({
   imports: [TypeOrmModule.forFeature([PrePos])],

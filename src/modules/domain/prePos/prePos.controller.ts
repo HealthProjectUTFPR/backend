@@ -10,8 +10,8 @@ import {
 } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/modules/infrastructure/auth/auth.guard';
 import { PrePosService } from './pre-pos.service';
-import { CreatePrePosDto } from './dto/create-pre_pos.dto';
-import { UpdatePrePosDto } from './dto/update-pre_pos.dto';
+import { CreatePrePosDto } from './dto/create-prePos.dto';
+import { UpdatePrePosDto } from './dto/update-prePos.dto';
 
 @Controller('prepos')
 @UseGuards(JwtAuthGuard)
