@@ -10,13 +10,13 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/modules/infrastructure/auth/auth.guard';
-import { PrePosService } from './pre-pos.service';
-import { CreatePrePosDto } from './dto/create-pre_pos.dto';
-import { UpdatePrePosDto } from './dto/update-pre_pos.dto';
+import { PrePosService } from './prePos.service';
+import { CreatePrePosDto } from './dto/createPrePos.dto';
+import { UpdatePrePosDto } from './dto/updatePrePos.dto';
 import { AuthUser } from 'src/common/decorators/auth-user.decorator';
 import { User } from 'src/modules/infrastructure/user/entities/user.entity';
 import { JoiPipe } from 'nestjs-joi';
-import { PrePos } from './entities/pre-pos.entity';
+import { PrePos } from './entities/prePos.entity';
 import { StringSchema } from 'joi';
 import { Pagination } from 'src/common/decorators/pagination.decorator';
 import { PaginationParams } from 'src/common/interfaces/pagination.interface';
@@ -45,6 +45,17 @@ export class PrePosController {
   ): Promise<PaginationResponseDto<PrePos>>{ 
     return new PaginationResponseDto<PrePos>(
       await this.prePosService.findAll(paginationParams,user),
+    );
+  }
+
+  @Get('student/:studentId')
+  async findBystudent(
+    @AuthUser() user: User,
+    @Param('studentId') studentId: string,
+    @Pagination() paginationParams: PaginationParams,
+  ): Promise<PaginationResponseDto<PrePos>>{ 
+    return new PaginationResponseDto<PrePos>(
+      await this.prePosService.findBystudent(paginationParams,studentId,user),
     );
   }
 

@@ -4,9 +4,9 @@ import { PaginationParams, PaginationResult } from 'src/common/interfaces/pagina
 import { Repository } from 'typeorm';
 import { User } from 'src/modules/infrastructure/user/entities/user.entity';
 import { Student } from '../student/entities/student.entity';
-import { CreatePrePosDto } from './dto/create-pre_pos.dto';
-import { UpdatePrePosDto } from './dto/update-pre_pos.dto';
-import { PrePos } from './entities/pre-pos.entity';
+import { CreatePrePosDto } from './dto/createPrePos.dto';
+import { UpdatePrePosDto } from './dto/updatePrePos.dto';
+import { PrePos } from './entities/prePos.entity';
 
 @Injectable()
 export class PrePosService {
@@ -30,25 +30,52 @@ export class PrePosService {
   async findAll(
     paginationParams: PaginationParams,
     user: User,
-  ): Promise<PaginationResult<PrePos>> {
-    const prepos = await this.prePosRepository.findAndCount({
-      where: {createdBy: {id: user.id}},
-      skip: (paginationParams.page -1) * paginationParams.limit,
-      take: paginationParams.limit,
-      relations: ['student'],
-    });
+    ): Promise<PaginationResult<PrePos>> {
+      const prepos = await this.prePosRepository.findAndCount({
+        where: {createdBy: {id: user.id}},
+        skip: (paginationParams.page -1) * paginationParams.limit,
+        take: paginationParams.limit,
+        relations: ['student'],
+      });
 
-    const meta = {
-      itemsPerPage: +paginationParams.limit,
-      totalItems: +prepos[1],
-      currentPage: +paginationParams.page,
-      totalPages: +Math.ceil(prepos[1] / paginationParams.limit),
-    };
+      const meta = {
+        itemsPerPage: +paginationParams.limit,
+        totalItems: +prepos[1],
+        currentPage: +paginationParams.page,
+        totalPages: +Math.ceil(prepos[1] / paginationParams.limit),
+      };
 
-    return {
-      data: prepos[0],
-      meta: meta,
-    };
+      return {
+        data: prepos[0],
+        meta: meta,
+      };
+  }
+
+  async findBystudent(
+    paginationParams: PaginationParams,
+    studenId: string,
+    user: User,
+    ): Promise<PaginationResult<PrePos>> {
+      const prepos = await this.prePosRepository.findAndCount({
+        where: {createdBy: {id: user.id},
+                student: {id:studenId }},
+        skip: (paginationParams.page -1) * paginationParams.limit,
+        take: paginationParams.limit,
+        relations: ['createdBy', 'student'],
+      });
+
+      const meta = {
+        itemsPerPage: +paginationParams.limit,
+        totalItems: +prepos[1],
+        currentPage: +paginationParams.page,
+        totalPages: +Math.ceil(prepos[1] / paginationParams.limit),
+      };
+
+      return {
+        data: prepos[0],
+        meta: meta,
+      };
+
   }
 
   async findOne(id: string,

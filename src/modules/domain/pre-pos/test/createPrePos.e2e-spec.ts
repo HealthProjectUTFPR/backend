@@ -3,7 +3,7 @@ import { Test } from '@nestjs/testing';
 import { AuthModule } from 'src/modules/infrastructure/auth/auth.module';
 import { DatabaseTestModule } from 'src/modules/infrastructure/database/database-test.module';
 import * as request from 'supertest';
-import { PrePosModule } from '../pre-pos.module';
+import { PrePosModule } from '../prePos.module';
 
 let app: INestApplication;
 let appRequest: request.SuperTest<request.Test>;

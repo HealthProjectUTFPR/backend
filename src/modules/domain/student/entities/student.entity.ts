@@ -3,7 +3,7 @@ import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 import { User } from 'src/modules/infrastructure/user/entities/user.entity';
 import { Evaluation } from '../../evaluations/entities/evaluation.entity';
 import { Exclude } from 'class-transformer';
-import { PrePos } from '../../pre-pos/entities/pre-pos.entity';
+import { PrePos } from '../../pre-pos/entities/prePos.entity';
 
 @Entity()
 export class Student extends BaseEntity {
