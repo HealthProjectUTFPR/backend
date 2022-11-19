@@ -34,7 +34,6 @@ export class FunctionalBatteryStrategy {
         private readonly functionalBatteryFactory: FunctionalBatteryFactory,
     ) {}
 
-
     async create(
         input: CreateFunctionalBatteryDto,
         user: User,
@@ -100,7 +99,7 @@ export class FunctionalBatteryStrategy {
         input: UpdateFunctionalBatteryDto,
       ): Promise<GetFunctionalBatteryDto> {
         const validation = functionalBatterySchema.validate(input);
-    
+  
         const evaluation = await this.evaluationRepository.findOne({
           where: {
             id,
@@ -127,8 +126,6 @@ export class FunctionalBatteryStrategy {
           reachTheBackResult, reachTheBackPercent, reachTheBackClassification,
           result, } = input;
 
-
-    
         const newData: UpdateFunctionalBatteryDto = {
           date,
           sitAndDownResult,
