@@ -9,15 +9,15 @@ export class CreateFunctionalBatteryDto {
 
     @ApiProperty()
     @JoiSchema(Joi.number().required())
-    sitGetUpResult: number;
+    sitAndDownResult: number;
 
     @ApiProperty()
     @JoiSchema(Joi.number().required())
-    sitGetUpPercent: number;
+    sitAndDownPercent: number;
 
     @ApiProperty()
     @JoiSchema(Joi.string().required())
-    sitGetUpClassification: string;
+    sitAndDownClassification: string;
 
     @ApiProperty()
     @JoiSchema(Joi.number().required())
@@ -33,51 +33,51 @@ export class CreateFunctionalBatteryDto {
 
     @ApiProperty()
     @JoiSchema(Joi.number().required())
-    stationaryMarchResult: number;
+    marchWouldParkResult: number;
 
     @ApiProperty()
     @JoiSchema(Joi.number().required())
-    stationaryMarchPercent: number;
+    marchWouldParkPercent: number;
 
     @ApiProperty()
     @JoiSchema(Joi.string().required())
-    stationaryMarchClassification: string;
+    marchWouldParkClassification: string;
 
     @ApiProperty()
     @JoiSchema(Joi.number().required())
-    sitFeetResult: number;
+    sitAndReachYourFeetResult: number;
 
     @ApiProperty()
     @JoiSchema(Joi.number().required())
-    sitFeetPercent: number;
+    sitAndReachYourFeetPercent: number;
 
     @ApiProperty()
     @JoiSchema(Joi.string().required())
-    sitFeetClassification: string;
-
-    @ApiProperty()
-    @JoiSchema(Joi.number().required())
-    TUGResult: number;
-
-    @ApiProperty()
-    @JoiSchema(Joi.number().required())
-    TUGPercent: number;
-
-    @ApiProperty()
-    @JoiSchema(Joi.string().required())
-    TUGClassification: string;
+    sitAndReachYourFeetClassification: string;
     
     @ApiProperty()
     @JoiSchema(Joi.number().required())
-    getBackResult: number;
+    reachTheBackResult: number;
 
     @ApiProperty()
     @JoiSchema(Joi.number().required())
-    getBackPercent: number;
+    reachTheBackPercent: number;
 
     @ApiProperty()
     @JoiSchema(Joi.string().required())
-    getBackClassification: string;
+    reachTheBackClassification: string;
+
+    @ApiProperty()
+    @JoiSchema(Joi.number().required())
+    tugResult: number;
+
+    @ApiProperty()
+    @JoiSchema(Joi.number().required())
+    tugPercent: number;
+
+    @ApiProperty()
+    @JoiSchema(Joi.string().required())
+    tugClassification: string;
 
     @ApiProperty()
     @JoiSchema(Joi.string().required())

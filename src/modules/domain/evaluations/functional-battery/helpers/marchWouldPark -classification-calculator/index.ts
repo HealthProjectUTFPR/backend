@@ -1,13 +1,13 @@
 import {IFunctionalBattery} from '../../interface/functional-battery.interface';
 
-export const calculateGetBackClassification = ({
-    getBackPercent,
+export const calculateMarchWouldParkClassification = ({
+    marchWouldParkPercent,
 }:Partial<IFunctionalBattery>) => {
-    if(getBackPercent > 70){
+    if(marchWouldParkPercent > 70){
         return 'ÓTIMO'
-    } else if (getBackPercent > 54 ){
+    } else if (marchWouldParkPercent > 54 ){
         return 'BOM'
-    } else if (getBackPercent > 29){
+    } else if (marchWouldParkPercent > 29){
         return 'REGULAR';
     } else {
             return 'RUIM';

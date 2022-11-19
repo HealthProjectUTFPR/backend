@@ -3,22 +3,22 @@ export interface IFunctionalBattery {
     age: number;
 
     date: Date;
-    sitGetUpResult: number;
-    sitGetUpPercent: number;
-    sitGetUpClassification: string;
+    sitAndDownResult: number;
+    sitAndDownPercent: number;
+    sitAndDownClassification: string;
     elbowFlexionResult: number;
     elbowFlexionPercent: number;
     elbowFlexionClassification: string;
-    stationaryMarchResult: number;
-    stationaryMarchPercent: number;
-    stationaryMarchClassification: string;
-    sitFeetResult: number;
-    sitFeetPercent: number;
-    sitFeetClassification: string;
-    TUGResult: number;
-    TUGPercent: number;
-    TUGClassification: string;
-    getBackResult: number;
-    getBackPercent: number;
-    getBackClassification: string;
+    marchWouldParkResult: number;
+    marchWouldParkPercent: number;
+    marchWouldParkClassification: string;
+    sitAndReachYourFeetResult: number;
+    sitAndReachYourFeetPercent: number;
+    sitAndReachYourFeetClassification: string;
+    reachTheBackResult: number;
+    reachTheBackPercent: number;
+    reachTheBackClassification: string;
+    tugResult: number;
+    tugPercent: number;
+    tugClassification: string;
 }

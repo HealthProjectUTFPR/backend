@@ -1,13 +1,13 @@
 import {IFunctionalBattery} from '../../interface/functional-battery.interface';
 
-export const calculateSitGetUpClassification = ({
-    sitGetUpPercent,
+export const calculateSitAndReachYourFeetClassification = ({
+    sitAndReachYourFeetPercent,
 }:Partial<IFunctionalBattery>) => {
-    if(sitGetUpPercent > 70){
+    if(sitAndReachYourFeetPercent > 70){
         return 'ÓTIMO'
-    } else if (sitGetUpPercent > 54 ){
+    } else if (sitAndReachYourFeetPercent > 54 ){
         return 'BOM'
-    } else if (sitGetUpPercent > 29){
+    } else if (sitAndReachYourFeetPercent > 29){
         return 'REGULAR';
     } else {
             return 'RUIM';

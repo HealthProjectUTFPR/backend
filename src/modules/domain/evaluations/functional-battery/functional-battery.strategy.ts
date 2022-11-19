@@ -18,11 +18,11 @@ import {
   import {GetAllFunctionalBatteryDto} from './dto/get-all-functional-battery.dto';
   import { UpdateFunctionalBatteryDto} from './dto/update-functional-battery.dto';
   import { calculatePercentElbowFlexion } from './helpers/elbowFlexion-calculate';
-  import { calculatePercentSitFeet } from './helpers/sitFeet-calculate';
+  import { calculatePercentSitAndReachYourFeet } from './helpers/sitAndReachYourFeet-calculate';
   import { calculatePercentTug } from './helpers/tug-calculate';
-  import { calculatePercentSitGetUp } from './helpers/SitGetUp-calculate';
-  import { calculatePercentGetBack } from './helpers/getBack-calculate';
-  import {calculatePercentStationaryMarch} from './helpers/stationaryMarch-calculate';
+  import { calculatePercentSitAndDown } from './helpers/sitAndDown-calculate';
+  import { calculatePercentReachTheBack } from './helpers/reachTheBack-calculate';
+  import {calculatePercentMarchWouldPark} from './helpers/marchWouldPark-calculate';
   import { IFunctionalBattery } from './interface/functional-battery.interface';
 
 @Injectable()
@@ -34,27 +34,6 @@ export class FunctionalBatteryStrategy {
         private readonly functionalBatteryFactory: FunctionalBatteryFactory,
     ) {}
 
-    // private recalculateResult({
-    //     age,
-    //     sex,
-    //     TUG,
-    //     sitFeet,
-    //     getBack,
-    //     sitGetUp,
-    //     stationaryMarch,
-    //     elbowFlexion,
-    // }:Partial<IFunctionalBattery>){
-    //     const percentTUG = calculatePercentTug({age,sex,TUG});
-    //     const percentSitFeet = calculatePercentSitFeet ({age,sex,sitFeet});
-    //     const percentSitGetUp = calculatePercentSitGetUp({age,sex,sitGetUp});
-    //     const percentGetBack = calculatePercentGetBack({age,sex,getBack});
-    //     const percentStationaryMarch = calculatePercentStationaryMarch({age,sex,stationaryMarch});
-    //     const percentElbowFlexion = calculatePercentElbowFlexion({age,sex,elbowFlexion});
-
-    //     if (percentTUG > 70) {
-
-    //     }
-    // } da pra tentar validar um por um
 
     async create(
         input: CreateFunctionalBatteryDto,
@@ -74,51 +53,37 @@ export class FunctionalBatteryStrategy {
         const age = dayjs(new Date()).diff(birthDate, 'year');
     
         const { date,
-                sitGetUpResult, sitGetUpPercent, sitGetUpClassification, 
+                sitAndDownResult, sitAndDownPercent, sitAndDownClassification, 
                 elbowFlexionResult, elbowFlexionPercent, elbowFlexionClassification,
-                stationaryMarchResult, stationaryMarchPercent, stationaryMarchClassification,
-                sitFeetResult, sitFeetPercent, sitFeetClassification,
-                TUGResult, TUGPercent, TUGClassification, 
-                getBackResult, getBackPercent, getBackClassification,
+                marchWouldParkResult, marchWouldParkPercent, marchWouldParkClassification,
+                sitAndReachYourFeetResult, sitAndReachYourFeetPercent, sitAndReachYourFeetClassification,
+                tugResult, tugPercent, tugClassification, 
+                reachTheBackResult, reachTheBackPercent, reachTheBackClassification,
                 result, } = input;
     
-        // const isResultValid = this.validateResult(result, {
-        //     //     age,
-        //     //     sex,
-        //     //     TUG,
-        //     //     sitFeet,
-        //     //     getBack,
-        //     //     sitGetUp,
-        //     //     stationaryMarch,
-        //     //     elbowFlexion,
-        // });
-    
-        // if (!isResultValid)
-        //   throw new BadRequestException(
-        //     'Resultado inválido',
-        //   );
+
     
         const data: CreateFunctionalBatteryDto = {
           date,
-          sitGetUpResult,
-          sitGetUpPercent,
-          sitGetUpClassification,
-          sitFeetResult,
-          sitFeetPercent,
-          sitFeetClassification,
+          sitAndDownResult,
+          sitAndDownPercent,
+          sitAndDownClassification,
+          sitAndReachYourFeetResult,
+          sitAndReachYourFeetPercent,
+          sitAndReachYourFeetClassification,
           elbowFlexionResult,
           elbowFlexionPercent,
           elbowFlexionClassification,
-          stationaryMarchResult,
-          stationaryMarchPercent,
-          stationaryMarchClassification,
-          TUGResult,
-          TUGPercent,
-          TUGClassification,
+          marchWouldParkResult,
+          marchWouldParkPercent,
+          marchWouldParkClassification,
+          tugResult,
+          tugPercent,
+          tugClassification,
           result,
-          getBackResult,
-          getBackPercent,
-          getBackClassification,
+          reachTheBackResult,
+          reachTheBackPercent,
+          reachTheBackClassification,
         };
     
         return await this.functionalBatteryFactory.create(
@@ -135,10 +100,6 @@ export class FunctionalBatteryStrategy {
         input: UpdateFunctionalBatteryDto,
       ): Promise<GetFunctionalBatteryDto> {
         const validation = functionalBatterySchema.validate(input);
-    
-        // if (validation?.error) {
-        //   throw new BadRequestException(validation.error.message);
-        // }
     
         const evaluation = await this.evaluationRepository.findOne({
           where: {
@@ -158,48 +119,37 @@ export class FunctionalBatteryStrategy {
         const age = dayjs(new Date()).diff(birthDate, 'year');
     
         const { date,
-          sitGetUpResult, sitGetUpPercent, sitGetUpClassification, 
+          sitAndDownResult, sitAndDownPercent, sitAndDownClassification, 
           elbowFlexionResult, elbowFlexionPercent, elbowFlexionClassification,
-          stationaryMarchResult, stationaryMarchPercent, stationaryMarchClassification,
-          sitFeetResult, sitFeetPercent, sitFeetClassification,
-          TUGResult, TUGPercent, TUGClassification, 
-          getBackResult, getBackPercent, getBackClassification,
+          marchWouldParkResult, marchWouldParkPercent, marchWouldParkClassification,
+          sitAndReachYourFeetResult, sitAndReachYourFeetPercent, sitAndReachYourFeetClassification,
+          tugResult, tugPercent, tugClassification, 
+          reachTheBackResult, reachTheBackPercent, reachTheBackClassification,
           result, } = input;
-    
-        // const isResultValid = this.validateResult(result, {
-        //   weight,
-        //   finalFC,
-        //   time,
-        //   age,
-        //   sex,
-        // });
-    
-        // if (!isResultValid)
-        //   throw new BadRequestException(
-        //     'Resultado inválido de acordo com os dados repassados',
-        //   );
+
+
     
         const newData: UpdateFunctionalBatteryDto = {
           date,
-          sitGetUpResult,
-          sitGetUpPercent,
-          sitGetUpClassification,
-          sitFeetResult,
-          sitFeetPercent,
-          sitFeetClassification,
+          sitAndDownResult,
+          sitAndDownPercent,
+          sitAndDownClassification,
+          sitAndReachYourFeetResult,
+          sitAndReachYourFeetPercent,
+          sitAndReachYourFeetClassification,
           elbowFlexionResult,
           elbowFlexionPercent,
           elbowFlexionClassification,
-          stationaryMarchResult,
-          stationaryMarchPercent,
-          stationaryMarchClassification,
-          TUGResult,
-          TUGPercent,
-          TUGClassification,
+          marchWouldParkResult,
+          marchWouldParkPercent,
+          marchWouldParkClassification,
+          tugResult,
+          tugPercent,
+          tugClassification,
           result,
-          getBackResult,
-          getBackPercent,
-          getBackClassification,
+          reachTheBackResult,
+          reachTheBackPercent,
+          reachTheBackClassification,
         };
     
         return await this.functionalBatteryFactory.update(
