@@ -67,7 +67,7 @@ export class CardiorespiratoryCapacityStrategy {
 
     const { sex: studentSex, birthDate } = student;
 
-    const sex = studentSex === 'H' ? 'Homem' : 'Mulher';
+    const sex = studentSex === 'M' ? 'Masculino' : 'Feminino';
     const age = dayjs(new Date()).diff(birthDate, 'year');
 
     const { date, weight, time, finalFC, vo2Lmin, vo2MlKG, result } = input;
@@ -128,7 +128,7 @@ export class CardiorespiratoryCapacityStrategy {
 
     const { sex: studentSex, birthDate } = evaluation.student;
 
-    const sex = studentSex === 'H' ? 'Homem' : 'Mulher';
+    const sex = studentSex === 'M' ? 'Masculino' : 'Feminino';
     const age = dayjs(new Date()).diff(birthDate, 'year');
 
     const { date, weight, time, finalFC, vo2Lmin, vo2MlKG, result } = input;
