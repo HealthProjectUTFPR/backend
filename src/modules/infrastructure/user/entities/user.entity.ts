@@ -1,6 +1,6 @@
 import { BaseEntity } from 'src/common/entities/base.entity';
 import { generateHash } from 'src/common/utils/hash.util';
-import { PrePos } from 'src/modules/domain/pre-pos/entities/prePos.entity';
+import { PrePos } from 'src/modules/domain/prePos/entities/prePos.entity';
 import { Student } from 'src/modules/domain/student/entities/student.entity';
 import { Evaluation } from 'src/modules/domain/evaluations/entities/evaluation.entity';
 import { BeforeInsert, BeforeUpdate, Column, Entity, OneToMany } from 'typeorm';
