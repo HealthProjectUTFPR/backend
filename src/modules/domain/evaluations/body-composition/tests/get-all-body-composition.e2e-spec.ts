@@ -49,7 +49,7 @@ beforeAll(async () => {
   const student = await server
     .post('/student/create')
     .send({
-      name: 'Estudante',
+      name: 'Estudante Testte',
       sex: 'M',
       breed: 'Branco',
       stature: 192.5,
@@ -58,6 +58,8 @@ beforeAll(async () => {
       contact: '449994484848',
       address: 'Rua 123',
       birthDate: '1980-10-12T03:00:00.000Z',
+      weight: 97.6,
+      note: 'sdfasd',
       flag: true,
     })
     .set('Authorization', `Bearer ${token}`);
