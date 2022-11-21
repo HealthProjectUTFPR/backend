@@ -4,6 +4,10 @@ import { JoiSchema } from 'nestjs-joi';
 
 export class CreateMiniCognitionDto {
   @ApiProperty()
+  @JoiSchema(Joi.date().required())
+  date: Date;
+
+  @ApiProperty()
   @JoiSchema(Joi.number().required())
   scholarity: number;
 

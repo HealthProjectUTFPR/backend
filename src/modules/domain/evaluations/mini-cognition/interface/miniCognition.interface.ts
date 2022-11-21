@@ -1,4 +1,5 @@
 export interface IMiniCognition {
+  date: Date;
   scholarity: number;
   checked1_1: boolean;
   checked1_2: boolean;

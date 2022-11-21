@@ -1,6 +1,7 @@
 import Joi from 'joi';
 
 export const MiniCognitionSchema = Joi.object({
+  date: Joi.date().required(),
   scholarity: Joi.number().required(),
   checked1_1: Joi.boolean().required(),
   checked1_2: Joi.boolean().required(),

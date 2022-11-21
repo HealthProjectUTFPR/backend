@@ -15,6 +15,7 @@ let testdata: object;
 
 beforeAll(async () => {
   testdata = {
+    date: '2022-10-12T03:00:00.000Z',
     scholarity: 1,
     checked1_1: true,
     checked1_2: false,
