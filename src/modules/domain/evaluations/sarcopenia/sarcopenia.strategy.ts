@@ -67,14 +67,14 @@ export class SarcopeniaStrategy {
       });
     }
 
-    // TODO console.log(muscleMassIndex)
-
+    console.log("muscleMassIndex: ", muscleMassIndex);
     const classifiedResult = classifyResult({
       walkingSpeed,
       handGripStrength,
       muscleMassIndex,
       sex,
     });
+    console.log("classifiedResult: ",classifiedResult)
 
     return classifiedResult;
   }
