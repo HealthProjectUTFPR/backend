@@ -5,8 +5,7 @@ const calculateIndexOfMeasuredMuscleMassPerStature = ({
   height,
 }: Partial<ISarcopenia>) => {
   if (!height) return 0;
-
-  return measuredMuscleMass / height ** 2;
+  return measuredMuscleMass / (height ** 2);
 };
 
 export default calculateIndexOfMeasuredMuscleMassPerStature;
