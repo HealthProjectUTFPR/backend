@@ -32,9 +32,6 @@ export class UpdateStudentDto {
   @JoiSchema(['UPDATE'], Joi.date().optional())
   birthDate: Date;
 
-  @JoiSchema(['CREATE'], Joi.number().optional())
-  weight: number;
-
   @JoiSchema(['CREATE'], Joi.string().optional())
   note: string;
 
