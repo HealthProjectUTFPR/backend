@@ -86,7 +86,7 @@ export class BodyCompositionStrategy {
     });
 
     if (
-      recalculatedResult.rcq !== rcq &&
+      recalculatedResult.rcq !== rcq ||
       recalculatedResult.waistCircumference !== waistCircumference
     ) {
       return false;
