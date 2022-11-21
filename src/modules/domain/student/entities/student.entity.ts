@@ -20,9 +20,6 @@ export class Student extends BaseEntity {
   @Column({ type: 'real' })
   stature: number;
 
-  @Column({ type: 'real' })
-  weight: number;
-
   @Column()
   contact: string;
 
