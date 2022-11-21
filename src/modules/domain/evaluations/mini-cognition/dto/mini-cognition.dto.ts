@@ -37,7 +37,7 @@ export const MiniCognitionSchema = Joi.object({
   checked10_1: Joi.boolean().required(),
   checked11_1: Joi.boolean().required(),
   checked12_1: Joi.boolean().required(),
-  result: Joi.string().required()
+  result: Joi.string().required(),
 }).options({
   abortEarly: false,
 });

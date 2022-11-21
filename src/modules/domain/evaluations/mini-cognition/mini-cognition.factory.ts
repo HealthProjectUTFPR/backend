@@ -12,7 +12,7 @@ import { PaginationParams } from 'src/common/interfaces/pagination.interface';
 import { EvaluationOrderBy } from '../enums/order-by.enum';
 import { CreateMiniCognitionDto } from './dto/create-mini-cognition.dto';
 import { GetMiniCognitionDto } from './dto/get-mini-cognition.dto';
-import { IMiniCognition } from './interface/miniCognition.interface'
+import { IMiniCognition } from './interface/miniCognition.interface';
 
 dayjs.extend(customParseFormat);
 
@@ -24,12 +24,10 @@ export class MiniCognitionFactory {
   @InjectRepository(Field)
   private readonly fieldRepository: Repository<Field>;
 
-  private parseFieldsToCorrectType(
-    data: Evaluation,
-  ): GetMiniCognitionDto{
+  private parseFieldsToCorrectType(data: Evaluation): GetMiniCognitionDto {
     const { id, name, createdAt, updatedAt, result, deletedAt, fields } = data;
-    
-    let parsedFields: Partial<IMiniCognition> = {};
+
+    const parsedFields: Partial<IMiniCognition> = {};
     fields.forEach(({ name, value, dataType }) => {
       parsedFields[name] = parseType(dataType, value);
     });
@@ -41,7 +39,7 @@ export class MiniCognitionFactory {
       createdAt,
       updatedAt,
       deletedAt,
-      ...parsedFields as CreateMiniCognitionDto,
+      ...(parsedFields as CreateMiniCognitionDto),
     };
 
     return returnedValues;
@@ -59,8 +57,9 @@ export class MiniCognitionFactory {
     Object.entries(rest).forEach(([key, value]) => {
       let ftype: string = typeof value;
       if (ftype === 'number') ftype = Number.isInteger(value) ? 'int' : 'float';
-      else if (ftype === 'string') ftype = dayjs(value.toString()).isValid() ? 'date' : 'string';
-      
+      else if (ftype === 'string')
+        ftype = dayjs(value.toString()).isValid() ? 'date' : 'string';
+
       inputs.push({
         name: key,
         value: String(value),
@@ -88,36 +87,36 @@ export class MiniCognitionFactory {
       }),
     );
 
-    evaluation.fields = fields; 
-    const { id } = evaluation;
+    evaluation.fields = fields;
 
     await evaluation.save();
-    
+
     return this.parseFieldsToCorrectType(evaluation);
   }
 
   async update(
-    id: string, 
+    id: string,
     type: string,
     input: CreateMiniCognitionDto,
     evaluation: Evaluation,
   ): Promise<GetMiniCognitionDto> {
-    const { result , ...rest } = input;
+    const { result, ...rest } = input;
     const { fields } = evaluation;
 
     const arrayOfFields = [];
     Object.entries(rest).forEach(([key, value]) => {
       let type: string = typeof value;
       if (type === 'number') type = Number.isInteger(value) ? 'int' : 'float';
-      else if (type === 'string') type = dayjs(value.toString()).isValid() ? 'date' : 'string';
-      
+      else if (type === 'string')
+        type = dayjs(value.toString()).isValid() ? 'date' : 'string';
+
       arrayOfFields.push({
         name: key,
         value: String(value),
         dataType: type,
       });
     });
-    
+
     await Promise.all(
       arrayOfFields.map((field, idx) => {
         const newField: Field = fields[idx];
@@ -134,7 +133,7 @@ export class MiniCognitionFactory {
     evaluation.result = result.toString();
 
     evaluation.save();
-    
+
     return this.parseFieldsToCorrectType(evaluation);
   }
 
@@ -161,21 +160,18 @@ export class MiniCognitionFactory {
       },
     });
 
-    const parsedEvaluations: GetMiniCognitionDto[] = 
-      evaluation.map((item) => {
-        let field = {};
-        item.fields.forEach(({ name, value, dataType }) => {
-          field[name] = parseType(dataType, value);
-        });
-        field['result'] = item.result;
-        return field as GetMiniCognitionDto;
+    const parsedEvaluations: GetMiniCognitionDto[] = evaluation.map((item) => {
+      const field = {};
+      item.fields.forEach(({ name, value, dataType }) => {
+        field[name] = parseType(dataType, value);
       });
+      field['result'] = item.result;
+      return field as GetMiniCognitionDto;
+    });
     return parsedEvaluations;
   }
 
-  async getOne(
-    evaluation: Evaluation,
-  ): Promise<GetMiniCognitionDto> {
+  async getOne(evaluation: Evaluation): Promise<GetMiniCognitionDto> {
     return this.parseFieldsToCorrectType(evaluation);
   }
 }

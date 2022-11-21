@@ -11,7 +11,7 @@ let app: INestApplication;
 let server: request.SuperTest<request.Test>;
 let token: string;
 let studentId: string;
-let testdata: Object;
+let testdata: object;
 
 beforeAll(async () => {
   testdata = {
