@@ -11,7 +11,7 @@ export const calculateVO2LMin = ({
     return 0;
   }
 
-  const sexWeight = sex === 'Homem' ? 1 : 0;
+  const sexWeight = sex === 'Masculino' ? 1 : 0;
 
   const result =
     6.952 +

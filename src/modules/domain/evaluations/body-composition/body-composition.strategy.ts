@@ -109,7 +109,7 @@ export class BodyCompositionStrategy {
 
     const { sex: studentSex, stature: height } = student;
 
-    const sex = studentSex === 'M' ? 'Homem' : 'Mulher';
+    const sex = studentSex === 'M' ? 'Masculino' : 'Feminino';
 
     const {
       date,
@@ -200,7 +200,7 @@ export class BodyCompositionStrategy {
 
     const { sex: studentSex, stature: height } = evaluation.student;
 
-    const sex = studentSex === 'M' ? 'Homem' : 'Mulher';
+    const sex = studentSex === 'M' ? 'Masculino' : 'Feminino';
 
     const {
       date,
