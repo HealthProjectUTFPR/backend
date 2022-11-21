@@ -132,7 +132,7 @@ export class FragilityStrategy {
   ): Promise<GetFragilityDTO> {
     const { sex: studentSex, stature } = student;
 
-    const sex = studentSex === 'H' ? 'Homem' : 'Mulher';
+    const sex = studentSex === 'M' ? 'Masculino' : 'Feminino';
 
     const {
       date,
@@ -244,7 +244,7 @@ export class FragilityStrategy {
 
     const { sex: studentSex, stature } = evaluation.student;
 
-    const sex = studentSex === 'H' ? 'Homem' : 'Mulher';
+    const sex = studentSex === 'M' ? 'Masculino' : 'Feminino';
 
     const {
       date,
