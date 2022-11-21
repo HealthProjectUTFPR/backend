@@ -12,9 +12,49 @@ let server: request.SuperTest<request.Test>;
 let token: string;
 let id: string;
 let studentId: string;
+let testdata: Object;
 
 beforeAll(async () => {
-  const module = await Test.createTestingModule({
+    testdata = {
+      scholarity: 1,
+      checked1_1: true,
+      checked1_2: false,
+      checked1_3: true,
+      checked1_4: false,
+      checked1_5: true,
+      checked2_1: true,
+      checked2_2: false,
+      checked2_3: true,
+      checked2_4: false,
+      checked2_5: true,
+      checked3_1: false,
+      checked3_2: true,
+      checked3_3: false,
+      checked4_1: true,
+      checked4_2: false,
+      checked4_3: true,
+      checked4_4: false,
+      checked4_5: true,
+      checked5_1: false,
+      checked5_2: true,
+      checked5_3: false,
+      checked5_4: true,
+      checked5_5: false,
+      checked6_1: true,
+      checked6_2: false,
+      checked6_3: true,
+      checked7_1: false,
+      checked7_2: true,
+      checked8_1: false,
+      checked9_1: true,
+      checked9_2: false,
+      checked9_3: true,
+      checked10_1: false,
+      checked11_1: true,
+      checked12_1: false,
+      result: 'Possui um declínio cognitivo.',
+    };
+    const module = await Test.createTestingModule({
     imports: [
       EvaluationModule,
       UserModule,
@@ -70,48 +110,20 @@ afterAll(async () => {
   await app.close();
 });
 
-describe('Buscar avaliação Cardiorespiratória', () => {
-  it(`/:id?type=ACR (GET) deve receber erro ao buscar id inválido`, async () => {
-    id = 'aca8e3cd-2c41-4b7e-9e1f-f3d8206064a';
-
-    return await server
-      .get(`/evaluation/${id}?type=ACR`)
-      .set('Authorization', `Bearer ${token}`)
-      .expect(400);
-  });
-
-  it(`/:id?type=ACR (GET) deve receber erro ao buscar id válido porém inexistente`, async () => {
-    id = 'a9cd5ca1-6bba-46a9-ad3e-f7f4bde8eb8f';
-
-    const teste = await server
-      .get(`/evaluation/${id}?type=ACR`)
-      .set('Authorization', `Bearer ${token}`)
-      .expect(404);
-
-    return teste;
-  });
-
-  it(`/:id?type=ACR (GET) deve retornar sucesso ao buscar id válido`, async () => {
+describe('Buscar avaliação mini cognição', () => {
+  it(`/:id?type=MiniCognition (GET) deve retornar sucesso ao buscar id válido`, async () => {
     const response = await server
       .post(`/evaluation/${studentId}`)
       .send({
-        type: 'ACR',
-        data: {
-          weight: 75,
-          time: 10,
-          date: '2022-10-12T03:00:00.000Z',
-          finalFC: 150,
-          vo2Lmin: 3.733740000000001,
-          vo2MlKG: 46.67175000000002,
-          result: 'Muito bom!',
-        },
+        type: 'MiniCognition',
+        data: testdata,
       })
       .set('Authorization', `Bearer ${token}`);
 
     id = response.body.id;
 
     return await server
-      .get(`/evaluation/${id}?type=ACR`)
+      .get(`/evaluation/${id}?type=MiniCognition`)
       .set('Authorization', `Bearer ${token}`)
       .expect(200);
   });

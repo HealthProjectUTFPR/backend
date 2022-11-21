@@ -33,6 +33,12 @@ import { CreateSarcopeniaDTO } from './sarcopenia/dto/create-sarcopenia.dto';
 import { UpdateSarcopeniaDTO } from './sarcopenia/dto/update-sarcopenia.dto';
 import { SarcopeniaStrategy } from './sarcopenia/sarcopenia.strategy';
 import { ResponseEvaluation } from './types/response-evaluation.type';
+import { MiniCognitionStrategy } from './mini-cognition/mini-cognition.strategy';
+import { CreateMiniCognitionDto } from './mini-cognition/dto/create-mini-cognition.dto';
+import { UpdateMiniCognitionDto } from './mini-cognition/dto/update-mini-cognition.dto';
+import { DepressionStrategy } from './depression/depression.strategy';
+import { CreateDepressionDto } from './depression/dto/create-depression.dto';
+import { UpdateDepressionDto } from './depression/dto/update-depression.dto';
 
 @Injectable()
 export class EvaluationService {
@@ -45,10 +51,12 @@ export class EvaluationService {
   constructor(
     private readonly bodyCompositionStrategy: BodyCompositionStrategy,
     private readonly cardiorespiratoryCapacityStrategy: CardiorespiratoryCapacityStrategy,
+    private readonly minicognitionStrategy: MiniCognitionStrategy,
     private readonly sarcopeniaStrategy: SarcopeniaStrategy,
     private readonly avdStrategy: avdStrategy,
     private readonly balanceStrategy: BalanceStrategy,
     private readonly fragilityStrategy: FragilityStrategy,
+    private readonly depressionStrategy: DepressionStrategy,
   ) {}
 
   async create(
@@ -83,6 +91,13 @@ export class EvaluationService {
           type,
           student,
         );
+      case 'MiniCognition':
+        return await this.minicognitionStrategy.create(
+          data as CreateMiniCognitionDto,
+          user,
+          type,
+          student,
+        );
       case 'bodyComposition':
         return await this.bodyCompositionStrategy.create(
           data as CreateBodyCompositionDto,
@@ -108,6 +123,13 @@ export class EvaluationService {
       case 'fragilidade':
         return await this.fragilityStrategy.create(
           data as CreateFragilityDTO,
+          user,
+          type,
+          student,
+        );
+      case 'Depression':
+        return await this.depressionStrategy.create(
+          data as CreateDepressionDto,
           user,
           type,
           student,
@@ -175,6 +197,24 @@ export class EvaluationService {
       );
 
     const {
+      evaluations: DepressionEvaluation,
+      count: countDepressionEvaluation,
+    } = await this.depressionStrategy.getAll(
+      orderBy as EvaluationOrderBy,
+      paginationParams,
+      studentID,
+    );
+
+    const {
+      evaluations: MiniCognitionEvaluation,
+      count: countMiniCognitionEvaluation,
+    } = await this.minicognitionStrategy.getAll(
+      orderBy as EvaluationOrderBy,
+      paginationParams,
+      studentID,
+    );
+
+    const {
       evaluations: fragilityEvaluation,
       count: countFragilityEvaluation,
     } = await this.fragilityStrategy.getAll(
@@ -189,7 +229,10 @@ export class EvaluationService {
       countCardioEvaluation +
       countAvdEvaluation +
       countBalanceEvaluation +
-      countFragilityEvaluation;
+      countFragilityEvaluation +
+      countMiniCognitionEvaluation +
+      countDepressionEvaluation +
+      countBalanceEvaluation;
 
     const meta = {
       itemsPerPage: +paginationParams.limit,
@@ -205,8 +248,10 @@ export class EvaluationService {
         ...sarcopeniaEvaluation,
         ...bodyEvaluation,
         ...balanceEvaluation,
+        ...MiniCognitionEvaluation,
         ...avdEvaluation,
         ...fragilityEvaluation,
+        ...DepressionEvaluation,
       ],
     };
   }
@@ -231,6 +276,11 @@ export class EvaluationService {
         return await this.balanceStrategy.getById(id);
       case 'fragilidade':
         return await this.fragilityStrategy.getByID(id);
+      case 'MiniCognition':
+        return await this.minicognitionStrategy.getByID(id);
+      case 'Depression':
+        return await this.depressionStrategy.getByID(id);
+
       default:
         break;
     }
@@ -280,6 +330,18 @@ export class EvaluationService {
           id,
           type,
           data as UpdateFragilityDTO,
+        );
+      case 'Depression':
+        return await this.depressionStrategy.update(
+          id,
+          type,
+          data as UpdateDepressionDto,
+        );
+      case 'MiniCognition':
+        return await this.minicognitionStrategy.update(
+          id,
+          type,
+          data as UpdateMiniCognitionDto,
         );
       default:
         break;

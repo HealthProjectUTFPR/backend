@@ -49,15 +49,15 @@ beforeAll(async () => {
   const student = await server
     .post('/student/create')
     .send({
-      name: 'Estudante',
-      sex: 'H',
-      breed: 'Branco',
-      stature: 192.5,
+      name: 'Aluno',
+      sex: 'M',
+      breed: 'Pardo',
+      stature: 171.8,
       healthPlan: 'free',
-      emergencyContact: '449994484848',
-      contact: '449994484848',
-      address: 'Rua 123',
-      birthDate: '1980-10-12T03:00:00.000Z',
+      emergencyContact: '44999499994',
+      contact: '44999499994',
+      address: 'Rua Lorem Ipsum',
+      birthDate: '1960-06-12T03:00:00.000Z',
       flag: true,
     })
     .set('Authorization', `Bearer ${token}`);
@@ -69,42 +69,33 @@ afterAll(async () => {
   await app.close();
 });
 
-describe('Criar avaliações Cardiorespiratória', () => {
-  it(`/:studentId (CREATE) falha na validação do resultado`, async () => {
-    return await server
-      .post(`/evaluation/${studentId}`)
-      .send({
-        type: 'ACR',
-        data: {
-          weight: 120,
-          time: 20,
-          date: '2022-10-12T03:00:00.000Z',
-          finalFC: 150,
-          vo2Lmin: 3.733740000000001,
-          vo2MlKG: 46.67175000000002,
-          result: 'Muito bom!',
-        },
-      })
-      .set('Authorization', `Bearer ${token}`)
-      .expect(400);
-  });
-
-  it(`/:studentId (CREATE) sucesso na criação`, async () => {
-    return await server
-      .post(`/evaluation/${studentId}`)
-      .send({
-        type: 'ACR',
-        data: {
-          weight: 75,
-          time: 10,
-          date: '2022-10-12T03:00:00.000Z',
-          finalFC: 150,
-          vo2Lmin: 3.733740000000001,
-          vo2MlKG: 46.67175000000002,
-          result: 'Muito bom!',
-        },
-      })
-      .set('Authorization', `Bearer ${token}`)
-      .expect(201);
-  });
+describe('Criar avaliações de Depressão', () => {
+    it(`/:studentId (CREATE) sucesso na criação`, async () => {
+        return await server
+          .post(`/evaluation/${studentId}`)
+          .send({
+            "type": "Depression",
+            "data": {
+                "date" : "2022-11-10T03:00:00.000Z",
+                "campo1" : true,
+                "campo2" : false,
+                "campo3" : false,
+                "campo4" : false,
+                "campo5" : false,
+                "campo6" : true,
+                "campo7" : false,
+                "campo8" : false,
+                "campo9" : false,
+                "campo10" : true,
+                "campo11" : true,
+                "campo12" : false,
+                "campo13" : false,
+                "campo14" : false,
+                "campo15" : true,
+                "result" : 5
+            }
+          })
+          .set('Authorization', `Bearer ${token}`)
+          .expect(201);
+      });
 });

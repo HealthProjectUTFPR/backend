@@ -50,7 +50,7 @@ beforeAll(async () => {
     .post('/student/create')
     .send({
       name: 'EstudanteTeste',
-      sex: 'M',
+      sex: 'H',
       breed: 'Amarelo',
       stature: 179.3,
       healthPlan: 'free',
@@ -69,24 +69,24 @@ afterAll(async () => {
   await app.close();
 });
 
-describe('Criar avaliações de AVD', () => { 
-    it(`/:studentId (CREATE) sucesso na criação`, async () => {
-      return await server
-        .post(`/evaluation/${studentId}`)
-        .send({
-            "type": "AVD",
-            "data": {
-                "date" : "2022-11-08T04:00:00.000Z",
-                "bath" : 0,
-                "dress" : 0,
-                "bathroom" : 0,
-                "transfer" : 0,
-                "salute" : 0,
-                "feeding" : 0,
-                "result" : 6
-            }
-        })
-        .set('Authorization', `Bearer ${token}`)
-        .expect(201);
-    });
+describe('Criar avaliações de AVD', () => {
+  it(`/:studentId (CREATE) sucesso na criação`, async () => {
+    return await server
+      .post(`/evaluation/${studentId}`)
+      .send({
+        type: 'AVD',
+        data: {
+          date: '2022-11-08T04:00:00.000Z',
+          bath: 0,
+          dress: 0,
+          bathroom: 0,
+          transfer: 0,
+          salute: 0,
+          feeding: 0,
+          result: 6,
+        },
+      })
+      .set('Authorization', `Bearer ${token}`)
+      .expect(201);
+  });
 });

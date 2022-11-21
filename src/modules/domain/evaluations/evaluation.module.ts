@@ -7,6 +7,8 @@ import { CardiorespiratoryCapacityStrategy } from './cardiorespiratory-capacity/
 import { Evaluation } from './entities/evaluation.entity';
 import { Field } from './entities/field.entity';
 import { TestBatteries } from './entities/test-batteries.entity';
+import { MiniCognitionStrategy } from './mini-cognition/mini-cognition.strategy';
+import { MiniCognitionFactory } from './mini-cognition/mini-cognition.factory';
 import { EvaluationController } from './evaluation.controller';
 import { EvaluationService } from './evaluation.service';
 import { SarcopeniaFactory } from './sarcopenia/sarcopenia.factory';
@@ -20,6 +22,8 @@ import { BodyCompositionFactory } from './body-composition/body-composition.fact
 import { FragilityStrategy } from './fragility/fragility.strategy';
 import { FragilityFactory } from './fragility/fragility.factory';
 
+import { DepressionFactory } from './depression/depression.factory';
+import { DepressionStrategy } from './depression/depression.strategy';
 @Module({
   imports: [
     TypeOrmModule.forFeature([Evaluation, Field, TestBatteries, User, Student]),
@@ -34,12 +38,16 @@ import { FragilityFactory } from './fragility/fragility.factory';
     BalanceStrategy,
     BalanceFactory,
     CardiorespiratoryCapacityFactory,
+    MiniCognitionStrategy,
+    MiniCognitionFactory,
     CardiorespiratoryCapacityStrategy,
     CardiorespiratoryCapacityFactory,
     BodyCompositionStrategy,
     BodyCompositionFactory,
     FragilityStrategy,
     FragilityFactory,
+    DepressionStrategy,
+    DepressionFactory,
   ],
   exports: [TypeOrmModule],
 })

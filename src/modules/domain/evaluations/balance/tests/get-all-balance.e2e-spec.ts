@@ -1,6 +1,6 @@
 import request from 'supertest';
 import { Test } from '@nestjs/testing';
-import { INestApplication } from "@nestjs/common";
+import { INestApplication } from '@nestjs/common';
 import { EvaluationModule } from '../../evaluation.module';
 import { UserModule } from 'src/modules/infrastructure/user/user.module';
 import { DatabaseTestModule } from 'src/modules/infrastructure/database/database-test.module';
@@ -50,7 +50,7 @@ beforeAll(async () => {
     .post('/student/create')
     .send({
       name: 'EstudanteTeste',
-      sex: 'M',
+      sex: 'H',
       breed: 'Amarelo',
       stature: 179.3,
       healthPlan: 'free',
@@ -72,44 +72,48 @@ afterAll(async () => {
 describe('Buscar avaliações Cardiorespiratória', () => {
   it(`/:studentId (GET) deve receber um array vazio como resultado`, async () => {
     return await server
-      .get(`/evaluation?studentId=${studentId}&page=1&limit=50&orderBy=updatedAt`,)
+      .get(
+        `/evaluation?studentId=${studentId}&page=1&limit=50&orderBy=updatedAt`,
+      )
       .set('Authorization', `Bearer ${token}`)
       .expect((res) => {
         expect(res.body.data).toStrictEqual([]);
       })
       .expect(200);
   });
-  
+
   it(`/:studentId (GET) deve receber um array não vazio como resultado`, async () => {
     for (let i = 0; i < 5; i++) {
       await server
         .post(`/evaluation/${studentId}`)
         .send({
-          "type": "AEQ",
-          "data": {
-              "date" : "2022-11-06T03:00:00.000Z",
-              "campo1" : 4,
-              "campo2" : 4,
-              "campo3" : 3,
-              "campo4" : 1,
-              "campo5" : 0,
-              "campo6" : 1,
-              "campo7" : 2,
-              "campo8" : 4,
-              "campo9" : 3,
-              "campo10" : 2,
-              "campo11" : 1,
-              "campo12" : 4,
-              "campo13" : 2,
-              "campo14" : 1,
-              "result" : 32
+          type: 'AEQ',
+          data: {
+            date: '2022-11-06T03:00:00.000Z',
+            campo1: 4,
+            campo2: 4,
+            campo3: 3,
+            campo4: 1,
+            campo5: 0,
+            campo6: 1,
+            campo7: 2,
+            campo8: 4,
+            campo9: 3,
+            campo10: 2,
+            campo11: 1,
+            campo12: 4,
+            campo13: 2,
+            campo14: 1,
+            result: 32,
           },
         })
-      .set('Authorization', `Bearer ${token}`);
+        .set('Authorization', `Bearer ${token}`);
     }
 
     return await server
-      .get(`/evaluation?studentId=${studentId}&page=1&limit=50&orderBy=updatedAt`,)
+      .get(
+        `/evaluation?studentId=${studentId}&page=1&limit=50&orderBy=updatedAt`,
+      )
       .set('Authorization', `Bearer ${token}`)
       .expect((res) => {
         expect(res.body.meta.totalItems).toBe(5);
@@ -123,7 +127,9 @@ describe('Buscar avaliações Cardiorespiratória', () => {
     const orderBy = 'updatedAt';
 
     return await server
-      .get(`/evaluation?studentId=${studentId}&page=${page}&limit=${limit}&orderBy=${orderBy}`)
+      .get(
+        `/evaluation?studentId=${studentId}&page=${page}&limit=${limit}&orderBy=${orderBy}`,
+      )
       .set('Authorization', `Bearer ${token}`)
       .expect(400);
   });

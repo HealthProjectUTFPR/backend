@@ -10,6 +10,7 @@ import { StudentModule } from 'src/modules/domain/student/student.module';
 let app: INestApplication;
 let server: request.SuperTest<request.Test>;
 let token: string;
+let id: string;
 let studentId: string;
 
 beforeAll(async () => {
@@ -49,15 +50,15 @@ beforeAll(async () => {
   const student = await server
     .post('/student/create')
     .send({
-        name: 'EstudanteTeste',
-        sex: 'H',
-        breed: 'Amarelo',
-        stature: 179.3,
+        name: 'Aluno',
+        sex: 'M',
+        breed: 'Pardo',
+        stature: 171.8,
         healthPlan: 'free',
-        emergencyContact: '44999999999',
-        contact: '44999999999',
-        address: 'Rua do seu Zé',
-        birthDate: '2000-01-01T01:00:00.000Z',
+        emergencyContact: '44999499994',
+        contact: '44999499994',
+        address: 'Rua Lorem Ipsum',
+        birthDate: '1960-06-12T03:00:00.000Z',
         flag: true,
     })
     .set('Authorization', `Bearer ${token}`);
@@ -69,61 +70,57 @@ afterAll(async () => {
   await app.close();
 });
 
-describe('Buscar avaliações de AVD', () => {
-    it(`/:studentId (GET) deve receber um array vazio como resultado`, async () => {
-      return await server
-        .get(
-          `/evaluation?studentId=${studentId}&page=1&limit=50&orderBy=updatedAt`,
-        )
-        .set('Authorization', `Bearer ${token}`)
-        .expect((res) => {
-          expect(res.body.data).toStrictEqual([]);
-        })
-        .expect(200);
-    });
-  
-    it(`/:studentId (GET) deve receber um array não vazio como resultado`, async () => {
-      for (let i = 0; i < 5; i++) {
-        await server
-            .post(`/evaluation/${studentId}`)
-            .send({
-              "type": "AVD",
-              "data": {
-                "date" : "2022-11-08T04:00:00.000Z",
-                "bath" : 0,
-                "dress" : 0,
-                "bathroom" : 0,
-                "transfer" : 0,
-                "salute" : 0,
-                "feeding" : 0,
-                "result" : 6
-              }
-            })
-            .set('Authorization', `Bearer ${token}`);
-      }
+describe('Buscar avaliação de Depressão', () => {
+    it(`/:id?type=Depression (GET) deve receber erro ao buscar id inválido`, async () => {
+      id = 'aca8e3cd-2c41-4b7e-9e1f-f3d8206064a';
   
       return await server
-        .get(
-          `/evaluation?studentId=${studentId}&page=1&limit=50&orderBy=updatedAt`,
-        )
-        .set('Authorization', `Bearer ${token}`)
-        .expect((res) => {
-          expect(res.body.meta.totalItems).toBe(5);
-        })
-        .expect(200);
-    });
-  
-    it(`/:studentId (GET) deve falhar devido a página invalida`, async () => {
-      const page = -1;
-      const limit = 5;
-      const orderBy = 'updatedAt';
-  
-      return await server
-        .get(
-          `/evaluation?studentId=${studentId}&page=${page}&limit=${limit}&orderBy=${orderBy}`,
-        )
+        .get(`/evaluation/${id}?type=AEQ`)
         .set('Authorization', `Bearer ${token}`)
         .expect(400);
     });
-  });
   
+    it(`/:id?type=Depression (GET) deve receber erro ao buscar id não válido porém inexistente`, async () => {
+      id = 'a9cd5ca1-6bba-46a9-ad3e-f7f4bde8eb8f';
+  
+      return await server
+        .get(`/evaluation/${id}?type=Depression`)
+        .set('Authorization', `Bearer ${token}`)
+        .expect(404);
+    });
+  
+    it(`/:id?type=Depression (GET) deve retornar sucesso ao buscar id válido`, async () => {
+      const response = await server
+      .post(`/evaluation/${studentId}`)
+        .send({
+          "type": "Depression",
+          "data": {
+            "date" : "2022-11-10T03:00:00.000Z",
+            "campo1" : true,
+            "campo2" : false,
+            "campo3" : false,
+            "campo4" : false,
+            "campo5" : false,
+            "campo6" : true,
+            "campo7" : false,
+            "campo8" : false,
+            "campo9" : false,
+            "campo10" : true,
+            "campo11" : true,
+            "campo12" : false,
+            "campo13" : false,
+            "campo14" : false,
+            "campo15" : true,
+            "result" : 5
+          },
+        })
+      .set('Authorization', `Bearer ${token}`);
+  
+      id = response.body.id;
+  
+      return await server
+        .get(`/evaluation/${id}?type=Depression`)
+        .set('Authorization', `Bearer ${token}`)
+        .expect(200);
+    });
+  });

@@ -2,9 +2,9 @@ import request from 'supertest';
 import { Test } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import { EvaluationModule } from '../../evaluation.module';
+import { UserModule } from 'src/modules/infrastructure/user/user.module';
 import { DatabaseTestModule } from 'src/modules/infrastructure/database/database-test.module';
 import { AuthModule } from 'src/modules/infrastructure/auth/auth.module';
-import { UserModule } from 'src/modules/infrastructure/user/user.module';
 import { StudentModule } from 'src/modules/domain/student/student.module';
 
 let app: INestApplication;
@@ -49,16 +49,16 @@ beforeAll(async () => {
   const student = await server
     .post('/student/create')
     .send({
-        name: 'EstudanteTeste',
-        sex: 'H',
-        breed: 'Amarelo',
-        stature: 179.3,
-        healthPlan: 'free',
-        emergencyContact: '44999999999',
-        contact: '44999999999',
-        address: 'Rua do seu Zé',
-        birthDate: '2000-01-01T01:00:00.000Z',
-        flag: true,
+      name: 'Aluno',
+      sex: 'M',
+      breed: 'Pardo',
+      stature: 171.8,
+      healthPlan: 'free',
+      emergencyContact: '44999499994',
+      contact: '44999499994',
+      address: 'Rua Lorem Ipsum',
+      birthDate: '1960-06-12T03:00:00.000Z',
+      flag: true,
     })
     .set('Authorization', `Bearer ${token}`);
 
@@ -69,7 +69,7 @@ afterAll(async () => {
   await app.close();
 });
 
-describe('Buscar avaliações de AVD', () => {
+describe('Buscar avaliações de Depressão', () => {
     it(`/:studentId (GET) deve receber um array vazio como resultado`, async () => {
       return await server
         .get(
@@ -81,27 +81,36 @@ describe('Buscar avaliações de AVD', () => {
         })
         .expect(200);
     });
-  
+    
     it(`/:studentId (GET) deve receber um array não vazio como resultado`, async () => {
       for (let i = 0; i < 5; i++) {
         await server
-            .post(`/evaluation/${studentId}`)
-            .send({
-              "type": "AVD",
-              "data": {
-                "date" : "2022-11-08T04:00:00.000Z",
-                "bath" : 0,
-                "dress" : 0,
-                "bathroom" : 0,
-                "transfer" : 0,
-                "salute" : 0,
-                "feeding" : 0,
-                "result" : 6
-              }
-            })
-            .set('Authorization', `Bearer ${token}`);
+          .post(`/evaluation/${studentId}`)
+          .send({
+            type: 'Depression',
+            data: {
+                date : '2022-11-10T03:00:00.000Z',
+                campo1 : true,
+                campo2 : false,
+                campo3 : false,
+                campo4 : false,
+                campo5 : false,
+                campo6 : true,
+                campo7 : false,
+                campo8 : false,
+                campo9 : false,
+                campo10 : true,
+                campo11 : true,
+                campo12 : false,
+                campo13 : false,
+                campo14 : false,
+                campo15 : true,
+                result : 5,
+            }
+          })
+        .set('Authorization', `Bearer ${token}`);
       }
-  
+      
       return await server
         .get(
           `/evaluation?studentId=${studentId}&page=1&limit=50&orderBy=updatedAt`,
