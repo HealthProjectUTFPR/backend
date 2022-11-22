@@ -75,6 +75,7 @@ describe('Atualizar informacoes de um aluno', () => {
         contact: '44999999999',
         address: 'Alterado',
         birthDate: '2000-01-01T01:00:00.000Z',
+        note: 'Anão',
         flag: true,
       })
       .set('Authorization', `Bearer ${token}`)
@@ -94,6 +95,7 @@ describe('Atualizar informacoes de um aluno', () => {
         contact: '44999999999',
         address: 'Alterado',
         birthDate: '2000-01-01T01:00:00.000Z',
+        note: 'Anão',
         flag: true,
       })
       .set('Authorization', `Bearer ${token}`)
