@@ -68,6 +68,8 @@ export class StudentService {
       emergencyContact,
       address,
       birthDate,
+      weight,
+      note,
       flag,
     } = updateStudentDto;
 
@@ -81,6 +83,8 @@ export class StudentService {
       : student.emergencyContact;
     student.address = address ? address : student.address;
     student.birthDate = birthDate ? birthDate : student.birthDate;
+    student.weight = weight ? weight : student.weight;
+    student.note = note ? note : student.note;
     student.flag = flag ? flag : student.flag;
 
     return await this.studentRepository.save(student);
@@ -92,6 +96,7 @@ export class StudentService {
         user: true,
       },
       where: {
+        flag: true,
         user: {
           id: id,
         },

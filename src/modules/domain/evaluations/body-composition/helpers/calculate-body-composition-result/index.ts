@@ -17,7 +17,7 @@ export const calculateBodyCompositionResult = ({
   let waistCircumference = 'none';
   let rcq = 'none';
 
-  if (sex === 'Mulher') {
+  if (sex === 'Feminino') {
     if (waistEstature > 0.88) {
       waistCircumference = 'Risco elevado';
     } else if (waistEstature > 0.8) {

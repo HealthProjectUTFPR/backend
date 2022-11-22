@@ -15,7 +15,7 @@ const calculateEstimatedMuscleMass = ({
 }: IEstimatedMuscleMass) => {
   if (!weight) return 0;
 
-  const sexValue = sex === 'Homem' ? 1 : 0;
+  const sexValue = sex === 'Masculino' ? 1 : 0;
   let raceValue = 1.4;
 
   if (race === 'Branco') {

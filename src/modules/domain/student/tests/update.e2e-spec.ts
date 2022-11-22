@@ -44,7 +44,7 @@ beforeAll(async () => {
     .post('/student/create')
     .send({
       name: 'EstudanteTeste',
-      sex: 'H',
+      sex: 'M',
       breed: 'Amarelo',
       stature: 179.3,
       healthPlan: 'free',
@@ -67,7 +67,7 @@ describe('Atualizar informacoes de um aluno', () => {
       .patch(`/student/update/${id}`)
       .send({
         name: 'Alterado',
-        sex: 'H',
+        sex: 'M',
         breed: 'Alterado',
         stature: 179.3,
         healthPlan: 'free',
@@ -86,7 +86,7 @@ describe('Atualizar informacoes de um aluno', () => {
       .get(`/student/show/${studentId}`)
       .send({
         name: 'Alterado',
-        sex: 'H',
+        sex: 'M',
         breed: 'Alterado',
         stature: 179.3,
         healthPlan: 'free',

@@ -46,7 +46,7 @@ export function calculateCardiorespiratoryCapacityResult({
 }: Partial<ICardiorespiratoryCapacity>) {
   let result: string;
 
-  if (sex === 'Homem') {
+  if (sex === 'Masculino') {
     result = verifyCardiorespiratoryCapacityOfMan({ vo2MlKG });
   } else {
     result = verifyCardiorespiratoryCapacityOfWoman({ vo2MlKG });
