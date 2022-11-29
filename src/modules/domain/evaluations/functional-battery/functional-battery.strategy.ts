@@ -57,8 +57,7 @@ export class FunctionalBatteryStrategy {
                 marchWouldParkResult, marchWouldParkPercent, marchWouldParkClassification,
                 sitAndReachYourFeetResult, sitAndReachYourFeetPercent, sitAndReachYourFeetClassification,
                 tugResult, tugPercent, tugClassification, 
-                reachTheBackResult, reachTheBackPercent, reachTheBackClassification,
-                result, } = input;
+                reachTheBackResult, reachTheBackPercent, reachTheBackClassification} = input;
     
 
     
@@ -79,7 +78,6 @@ export class FunctionalBatteryStrategy {
           tugResult,
           tugPercent,
           tugClassification,
-          result,
           reachTheBackResult,
           reachTheBackPercent,
           reachTheBackClassification,
@@ -123,9 +121,9 @@ export class FunctionalBatteryStrategy {
           marchWouldParkResult, marchWouldParkPercent, marchWouldParkClassification,
           sitAndReachYourFeetResult, sitAndReachYourFeetPercent, sitAndReachYourFeetClassification,
           tugResult, tugPercent, tugClassification, 
-          reachTheBackResult, reachTheBackPercent, reachTheBackClassification,
-          result, } = input;
-
+          reachTheBackResult, reachTheBackPercent, reachTheBackClassification} = input;
+          
+          
         const newData: UpdateFunctionalBatteryDto = {
           date,
           sitAndDownResult,
@@ -143,7 +141,6 @@ export class FunctionalBatteryStrategy {
           tugResult,
           tugPercent,
           tugClassification,
-          result,
           reachTheBackResult,
           reachTheBackPercent,
           reachTheBackClassification,

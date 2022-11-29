@@ -45,7 +45,7 @@ export class FunctionalBatteryFactory {
     }
 
     private parseFieldsToCorrectType(data: Evaluation): GetFunctionalBatteryDto {
-        const { id, name, createdAt, updatedAt, result, deletedAt, fields } = data;
+        const { id, name, createdAt, updatedAt, deletedAt, fields } = data;
 
         const parsedFields: Partial<IFunctionalBattery> = {};
 
@@ -70,7 +70,6 @@ export class FunctionalBatteryFactory {
             createdAt,
             updatedAt,
             deletedAt,
-            result,
             date,
             sitAndDownResult,
             sitAndDownPercent,
@@ -102,13 +101,12 @@ export class FunctionalBatteryFactory {
         type: string,
         student: Student,
     ): Promise<GetFunctionalBatteryDto>{
-        const {result, ...rest} = input;
+        const { ...rest} = input;
 
         const arrayOfFields = this.parseFieldsToString(rest);
 
         let evaluation = this.evaluationsRepository.create({
             name: type,
-            result,
             createdBy: user,
             student,
         });
@@ -148,7 +146,7 @@ export class FunctionalBatteryFactory {
         input: CreateFunctionalBatteryDto,
         evaluation: Evaluation,
     ): Promise<GetFunctionalBatteryDto> {
-        const {result, ...rest} = input;
+        const {...rest} = input;
 
         const arrayOfFields = this.parseFieldsToString(rest);
 
@@ -167,7 +165,6 @@ export class FunctionalBatteryFactory {
           );
         
           evaluation.updatedAt = new Date();
-          evaluation.result = result;
 
           evaluation.save();
 
