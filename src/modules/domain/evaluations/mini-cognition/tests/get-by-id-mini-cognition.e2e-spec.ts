@@ -98,6 +98,7 @@ beforeAll(async () => {
       emergencyContact: '449994484848',
       contact: '449994484848',
       address: 'Rua 123',
+      note:			'teste',
       birthDate: '1980-10-12T03:00:00.000Z',
       flag: true,
     })
