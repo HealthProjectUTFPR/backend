@@ -5,7 +5,7 @@ export const calculatePercentTug = ({
     sex,
     tugResult,
 }:Partial<IFunctionalBattery>) => {
-    if (sex === 'Homem' && age >= 60 && age <=64 ){
+    if (sex === 'Masculino' && age >= 60 && age <=64 ){
         if (tugResult >= 3.0){
             return 90;
         }
@@ -61,7 +61,7 @@ export const calculatePercentTug = ({
             return 5;
         }
    } 
-   if (sex === 'Homem' && age >= 65 && age <=69 ){
+   if (sex === 'Masculino' && age >= 65 && age <=69 ){
         if (tugResult >= 3.1){
             return 95;
         }
@@ -120,7 +120,7 @@ export const calculatePercentTug = ({
             return 5;
         }
     } 
-    if (sex === 'Homem' && age >= 70 && age <=74 ){
+    if (sex === 'Masculino' && age >= 70 && age <=74 ){
         if (tugResult >= 3.2){
             return 95;
         }
@@ -179,7 +179,7 @@ export const calculatePercentTug = ({
             return 5;
         }
     } 
-    if (sex === 'Homem' && age >= 75 && age <=79 ){
+    if (sex === 'Masculino' && age >= 75 && age <=79 ){
         if (tugResult >= 3.3){
             return 95;
         }
@@ -238,7 +238,7 @@ export const calculatePercentTug = ({
             return 5;
         }
     } 
-    if (sex === 'Homem' && age >= 80 && age <=84 ){
+    if (sex === 'Masculino' && age >= 80 && age <=84 ){
         if (tugResult >= 4.0){
             return 95;
         }
@@ -297,7 +297,7 @@ export const calculatePercentTug = ({
             return 5;
         }
     } 
-    if (sex === 'Homem' && age >= 85 && age <=89 ){
+    if (sex === 'Masculino' && age >= 85 && age <=89 ){
         if (tugResult >= 4.0){
             return 95;
         }
@@ -356,7 +356,7 @@ export const calculatePercentTug = ({
             return 5;
         }
     } 
-    if (sex === 'Homem' && age >= 90){
+    if (sex === 'Masculino' && age >= 90){
         if (tugResult >= 4.3){
             return 95;
         }
@@ -415,7 +415,7 @@ export const calculatePercentTug = ({
             return 5;
         }
     } 
-    if (sex === 'Mulher' && age >= 60 && age <=64 ){
+    if (sex === 'Feminino' && age >= 60 && age <=64 ){
         if (tugResult >= 3.2){
             return 95;
         }
@@ -474,7 +474,7 @@ export const calculatePercentTug = ({
             return 5;
         }
    } 
-   if (sex === 'Mulher' && age >= 65 && age <=69 ){
+   if (sex === 'Feminino' && age >= 65 && age <=69 ){
         if (tugResult >= 3.6){
             return 95;
         }
@@ -533,7 +533,7 @@ export const calculatePercentTug = ({
             return 5;
         }
     } 
-    if (sex === 'Mulher' && age >= 70 && age <=74 ){
+    if (sex === 'Feminino' && age >= 70 && age <=74 ){
         if (tugResult >= 3.8){
             return 95;
         }
@@ -592,7 +592,7 @@ export const calculatePercentTug = ({
             return 5;
         }
     } 
-    if (sex === 'Mulher' && age >= 75 && age <=79 ){
+    if (sex === 'Feminino' && age >= 75 && age <=79 ){
         if (tugResult >= 4.0){
             return 95;
         }
@@ -651,7 +651,7 @@ export const calculatePercentTug = ({
             return 5;
         }
     } 
-    if (sex === 'Mulher' && age >= 80 && age <=84 ){
+    if (sex === 'Feminino' && age >= 80 && age <=84 ){
         if (tugResult >= 4.0){
             return 95;
         }
@@ -710,7 +710,7 @@ export const calculatePercentTug = ({
             return 5;
         }
     }
-    if (sex === 'Mulher' && age >= 85 && age <=89 ){
+    if (sex === 'Feminino' && age >= 85 && age <=89 ){
         if (tugResult >= 4.5){
             return 95;
         }
@@ -769,7 +769,7 @@ export const calculatePercentTug = ({
             return 5;
         }
     } 
-    if (sex === 'Mulher' && age >= 90){
+    if (sex === 'Feminino' && age >= 90){
         if (tugResult >= 5.0){
             return 95;
         }

@@ -21,4 +21,5 @@ export interface IFunctionalBattery {
     tugResult: number;
     tugPercent: number;
     tugClassification: string;
+    result: string;
 }

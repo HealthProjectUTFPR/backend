@@ -13,6 +13,7 @@ import { EvaluationOrderBy } from '../enums/order-by.enum';
 import { CreateFunctionalBatteryDto } from './dto/create-functional-battery.dto';
 import { GetFunctionalBatteryDto } from './dto/get-functional-battery.dto';
 import { IFunctionalBattery} from './interface/functional-battery.interface';
+import { UpdateFunctionalBatteryDto} from './dto/update-functional-battery.dto';
 dayjs.extend(customParseFormat);
 
 
@@ -45,7 +46,7 @@ export class FunctionalBatteryFactory {
     }
 
     private parseFieldsToCorrectType(data: Evaluation): GetFunctionalBatteryDto {
-        const { id, name, createdAt, updatedAt, deletedAt, fields } = data;
+        const { id, name, result, createdAt, updatedAt, deletedAt, fields } = data;
 
         const parsedFields: Partial<IFunctionalBattery> = {};
 
@@ -60,7 +61,7 @@ export class FunctionalBatteryFactory {
               elbowFlexionResult, elbowFlexionPercent, elbowFlexionClassification,
               marchWouldParkResult, marchWouldParkPercent, marchWouldParkClassification,
               sitAndReachYourFeetResult, sitAndReachYourFeetPercent, sitAndReachYourFeetClassification,
-              tugResult, tugPercent, tugClassification, 
+              tugResult, tugPercent, tugClassification,
               reachTheBackResult, reachTheBackPercent, reachTheBackClassification,
               } = parsedFields;
 
@@ -83,12 +84,13 @@ export class FunctionalBatteryFactory {
             sitAndReachYourFeetResult,
             sitAndReachYourFeetPercent,
             sitAndReachYourFeetClassification,
-            tugResult,
-            tugPercent,
-            tugClassification,
             reachTheBackResult,
             reachTheBackPercent,
             reachTheBackClassification,
+            tugResult,
+            tugPercent,
+            tugClassification,
+            result,
         }
 
         return returnedValues;
@@ -115,7 +117,7 @@ export class FunctionalBatteryFactory {
 
         const fields: Field[] = await Promise.all(
             arrayOfFields.map(async (field)=> {
-                const entityField = await this.fieldRepository.create({
+                const entityField = this.fieldRepository.create({
                     ...field,
                     evaluation,                    
                 } as Field);
@@ -125,7 +127,6 @@ export class FunctionalBatteryFactory {
         );
 
         evaluation.fields = fields;
-
         const { id } = evaluation;
 
         await evaluation.save();
@@ -143,10 +144,10 @@ export class FunctionalBatteryFactory {
     async update(
         id: string,
         qtype: string,
-        input: CreateFunctionalBatteryDto,
+        input: UpdateFunctionalBatteryDto,
         evaluation: Evaluation,
     ): Promise<GetFunctionalBatteryDto> {
-        const {...rest} = input;
+      const { ...rest} = input;
 
         const arrayOfFields = this.parseFieldsToString(rest);
 

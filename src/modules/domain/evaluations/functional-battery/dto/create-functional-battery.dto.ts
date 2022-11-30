@@ -79,4 +79,8 @@ export class CreateFunctionalBatteryDto {
     @JoiSchema(Joi.string().required())
     tugClassification: string;
 
+    @ApiProperty()
+    @JoiSchema(Joi.string().required())
+    result: string;
+
 }

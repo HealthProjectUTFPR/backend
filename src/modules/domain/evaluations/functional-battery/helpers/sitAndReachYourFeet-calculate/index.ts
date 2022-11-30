@@ -5,7 +5,7 @@ export const calculatePercentSitAndReachYourFeet = ({
     sex,
     sitAndReachYourFeetResult,
 }:Partial<IFunctionalBattery>) => {
-    if (sex === 'Homem' && age >= 60 && age <=64 ){
+    if (sex === 'Masculino' && age >= 60 && age <=64 ){
         if (sitAndReachYourFeetResult >= 8.5){
             return 95;
         }
@@ -64,7 +64,7 @@ export const calculatePercentSitAndReachYourFeet = ({
             return 5;
         }
    } 
-   if (sex === 'Homem' && age >= 65 && age <=69 ){
+   if (sex === 'Masculino' && age >= 65 && age <=69 ){
         if (sitAndReachYourFeetResult >= 7.5){
             return 95;
         }
@@ -123,7 +123,7 @@ export const calculatePercentSitAndReachYourFeet = ({
             return 5;
         }
     }  
-    if (sex === 'Homem' && age >= 70 && age <=74 ){
+    if (sex === 'Masculino' && age >= 70 && age <=74 ){
         if (sitAndReachYourFeetResult >= 7.5){
             return 95;
         }
@@ -182,7 +182,7 @@ export const calculatePercentSitAndReachYourFeet = ({
             return 5;
         }
     }  
-    if (sex === 'Homem' && age >= 75 && age <=79 ){
+    if (sex === 'Masculino' && age >= 75 && age <=79 ){
         if (sitAndReachYourFeetResult >= 6.6){
             return 95;
         }
@@ -241,7 +241,7 @@ export const calculatePercentSitAndReachYourFeet = ({
             return 5;
         }
     }  
-    if (sex === 'Homem' && age >= 80 && age <=84 ){
+    if (sex === 'Masculino' && age >= 80 && age <=84 ){
         if (sitAndReachYourFeetResult >= 6.2){
             return 95;
         }
@@ -300,7 +300,7 @@ export const calculatePercentSitAndReachYourFeet = ({
             return 5;
         }
     }  
-    if (sex === 'Homem' && age >= 85 && age <=89 ){
+    if (sex === 'Masculino' && age >= 85 && age <=89 ){
         if (sitAndReachYourFeetResult >= 4.5){
             return 95;
         }
@@ -359,7 +359,7 @@ export const calculatePercentSitAndReachYourFeet = ({
             return 5;
         }
     }  
-    if (sex === 'Homem' && age >= 90 ){
+    if (sex === 'Masculino' && age >= 90 ){
         if (sitAndReachYourFeetResult >= 3.5){
             return 95;
         }
@@ -418,7 +418,7 @@ export const calculatePercentSitAndReachYourFeet = ({
             return 5;
         }
     }  
-    if (sex === 'Mulher' && age >= 60 && age <=64 ){
+    if (sex === 'Feminino' && age >= 60 && age <=64 ){
         if (sitAndReachYourFeetResult >= 8.7){
             return 95;
         }
@@ -477,7 +477,7 @@ export const calculatePercentSitAndReachYourFeet = ({
             return 5;
         }
    } 
-   if (sex === 'Mulher' && age >= 65 && age <=69 ){
+   if (sex === 'Feminino' && age >= 65 && age <=69 ){
         if (sitAndReachYourFeetResult >= 7.9){
             return 95;
         }
@@ -536,7 +536,7 @@ export const calculatePercentSitAndReachYourFeet = ({
             return 5;
         }
     } 
-    if (sex === 'Mulher' && age >= 70 && age <=74 ){
+    if (sex === 'Feminino' && age >= 70 && age <=74 ){
         if (sitAndReachYourFeetResult >= 7.5){
             return 95;
         }
@@ -595,7 +595,7 @@ export const calculatePercentSitAndReachYourFeet = ({
             return 5;
         }
     } 
-    if (sex === 'Mulher' && age >= 75 && age <=79 ){
+    if (sex === 'Feminino' && age >= 75 && age <=79 ){
         if (sitAndReachYourFeetResult >= 7.4){
             return 95;
         }
@@ -654,7 +654,7 @@ export const calculatePercentSitAndReachYourFeet = ({
             return 5;
         }
     } 
-    if (sex === 'Mulher' && age >= 80 && age <=84 ){
+    if (sex === 'Feminino' && age >= 80 && age <=84 ){
         if (sitAndReachYourFeetResult >= 6.6){
             return 95;
         }
@@ -713,7 +713,7 @@ export const calculatePercentSitAndReachYourFeet = ({
             return 5;
         }
     } 
-    if (sex === 'Mulher' && age >= 85 && age <=89 ){
+    if (sex === 'Feminino' && age >= 85 && age <=89 ){
         if (sitAndReachYourFeetResult >= 6.0){
             return 95;
         }
@@ -772,7 +772,7 @@ export const calculatePercentSitAndReachYourFeet = ({
             return 5;
         }
     } 
-    if (sex === 'Mulher' && age >= 90 ){
+    if (sex === 'Feminino' && age >= 90 ){
         if (sitAndReachYourFeetResult >= 4.9){
             return 95;
         }

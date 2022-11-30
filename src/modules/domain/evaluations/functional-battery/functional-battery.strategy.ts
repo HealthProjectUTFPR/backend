@@ -17,13 +17,7 @@ import {
   import { GetFunctionalBatteryDto} from './dto/get-functional-battery.dto';
   import {GetAllFunctionalBatteryDto} from './dto/get-all-functional-battery.dto';
   import { UpdateFunctionalBatteryDto} from './dto/update-functional-battery.dto';
-  import { calculatePercentElbowFlexion } from './helpers/elbowFlexion-calculate';
-  import { calculatePercentSitAndReachYourFeet } from './helpers/sitAndReachYourFeet-calculate';
-  import { calculatePercentTug } from './helpers/tug-calculate';
-  import { calculatePercentSitAndDown } from './helpers/sitAndDown-calculate';
-  import { calculatePercentReachTheBack } from './helpers/reachTheBack-calculate';
-  import {calculatePercentMarchWouldPark} from './helpers/marchWouldPark-calculate';
-  import { IFunctionalBattery } from './interface/functional-battery.interface';
+
 
 @Injectable()
 export class FunctionalBatteryStrategy {
@@ -48,7 +42,7 @@ export class FunctionalBatteryStrategy {
     
         const { sex: studentSex, birthDate } = student;
     
-        const sex = studentSex === 'H' ? 'Homem' : 'Mulher';
+        const sex = studentSex === 'M' ? 'Masculino' : 'Feminino';
         const age = dayjs(new Date()).diff(birthDate, 'year');
     
         const { date,
@@ -57,7 +51,8 @@ export class FunctionalBatteryStrategy {
                 marchWouldParkResult, marchWouldParkPercent, marchWouldParkClassification,
                 sitAndReachYourFeetResult, sitAndReachYourFeetPercent, sitAndReachYourFeetClassification,
                 tugResult, tugPercent, tugClassification, 
-                reachTheBackResult, reachTheBackPercent, reachTheBackClassification} = input;
+                reachTheBackResult, reachTheBackPercent, reachTheBackClassification,
+                result} = input
     
 
     
@@ -75,13 +70,14 @@ export class FunctionalBatteryStrategy {
           marchWouldParkResult,
           marchWouldParkPercent,
           marchWouldParkClassification,
-          tugResult,
-          tugPercent,
-          tugClassification,
           reachTheBackResult,
           reachTheBackPercent,
           reachTheBackClassification,
-        };
+          tugResult,
+          tugPercent,
+          tugClassification,
+          result,
+        }
     
         return await this.functionalBatteryFactory.create(
           data,
@@ -112,7 +108,7 @@ export class FunctionalBatteryStrategy {
     
         const { sex: studentSex, birthDate } = evaluation.student;
     
-        const sex = studentSex === 'H' ? 'Homem' : 'Mulher';
+        const sex = studentSex === 'M' ? 'Masculino' : 'Feminino';
         const age = dayjs(new Date()).diff(birthDate, 'year');
     
         const { date,
@@ -120,8 +116,9 @@ export class FunctionalBatteryStrategy {
           elbowFlexionResult, elbowFlexionPercent, elbowFlexionClassification,
           marchWouldParkResult, marchWouldParkPercent, marchWouldParkClassification,
           sitAndReachYourFeetResult, sitAndReachYourFeetPercent, sitAndReachYourFeetClassification,
-          tugResult, tugPercent, tugClassification, 
-          reachTheBackResult, reachTheBackPercent, reachTheBackClassification} = input;
+          tugResult, tugPercent, tugClassification,
+          reachTheBackResult, reachTheBackPercent, reachTheBackClassification,
+          result } = input;
           
           
         const newData: UpdateFunctionalBatteryDto = {
@@ -138,12 +135,13 @@ export class FunctionalBatteryStrategy {
           marchWouldParkResult,
           marchWouldParkPercent,
           marchWouldParkClassification,
-          tugResult,
-          tugPercent,
-          tugClassification,
           reachTheBackResult,
           reachTheBackPercent,
           reachTheBackClassification,
+          tugResult,
+          tugPercent,
+          tugClassification,
+          result
         };
     
         return await this.functionalBatteryFactory.update(
