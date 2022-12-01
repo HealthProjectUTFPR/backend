@@ -123,7 +123,7 @@ describe('CRiar avaliações de Fragilidade', () => {
           mets3: 480,
           metsTotal: 918,
           kcal: 902.7,
-          score: 3,
+          score: 4,
           result: 'frágil',
         },
       })
