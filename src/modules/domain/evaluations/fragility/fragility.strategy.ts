@@ -243,7 +243,7 @@ export class FragilityStrategy {
 
     const { sex: studentSex, stature } = evaluation.student;
 
-    const sex = studentSex === 'H' ? 'Homem' : 'Mulher';
+    const sex = studentSex === 'H' ? 'Masculino' : 'Feminino';
 
     const {
       date,
@@ -271,6 +271,7 @@ export class FragilityStrategy {
 
     const isResultValid = this.validateResult({
       sex,
+      looseWeight,
       activityDifficultLastWeekFrequency,
       KeepGoingDifficultLastWeekFrequency,
       walkingDays,
