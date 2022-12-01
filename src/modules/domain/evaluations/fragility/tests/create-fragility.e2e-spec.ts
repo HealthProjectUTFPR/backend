@@ -29,19 +29,12 @@ beforeAll(async () => {
 
   await server
     .post('/auth/register')
-    .send({
-      email: 'test@test.com',
-      name: 'teste',
-      password: '12345678',
-    })
+    .send({ email: 'test@fragility.com', name: 'teste', password: '12345678' })
     .expect(201);
 
   const login = await server
     .post('/auth/login')
-    .send({
-      email: 'test@test.com',
-      password: '12345678',
-    })
+    .send({ email: 'test@fragility.com', password: '12345678' })
     .expect(200);
 
   token = login.text;
@@ -71,23 +64,34 @@ afterAll(async () => {
   await app.close();
 });
 
-describe('Criar avaliações do tipo Sarcopenia', () => {
+describe('CRiar avaliações de Fragilidade', () => {
   it(`/:studentId (CREATE) Falha na validação do resultado`, async () => {
     return await server
       .post(`/evaluation/${studentId}`)
       .send({
-        type: 'sarcopenia',
+        type: 'fragilidade',
         data: {
           date: '2022-11-10T03:00:00.000Z',
-          weight: 89,
-          measuredMuscleMass: 75,
-          estimatedMuscleMass: 33.376000000000005,
-          walkingSpeed: 2.5,
-          handGripStrength: 90,
-          muscleMassIndex: 20.35,
-          calfCircumference: 30,
-          hasSarcopenia: true,
-          result: 'Muito bom!',
+          weight: 59,
+          looseWeight: 4.6,
+          activityDifficultLastWeekFrequency: 5,
+          KeepGoingDifficultLastWeekFrequency: 5,
+          walkingDays: 2,
+          walkingMinutesPerDay: 30,
+          moderateActivityDays: 2,
+          moderateActivityMinutesPerDay: 30,
+          vigorousActivityDays: 2,
+          vigorousActivityMinutesPerDay: 30,
+          time: 30,
+          handgripStrength: 5,
+          imc: 26.2,
+          mets1: 198,
+          mets2: 240,
+          mets3: 480,
+          metsTotal: 918,
+          kcal: 902.7,
+          score: 5,
+          result: 'frágil',
         },
       })
       .set('Authorization', `Bearer ${token}`)
@@ -98,18 +102,29 @@ describe('Criar avaliações do tipo Sarcopenia', () => {
     return await server
       .post(`/evaluation/${studentId}`)
       .send({
-        type: 'sarcopenia',
+        type: 'fragilidade',
         data: {
           date: '2022-11-10T03:00:00.000Z',
-          weight: 90,
-          measuredMuscleMass: 75,
-          estimatedMuscleMass: 33.376000000000005,
-          walkingSpeed: 2.5,
-          handGripStrength: 90,
-          muscleMassIndex: 20.35,
-          calfCircumference: 30,
-          hasSarcopenia: false,
-          result: 'Muito bom!',
+          weight: 59,
+          looseWeight: 4.6,
+          activityDifficultLastWeekFrequency: 5,
+          KeepGoingDifficultLastWeekFrequency: 5,
+          walkingDays: 2,
+          walkingMinutesPerDay: 30,
+          moderateActivityDays: 2,
+          moderateActivityMinutesPerDay: 30,
+          vigorousActivityDays: 2,
+          vigorousActivityMinutesPerDay: 30,
+          time: 30,
+          handgripStrength: 5,
+          imc: 26.2,
+          mets1: 198,
+          mets2: 240,
+          mets3: 480,
+          metsTotal: 918,
+          kcal: 902.7,
+          score: 4,
+          result: 'frágil',
         },
       })
       .set('Authorization', `Bearer ${token}`)

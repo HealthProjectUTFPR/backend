@@ -1,11 +1,11 @@
-import { INestApplication } from '@nestjs/common';
-import { Test } from '@nestjs/testing';
-import { StudentModule } from 'src/modules/domain/student/student.module';
-import { AuthModule } from 'src/modules/infrastructure/auth/auth.module';
-import { DatabaseTestModule } from 'src/modules/infrastructure/database/database-test.module';
-import { UserModule } from 'src/modules/infrastructure/user/user.module';
 import request from 'supertest';
+import { Test } from '@nestjs/testing';
+import { INestApplication } from '@nestjs/common';
 import { EvaluationModule } from '../../evaluation.module';
+import { DatabaseTestModule } from 'src/modules/infrastructure/database/database-test.module';
+import { AuthModule } from 'src/modules/infrastructure/auth/auth.module';
+import { UserModule } from 'src/modules/infrastructure/user/user.module';
+import { StudentModule } from 'src/modules/domain/student/student.module';
 
 let app: INestApplication;
 let server: request.SuperTest<request.Test>;
@@ -22,23 +22,26 @@ beforeAll(async () => {
       StudentModule,
     ],
   }).compile();
-
   app = module.createNestApplication();
   await app.init();
+
   server = request(app.getHttpServer());
 
   await server
     .post('/auth/register')
     .send({
-      email: 'test@sarcopenia.com',
+      email: 'test@test.com',
       name: 'teste',
-      password: '123456789',
+      password: '12345678',
     })
     .expect(201);
 
   const login = await server
     .post('/auth/login')
-    .send({ email: 'test@sarcopenia.com', password: '123456789' })
+    .send({
+      email: 'test@test.com',
+      password: '12345678',
+    })
     .expect(200);
 
   token = login.text;
@@ -68,36 +71,47 @@ afterAll(async () => {
   await app.close();
 });
 
-describe('Buscar avaliações Sarcopenia', () => {
+describe('Buscar avaliações de Fragilidade', () => {
   it(`/:studentId (GET) deve receber um array vazio como resultado`, async () => {
     return await server
       .get(
         `/evaluation?studentId=${studentId}&page=1&limit=50&orderBy=updatedAt`,
       )
       .set('Authorization', `Bearer ${token}`)
-      .expect((result) => {
-        expect(result.body.data).toStrictEqual([]);
+      .expect((res) => {
+        expect(res.body.data).toStrictEqual([]);
       })
       .expect(200);
   });
 
-  it(`/:studentId (GET) deve receber um array com avaliações como resultado`, async () => {
+  it(`/:studentId (GET) deve receber um array não vazio como resultado`, async () => {
     for (let i = 0; i < 5; i++) {
       await server
         .post(`/evaluation/${studentId}`)
         .send({
-          type: 'sarcopenia',
+          type: 'fragilidade',
           data: {
             date: '2022-11-10T03:00:00.000Z',
-            weight: 90,
-            measuredMuscleMass: 75.3,
-            estimatedMuscleMass: 33.376000000000005,
-            walkingSpeed: 2.5,
-            handGripStrength: 90,
-            muscleMassIndex: 20.35,
-            calfCircumference: 30,
-            hasSarcopenia: false,
-            result: 'Muito bom!',
+            weight: 59,
+            looseWeight: 4.6,
+            activityDifficultLastWeekFrequency: 5,
+            KeepGoingDifficultLastWeekFrequency: 5,
+            walkingDays: 2,
+            walkingMinutesPerDay: 30,
+            moderateActivityDays: 2,
+            moderateActivityMinutesPerDay: 30,
+            vigorousActivityDays: 2,
+            vigorousActivityMinutesPerDay: 30,
+            time: 30,
+            handgripStrength: 5,
+            imc: 26.2,
+            mets1: 198,
+            mets2: 240,
+            mets3: 480,
+            metsTotal: 918,
+            kcal: 902.7,
+            score: 4,
+            result: 'frágil',
           },
         })
         .set('Authorization', `Bearer ${token}`);
@@ -114,8 +128,8 @@ describe('Buscar avaliações Sarcopenia', () => {
       .expect(200);
   });
 
-  it('/:studentId Deve falhar devido a página inválida informada.', async () => {
-    const page = 0;
+  it(`/:studentId (GET) deve falhar devido a página invalida`, async () => {
+    const page = -1;
     const limit = 5;
     const orderBy = 'updatedAt';
 
