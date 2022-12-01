@@ -1,4 +1,9 @@
 export interface IMiniCognition {
+  id: string;
+  name: string;
+  createdAt: Date;
+  updatedAt: Date;
+  deletedAt: Date;
   date: Date;
   scholarity: number;
   checked1_1: boolean;

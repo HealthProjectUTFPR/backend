@@ -154,14 +154,16 @@ export class MiniCognitionFactory {
       },
       skip: (page - 1) * limit,
       take: limit,
-      relations: ['fields'],
-      order: {
-        [orderBy]: 'DESC',
-      },
+      relations: ['fields']
     });
 
     const parsedEvaluations: GetMiniCognitionDto[] = evaluation.map((item) => {
       const field = {};
+      field['id'] = item.id;
+      field['name'] = item.name;
+      field['createdAt'] = item.createdAt;
+      field['updatedAt'] = item.updatedAt;
+      field['deletedAt'] = item.deletedAt;
       item.fields.forEach(({ name, value, dataType }) => {
         field[name] = parseType(dataType, value);
       });
