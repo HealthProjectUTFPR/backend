@@ -52,6 +52,7 @@ beforeAll(async () => {
       contact: '44999999999',
       address: 'Rua do seu Zé',
       birthDate: '2000-01-01T01:00:00.000Z',
+      note: 'Anão',
       flag: true,
     })
     .set('Authorization', `Bearer ${token}`);
@@ -84,7 +85,7 @@ describe('Atualizar informacoes de um aluno', () => {
 
   it(`/update/:id (PATCH) deve retornar sucesso ao buscar id válido`, async () => {
     return await server
-      .get(`/student/show/${studentId}`)
+      .patch(`/student/update/${studentId}`)
       .send({
         name: 'Alterado',
         sex: 'M',
