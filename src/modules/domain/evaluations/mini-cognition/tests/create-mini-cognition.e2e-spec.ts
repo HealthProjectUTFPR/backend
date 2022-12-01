@@ -91,13 +91,14 @@ beforeAll(async () => {
     .post('/student/create')
     .send({
       name: 'Estudante',
-      sex: 'H',
+      sex: 'M',
       breed: 'Branco',
       stature: 192,
       healthPlan: 'free',
       emergencyContact: '449994484848',
       contact: '449994484848',
       address: 'Rua 123',
+      note:			'teste',
       birthDate: '1980-10-12T03:00:00.000Z',
       flag: true,
     })

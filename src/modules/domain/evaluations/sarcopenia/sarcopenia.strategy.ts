@@ -43,26 +43,29 @@ export class SarcopeniaStrategy {
     } = input;
 
     let muscleMassIndex: number;
+    const heightInMeters = height / 100;
 
     if (measuredMuscleMass) {
       muscleMassIndex = calculateIndexOfMeasuredMuscleMassPerStature({
         measuredMuscleMass,
-        height,
+        height: heightInMeters,
       });
     } else {
       const estimatedMuscleMass = calculateEstimatedMuscleMass({
         weight,
         sex,
         race,
-        height,
+        height: heightInMeters,
         age,
       });
 
       muscleMassIndex = calculateIndexOfEstimatedMuscleMassPerStature({
         estimatedMuscleMass,
-        height,
+        height: heightInMeters,
       });
     }
+
+    muscleMassIndex = Number(muscleMassIndex.toFixed(2));
 
     const classifiedResult = classifyResult({
       walkingSpeed,
@@ -96,7 +99,7 @@ export class SarcopeniaStrategy {
       breed: race,
     } = student;
 
-    const sex = studentSex === 'M' ? 'Homem' : 'Mulher';
+    const sex = studentSex === 'M' ? 'Masculino' : 'Feminino';
     const age = dayjs(new Date()).diff(birthDate, 'year');
 
     const {
@@ -176,7 +179,7 @@ export class SarcopeniaStrategy {
 
     const { sex: studentSex, birthDate, stature: height } = evaluation.student;
 
-    const sex = studentSex === 'M' ? 'Homem' : 'Mulher';
+    const sex = studentSex === 'M' ? 'Masculino' : 'Feminino';
     const age = dayjs(new Date()).diff(birthDate, 'year');
     const race = '';
 

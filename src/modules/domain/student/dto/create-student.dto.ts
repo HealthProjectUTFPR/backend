@@ -30,6 +30,9 @@ export class CreateStudentDto {
   @JoiSchema(['CREATE'], Joi.date().required())
   birthDate: Date;
 
+  @JoiSchema(['CREATE'], Joi.string().required())
+  note: string;
+
   @JoiSchema(['CREATE'], Joi.boolean().required())
   flag: boolean;
 

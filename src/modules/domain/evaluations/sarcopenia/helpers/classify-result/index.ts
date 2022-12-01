@@ -73,7 +73,7 @@ const classifyResult = ({
   sex,
 }: Partial<ISarcopenia>): boolean => {
   let result;
-  if (sex === 'Homem') {
+  if (sex === 'Masculino') {
     result = verifySarcopeniaOfMan({
       walkingSpeed,
       handGripStrength,
