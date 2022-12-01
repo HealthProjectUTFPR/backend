@@ -103,7 +103,6 @@ export class FragilityStrategy {
       return false;
     }
     if (score !== originalScore) {
-      console.log('score', score, 'originalScore', originalScore);
       return false;
     }
     if (mets1 !== originalMets1) {
