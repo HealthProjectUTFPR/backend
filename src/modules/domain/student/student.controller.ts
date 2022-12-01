@@ -52,6 +52,7 @@ export class StudentController {
     updateStudentDto: UpdateStudentDto,
   ): Promise<Student> {
     if (!user) throw new ForbiddenException('Sessão de usuário inválida');
+
     return await this.studentService.update(id, updateStudentDto);
   }
 
