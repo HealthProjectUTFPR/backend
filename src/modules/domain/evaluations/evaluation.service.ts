@@ -228,7 +228,6 @@ export class EvaluationService {
       countBodyEvaluation +
       countCardioEvaluation +
       countAvdEvaluation +
-      countBalanceEvaluation +
       countFragilityEvaluation +
       countMiniCognitionEvaluation +
       countDepressionEvaluation +

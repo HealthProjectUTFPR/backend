@@ -5,19 +5,27 @@ interface IWalkingTest {
 }
 
 const calculateWalkingTest = ({ time, stature, sex }: IWalkingTest) => {
-  let result = 0;
-
-  if (sex === 'M') {
+  if (sex === 'Masculino') {
     if (time > 7 && stature <= 1.73) {
-      result = 1;
+      return 1;
     }
 
     if (time > 6 && stature > 1.73) {
-      result = 1;
+      return 1;
     }
   }
 
-  return result;
+  if (sex === 'Feminino') {
+    if (time > 7 && stature <= 1.73) {
+      return 1;
+    }
+
+    if (time > 6 && stature > 1.59) {
+      return 1;
+    }
+  }
+
+  return 0;
 };
 
 export default calculateWalkingTest;

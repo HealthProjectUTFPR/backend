@@ -9,7 +9,7 @@ const calculateHandgripStrength = ({
   imc,
   sex,
 }: ICalculateHandgripStrength) => {
-  if (sex === 'Homem') {
+  if (sex === 'Masculino') {
     if (handgripStrength <= 29 && imc <= 24) {
       return 1;
     } else if (handgripStrength <= 30) {
@@ -21,7 +21,7 @@ const calculateHandgripStrength = ({
     } else if (handgripStrength <= 32 && imc >= 29) {
       return 1;
     }
-  } else if (sex === 'Mulher') {
+  } else if (sex === 'Feminino') {
     if (handgripStrength <= 17 && imc <= 23) {
       return 1;
     } else if (handgripStrength <= 17.3) {

@@ -103,6 +103,7 @@ export class FragilityStrategy {
       return false;
     }
     if (score !== originalScore) {
+      console.log('score', score, 'originalScore', originalScore);
       return false;
     }
     if (mets1 !== originalMets1) {
@@ -131,8 +132,7 @@ export class FragilityStrategy {
     student: Student,
   ): Promise<GetFragilityDTO> {
     const { sex: studentSex, stature } = student;
-
-    const sex = studentSex === 'H' ? 'Homem' : 'Mulher';
+    const sex = studentSex === 'M' ? 'Masculino' : 'Feminino';
 
     const {
       date,
