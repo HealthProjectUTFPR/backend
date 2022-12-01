@@ -9,9 +9,7 @@ describe('MiniCognitionStrategy', () => {
       providers: [MiniCognitionStrategy],
     }).compile();
 
-    service = module.get<MiniCognitionStrategy>(
-        MiniCognitionStrategy,
-    );
+    service = module.get<MiniCognitionStrategy>(MiniCognitionStrategy);
   });
 
   it('should be defined', () => {
