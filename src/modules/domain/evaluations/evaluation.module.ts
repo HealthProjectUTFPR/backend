@@ -19,6 +19,9 @@ import { BalanceStrategy } from './balance/balance.strategy';
 import { BalanceFactory } from './balance/balance.factory';
 import { BodyCompositionStrategy } from './body-composition/body-composition.strategy';
 import { BodyCompositionFactory } from './body-composition/body-composition.factory';
+import { FragilityStrategy } from './fragility/fragility.strategy';
+import { FragilityFactory } from './fragility/fragility.factory';
+
 import { DepressionFactory } from './depression/depression.factory';
 import { DepressionStrategy } from './depression/depression.strategy';
 @Module({
@@ -41,6 +44,8 @@ import { DepressionStrategy } from './depression/depression.strategy';
     CardiorespiratoryCapacityFactory,
     BodyCompositionStrategy,
     BodyCompositionFactory,
+    FragilityStrategy,
+    FragilityFactory,
     DepressionStrategy,
     DepressionFactory,
   ],
