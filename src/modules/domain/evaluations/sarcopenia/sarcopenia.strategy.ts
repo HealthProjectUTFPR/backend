@@ -1,7 +1,7 @@
 import {
   BadRequestException,
   Injectable,
-  NotFoundException
+  NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import dayjs from 'dayjs';
@@ -43,14 +43,12 @@ export class SarcopeniaStrategy {
     } = input;
 
     let muscleMassIndex: number;
-    const heightInMeters = height/100;
+    const heightInMeters = height / 100;
 
-    console.log(heightInMeters)
-  
     if (measuredMuscleMass) {
       muscleMassIndex = calculateIndexOfMeasuredMuscleMassPerStature({
         measuredMuscleMass,
-        height: heightInMeters
+        height: heightInMeters,
       });
     } else {
       const estimatedMuscleMass = calculateEstimatedMuscleMass({
@@ -63,21 +61,18 @@ export class SarcopeniaStrategy {
 
       muscleMassIndex = calculateIndexOfEstimatedMuscleMassPerStature({
         estimatedMuscleMass,
-        height: heightInMeters
+        height: heightInMeters,
       });
     }
 
     muscleMassIndex = Number(muscleMassIndex.toFixed(2));
 
-
-    console.log("muscleMassIndex: ", muscleMassIndex);
     const classifiedResult = classifyResult({
       walkingSpeed,
       handGripStrength,
       muscleMassIndex,
       sex,
     });
-    console.log("classifiedResult: ",classifiedResult)
 
     return classifiedResult;
   }

@@ -11,8 +11,6 @@ const verifySarcopeniaOfMan = ({
     'De acordo com os dados informados, o paciente não sofre de Sarcopenia.';
   let type = 'success';
 
-  console.log(walkingSpeed, handGripStrength, muscleMassIndex);
-
   if (walkingSpeed > 0.8 && handGripStrength > 30) {
     hasSarcopenia = false;
   } else if (
@@ -75,7 +73,6 @@ const classifyResult = ({
   sex,
 }: Partial<ISarcopenia>): boolean => {
   let result;
-  console.log(sex)
   if (sex === 'Masculino') {
     result = verifySarcopeniaOfMan({
       walkingSpeed,
