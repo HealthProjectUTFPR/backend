@@ -49,16 +49,17 @@ beforeAll(async () => {
   const student = await server
     .post('/student/create')
     .send({
-        name: 'EstudanteTeste',
-        sex: 'H',
-        breed: 'Amarelo',
-        stature: 179.3,
-        healthPlan: 'free',
-        emergencyContact: '44999999999',
-        contact: '44999999999',
-        address: 'Rua do seu Zé',
-        birthDate: '2000-01-01T01:00:00.000Z',
-        flag: true,
+      name: 'EstudanteTeste',
+      sex: 'M',
+      breed: 'Amarelo',
+      stature: 179.3,
+      healthPlan: 'free',
+      emergencyContact: '44999999999',
+      contact: '44999999999',
+      address: 'Rua do seu Zé',
+      note:			'teste',
+      birthDate: '2000-01-01T01:00:00.000Z',
+      flag: true,
     })
     .set('Authorization', `Bearer ${token}`);
 

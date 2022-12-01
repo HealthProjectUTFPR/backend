@@ -14,7 +14,7 @@ export class UpdateStudentDto {
   @JoiSchema(['UPDATE'], Joi.string().optional())
   breed: string;
 
-  @JoiSchema(['UPDATE'], Joi.string().optional())
+  @JoiSchema(['UPDATE'], Joi.number().optional())
   stature: number;
 
   @JoiSchema(['UPDATE'], Joi.string().optional())
@@ -31,6 +31,9 @@ export class UpdateStudentDto {
 
   @JoiSchema(['UPDATE'], Joi.date().optional())
   birthDate: Date;
+
+  @JoiSchema(['CREATE'], Joi.string().optional())
+  note: string;
 
   @JoiSchema(['UPDATE'], Joi.boolean().optional())
   flag: boolean;
