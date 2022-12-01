@@ -19,7 +19,7 @@ export class Evaluation extends BaseEntity {
   name: string;
 
   @Column({ nullable: true})
-  result: string;
+  result?: string;
 
   @OneToMany(() => Field, (field) => field.evaluation)
   fields?: Field[];

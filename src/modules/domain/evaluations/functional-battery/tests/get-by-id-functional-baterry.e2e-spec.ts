@@ -116,8 +116,7 @@ describe('Buscar avaliação de Bateria Funcional', () => {
             reachTheBackClassification: 'RUIM',
             tugResult:3.3,
             tugPercent: 85,
-            tugClassification: 'ÓTIMO',
-            result:'NULL'
+            tugClassification: 'ÓTIMO'
         }
       })
       .set('Authorization', `Bearer ${token}`);

@@ -20,7 +20,7 @@ export const functionalBatterySchema = Joi.object({
     tugResult: Joi.number().required(),
     tugPercent: Joi.number().required(),
     tugClassification: Joi.string().required(),
-    result: Joi.string().required(),
+    result: Joi.string().optional(),
 
 }). options({
     abortEarly: false,
