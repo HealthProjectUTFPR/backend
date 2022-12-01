@@ -52,6 +52,7 @@ beforeAll(async () => {
       contact: '44999999999',
       address: 'Rua do seu Zé',
       birthDate: '2000-01-01T01:00:00.000Z',
+      note: 'Anão',
       flag: true,
     })
     .set('Authorization', `Bearer ${token}`);
