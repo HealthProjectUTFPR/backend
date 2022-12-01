@@ -11,10 +11,11 @@ let app: INestApplication;
 let server: request.SuperTest<request.Test>;
 let token: string;
 let studentId: string;
-let testdata: Object;
+let testdata: object;
 
 beforeAll(async () => {
   testdata = {
+    date: '2022-10-12T03:00:00.000Z',
     scholarity: 1,
     checked1_1: true,
     checked1_2: false,
