@@ -68,12 +68,15 @@ export class BodyCompositionStrategy {
     } = input;
 
     const calculatedDensity = calculateDensity({ sex, sumPleats });
+
     if (calculatedDensity !== density) return false;
 
     const calculatedBodyFat = calculateBodyFat(density);
+
     if (calculatedBodyFat !== bodyFat) return false;
 
     const calculatedIMC = calculateImc({ weight, height });
+
     if (calculatedIMC !== imc) return false;
 
     const recalculatedResult = this.recalculateResult({
@@ -83,7 +86,7 @@ export class BodyCompositionStrategy {
     });
 
     if (
-      recalculatedResult.rcq !== rcq &&
+      recalculatedResult.rcq !== rcq ||
       recalculatedResult.waistCircumference !== waistCircumference
     ) {
       return false;
@@ -106,7 +109,7 @@ export class BodyCompositionStrategy {
 
     const { sex: studentSex, stature: height } = student;
 
-    const sex = studentSex === 'H' ? 'Homem' : 'Mulher';
+    const sex = studentSex === 'M' ? 'Masculino' : 'Feminino';
 
     const {
       date,
@@ -197,7 +200,7 @@ export class BodyCompositionStrategy {
 
     const { sex: studentSex, stature: height } = evaluation.student;
 
-    const sex = studentSex === 'H' ? 'Homem' : 'Mulher';
+    const sex = studentSex === 'M' ? 'Masculino' : 'Feminino';
 
     const {
       date,

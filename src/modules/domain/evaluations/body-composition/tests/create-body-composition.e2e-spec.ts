@@ -49,7 +49,7 @@ beforeAll(async () => {
   const student = await server
     .post('/student/create')
     .send({
-      name: 'Estudante',
+      name: 'Estudante Testte',
       sex: 'M',
       breed: 'Branco',
       stature: 192.5,
@@ -58,6 +58,8 @@ beforeAll(async () => {
       contact: '449994484848',
       address: 'Rua 123',
       birthDate: '1980-10-12T03:00:00.000Z',
+      weight: 97.6,
+      note: 'sdfasd',
       flag: true,
     })
     .set('Authorization', `Bearer ${token}`);
@@ -76,24 +78,24 @@ describe('Criar avaliações Composição Corporal', () => {
       .send({
         type: 'bodyComposition',
         data: {
-          date: '2022-11-18T03:00:00.000Z',
-          weight: 23,
-          waist: 23,
-          hip: 23,
-          waistEstature: 0.11948051948051948,
+          date: '2022-11-09T03:00:00.000Z',
+          weight: 92,
+          waist: 20,
+          hip: 20,
+          waistEstature: 0.1038961038961039,
           waistHip: 1,
-          imc: 6.206780232754258,
-          scapula: 33,
-          triceps: 33,
-          biceps: 33,
-          suprailiac: 33,
-          sumPleats: 132,
-          density: 1.0063072907590642,
-          bodyFat: 41.89745969803944,
-          mg: 9.636415730549071,
-          mcm: 13.363584269450929,
-          minimumWeight: 18.560533707570883,
-          maximumWeight: 19.65232987090353,
+          imc: 24.82712093101703,
+          scapula: 10,
+          triceps: 20,
+          biceps: 20,
+          suprailiac: 50,
+          sumPleats: 100,
+          density: 1.0133,
+          bodyFat: 38.502911279976274,
+          mg: 35.42267837757817,
+          mcm: 56.57732162242183,
+          minimumWeight: 78.57961336447539,
+          maximumWeight: 83.20194382863127,
           cardiovascularRisk: {
             waistCircumference: 'none',
             rcq: 'none',
@@ -101,7 +103,7 @@ describe('Criar avaliações Composição Corporal', () => {
         },
       })
       .set('Authorization', `Bearer ${token}`)
-      .expect(201);
+      .expect(400);
   });
 
   it(`/:studentId (CREATE) sucesso na criação`, async () => {
@@ -110,24 +112,24 @@ describe('Criar avaliações Composição Corporal', () => {
       .send({
         type: 'bodyComposition',
         data: {
-          date: '2022-11-18T03:00:00.000Z',
-          weight: 23,
-          waist: 23,
-          hip: 23,
-          waistEstature: 0.11948051948051948,
+          date: '2022-11-09T03:00:00.000Z',
+          weight: 92,
+          waist: 20,
+          hip: 20,
+          waistEstature: 0.1038961038961039,
           waistHip: 1,
-          imc: 6.206780232754258,
-          scapula: 33,
-          triceps: 33,
-          biceps: 33,
-          suprailiac: 33,
-          sumPleats: 132,
-          density: 1.0063072907590642,
-          bodyFat: 41.89745969803944,
-          mg: 9.636415730549071,
-          mcm: 13.363584269450929,
-          minimumWeight: 18.560533707570883,
-          maximumWeight: 19.65232987090353,
+          imc: 24.82712093101703,
+          scapula: 10,
+          triceps: 20,
+          biceps: 20,
+          suprailiac: 50,
+          sumPleats: 100,
+          density: 1.0133,
+          bodyFat: 38.502911279976274,
+          mg: 35.42267837757817,
+          mcm: 56.57732162242183,
+          minimumWeight: 78.57961336447539,
+          maximumWeight: 83.20194382863127,
           cardiovascularRisk: {
             waistCircumference: 'none',
             rcq: 'Risco aumentado',
