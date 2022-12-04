@@ -1,11 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger';
-import * as Joi from 'joi';
+import Joi from 'joi';
 import { JoiSchema } from 'nestjs-joi';
-import { CreateMiniCognitionDto } from './create-mini-cognition.dto';
+import { CreateFragilityDTO } from './create-fragility.dto';
 
-export class GetMiniCognitionDto extends CreateMiniCognitionDto {
+export class GetFragilityDTO extends CreateFragilityDTO {
   @ApiProperty()
-  @JoiSchema(Joi.string().guid().required())
+  @JoiSchema(Joi.string().required())
   id: string;
 
   @ApiProperty()
@@ -21,6 +21,6 @@ export class GetMiniCognitionDto extends CreateMiniCognitionDto {
   updatedAt: Date;
 
   @ApiProperty()
-  @JoiSchema(Joi.date().allow(null))
+  @JoiSchema(Joi.date().required())
   deletedAt: Date;
 }

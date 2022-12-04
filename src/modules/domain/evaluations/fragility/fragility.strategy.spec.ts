@@ -1,14 +1,15 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { MiniCognitionFactory } from './mini-cognition.factory';
-describe('MiniCognitionFactory', () => {
-  let service: MiniCognitionFactory;
+import { FragilityStrategy } from './fragility.strategy';
+
+describe('FragilityStrategy', () => {
+  let service: FragilityStrategy;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [MiniCognitionFactory],
+      providers: [FragilityStrategy],
     }).compile();
 
-    service = module.get<MiniCognitionFactory>(MiniCognitionFactory);
+    service = module.get<FragilityStrategy>(FragilityStrategy);
   });
 
   it('should be defined', () => {

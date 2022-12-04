@@ -10,21 +10,25 @@ import { PaginationParams } from 'src/common/interfaces/pagination.interface';
 import { User } from 'src/modules/infrastructure/user/entities/user.entity';
 import { Repository } from 'typeorm';
 import { Student } from '../student/entities/student.entity';
-import { BodyCompositionStrategy } from './body-composition/body-composition.strategy';
-import { CreateBodyCompositionDto } from './body-composition/dto/create-body-composition.dto';
-import { UpdateBodyCompositionDto } from './body-composition/dto/update-body-composition.dto';
 import { avdStrategy } from './avd/avd.strategy';
 import { CreateAvdDto } from './avd/dto/create-avd.dto';
 import { UpdateAvdDto } from './avd/dto/update-avd.dto';
+import { BalanceStrategy } from './balance/balance.strategy';
+import { CreateBalanceDto } from './balance/dto/create-balance.dto';
+import { UpdateBalanceDto } from './balance/dto/update-balance.dto';
+import { BodyCompositionStrategy } from './body-composition/body-composition.strategy';
+import { CreateBodyCompositionDto } from './body-composition/dto/create-body-composition.dto';
+import { UpdateBodyCompositionDto } from './body-composition/dto/update-body-composition.dto';
 import { CardiorespiratoryCapacityStrategy } from './cardiorespiratory-capacity/cardiorespiratory-capacity.strategy';
 import { CreateCardiorespiratoryCapacityDto } from './cardiorespiratory-capacity/dto/create-cardiorespiratory-capacity.dto';
 import { UpdateCardiorespiratoryCapacityDto } from './cardiorespiratory-capacity/dto/update-cardiorespiratory-capacity.dto';
-import { BalanceStrategy } from './balance/balance.strategy';
-import { CreateBalanceDto } from './balance/dto/create-balance.dto';
 import { CreateEvaluationDto } from './dto/create-evaluation.dto';
 import { UpdateEvaluationDto } from './dto/update-evaluation.dto';
 import { Evaluation } from './entities/evaluation.entity';
 import { EvaluationOrderBy } from './enums/order-by.enum';
+import { CreateFragilityDTO } from './fragility/dto/create-fragility.dto';
+import { UpdateFragilityDTO } from './fragility/dto/update-fragility.dto';
+import { FragilityStrategy } from './fragility/fragility.strategy';
 import { CreateSarcopeniaDTO } from './sarcopenia/dto/create-sarcopenia.dto';
 import { UpdateSarcopeniaDTO } from './sarcopenia/dto/update-sarcopenia.dto';
 import { SarcopeniaStrategy } from './sarcopenia/sarcopenia.strategy';
@@ -35,11 +39,11 @@ import { UpdateFunctionalBatteryDto } from './functional-battery/dto/update-func
 
 import { MiniCognitionStrategy } from './mini-cognition/mini-cognition.strategy';
 import { CreateMiniCognitionDto } from './mini-cognition/dto/create-mini-cognition.dto';
-import { UpdateBalanceDto } from './balance/dto/update-balance.dto';
 import { UpdateMiniCognitionDto } from './mini-cognition/dto/update-mini-cognition.dto';
 import { DepressionStrategy } from './depression/depression.strategy';
 import { CreateDepressionDto } from './depression/dto/create-depression.dto';
 import { UpdateDepressionDto } from './depression/dto/update-depression.dto';
+
 @Injectable()
 export class EvaluationService {
   @InjectRepository(Evaluation)
@@ -56,6 +60,7 @@ export class EvaluationService {
     private readonly sarcopeniaStrategy: SarcopeniaStrategy,
     private readonly avdStrategy: avdStrategy,
     private readonly balanceStrategy: BalanceStrategy,
+    private readonly fragilityStrategy: FragilityStrategy,
     private readonly depressionStrategy: DepressionStrategy,
   ) {}
 
@@ -122,6 +127,14 @@ export class EvaluationService {
       case 'AEQ':
         return await this.balanceStrategy.create(
           data as CreateBalanceDto,
+          user,
+          type,
+          student,
+        );
+
+      case 'fragilidade':
+        return await this.fragilityStrategy.create(
+          data as CreateFragilityDTO,
           user,
           type,
           student,
@@ -201,21 +214,33 @@ export class EvaluationService {
         paginationParams,
         studentID,
       );
-      
-    const { evaluations: DepressionEvaluation, count: countDepressionEvaluation } =
-      await this.depressionStrategy.getAll(
-        orderBy as EvaluationOrderBy,
-        paginationParams,
-        studentID,
-      );
 
-    const { evaluations: MiniCognitionEvaluation, count: countMiniCognitionEvaluation } =
-      await this.minicognitionStrategy.getAll(
-        orderBy as EvaluationOrderBy,
-        paginationParams,
-        studentID,
-      );
+    const {
+      evaluations: DepressionEvaluation,
+      count: countDepressionEvaluation,
+    } = await this.depressionStrategy.getAll(
+      orderBy as EvaluationOrderBy,
+      paginationParams,
+      studentID,
+    );
 
+    const {
+      evaluations: MiniCognitionEvaluation,
+      count: countMiniCognitionEvaluation,
+    } = await this.minicognitionStrategy.getAll(
+      orderBy as EvaluationOrderBy,
+      paginationParams,
+      studentID,
+    );
+
+    const {
+      evaluations: fragilityEvaluation,
+      count: countFragilityEvaluation,
+    } = await this.fragilityStrategy.getAll(
+      orderBy as EvaluationOrderBy,
+      paginationParams,
+      studentID,
+    );
 
     const amountOfEvaluations =
       countSarcopeniaEvaluation +
@@ -223,6 +248,7 @@ export class EvaluationService {
       countBodyEvaluation +
       countCardioEvaluation +
       countAvdEvaluation +
+      countFragilityEvaluation +
       countMiniCognitionEvaluation +
       countDepressionEvaluation +
       countBalanceEvaluation;
@@ -244,6 +270,7 @@ export class EvaluationService {
         ...balanceEvaluation,
         ...MiniCognitionEvaluation,
         ...avdEvaluation,
+        ...fragilityEvaluation,
         ...DepressionEvaluation,
       ],
     };
@@ -269,6 +296,8 @@ export class EvaluationService {
         return await this.avdStrategy.getByID(id);
       case 'AEQ':
         return await this.balanceStrategy.getById(id);
+      case 'fragilidade':
+        return await this.fragilityStrategy.getByID(id);
       case 'MiniCognition':
         return await this.minicognitionStrategy.getByID(id);
       case 'Depression':
@@ -324,12 +353,18 @@ export class EvaluationService {
           type,
           data as UpdateBalanceDto,
         );
+      case 'fragilidade':
+        return await this.fragilityStrategy.update(
+          id,
+          type,
+          data as UpdateFragilityDTO,
+        );
       case 'Depression':
-          return await this.depressionStrategy.update(
-            id,
-            type,
-            data as UpdateDepressionDto,
-          );
+        return await this.depressionStrategy.update(
+          id,
+          type,
+          data as UpdateDepressionDto,
+        );
       case 'MiniCognition':
         return await this.minicognitionStrategy.update(
           id,

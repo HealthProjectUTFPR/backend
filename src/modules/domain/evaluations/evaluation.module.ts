@@ -21,6 +21,8 @@ import { BodyCompositionStrategy } from './body-composition/body-composition.str
 import { BodyCompositionFactory } from './body-composition/body-composition.factory';
 import { FunctionalBatteryFactory } from './functional-battery/functional-battery-factory';
 import { FunctionalBatteryStrategy } from './functional-battery/functional-battery.strategy'
+import { FragilityStrategy } from './fragility/fragility.strategy';
+import { FragilityFactory } from './fragility/fragility.factory';
 
 import { DepressionFactory } from './depression/depression.factory';
 import { DepressionStrategy } from './depression/depression.strategy';
@@ -46,6 +48,8 @@ import { DepressionStrategy } from './depression/depression.strategy';
     BodyCompositionFactory,
     FunctionalBatteryStrategy,
     FunctionalBatteryFactory,
+    FragilityStrategy,
+    FragilityFactory,
     DepressionStrategy,
     DepressionFactory,
   ],

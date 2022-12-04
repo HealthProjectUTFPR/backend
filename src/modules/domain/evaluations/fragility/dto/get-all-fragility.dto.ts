@@ -1,12 +1,12 @@
 import { ApiProperty } from '@nestjs/swagger';
-import * as Joi from 'joi';
+import Joi from 'joi';
 import { JoiSchema } from 'nestjs-joi';
-import { GetMiniCognitionDto } from './get-mini-cognition.dto';
+import { GetFragilityDTO } from './get-fragility.dto';
 
-export class GetAllMiniCognitionDto {
+export class GetAllFragilityDTO {
   @ApiProperty()
   @JoiSchema(Joi.array().required())
-  evaluations: GetMiniCognitionDto[];
+  evaluations: GetFragilityDTO[];
 
   @ApiProperty()
   @JoiSchema(Joi.number().required())

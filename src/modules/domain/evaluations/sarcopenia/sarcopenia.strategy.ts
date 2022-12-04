@@ -43,26 +43,29 @@ export class SarcopeniaStrategy {
     } = input;
 
     let muscleMassIndex: number;
+    const heightInMeters = height / 100;
 
     if (measuredMuscleMass) {
       muscleMassIndex = calculateIndexOfMeasuredMuscleMassPerStature({
         measuredMuscleMass,
-        height,
+        height: heightInMeters,
       });
     } else {
       const estimatedMuscleMass = calculateEstimatedMuscleMass({
         weight,
         sex,
         race,
-        height,
+        height: heightInMeters,
         age,
       });
 
       muscleMassIndex = calculateIndexOfEstimatedMuscleMassPerStature({
         estimatedMuscleMass,
-        height,
+        height: heightInMeters,
       });
     }
+
+    muscleMassIndex = Number(muscleMassIndex.toFixed(2));
 
     const classifiedResult = classifyResult({
       walkingSpeed,

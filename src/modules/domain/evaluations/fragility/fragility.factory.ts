@@ -9,25 +9,26 @@ import { Student } from '../../student/entities/student.entity';
 import { Evaluation } from '../entities/evaluation.entity';
 import { Field } from '../entities/field.entity';
 import { EvaluationOrderBy } from '../enums/order-by.enum';
-import { CreateSarcopeniaDTO } from './dto/create-sarcopenia.dto';
-import { GetSarcopeniaDto } from './dto/get-sarcopenia.dto';
-import { UpdateSarcopeniaDTO } from './dto/update-sarcopenia.dto';
-import { ISarcopenia } from './interfaces/sarcopenia.interface';
+import { CreateFragilityDTO } from './dto/create-fragility.dto';
+import { GetFragilityDTO } from './dto/get-fragility.dto';
+import { UpdateFragilityDTO } from './dto/update-fragility.dto';
+import { IFragility } from './interfaces/fragility.interface';
 
 @Injectable()
-export class SarcopeniaFactory {
+export class FragilityFactory {
   @InjectRepository(Evaluation)
   private readonly evaluationRepository: Repository<Evaluation>;
 
   @InjectRepository(Field)
   private readonly fieldRepository: Repository<Field>;
 
-  private parseFieldsToString(data: Partial<CreateSarcopeniaDTO>) {
+  private parseFieldsToString(data: Partial<CreateFragilityDTO>) {
     const values = Object.entries(data);
     const inputs = [];
 
     values.forEach(([key, value]) => {
       let type: string = typeof value;
+
       if (type === 'number') type = Number.isInteger(value) ? 'int' : 'float';
       if (type === 'string')
         type = dayjs(value as string).isValid() ? 'date' : 'string';
@@ -42,10 +43,9 @@ export class SarcopeniaFactory {
     return inputs;
   }
 
-  private parseFieldsToCorrectType(data: Evaluation): GetSarcopeniaDto {
+  private parseFieldToCorrectType(data: Evaluation): GetFragilityDTO {
     const { id, name, createdAt, updatedAt, result, deletedAt, fields } = data;
-
-    const parsedFields: Partial<ISarcopenia> = {};
+    const parsedFields: Partial<IFragility> = {};
 
     fields.forEach(({ name, value, dataType }) => {
       parsedFields[name] = parseType(dataType, value);
@@ -53,29 +53,51 @@ export class SarcopeniaFactory {
 
     const {
       date,
+      looseWeight,
+      activityDifficultLastWeekFrequency,
+      KeepGoingDifficultLastWeekFrequency,
+      walkingDays,
+      walkingMinutesPerDay,
+      moderateActivityDays,
+      moderateActivityMinutesPerDay,
+      vigorousActivityDays,
+      vigorousActivityMinutesPerDay,
+      mets1,
+      mets2,
+      mets3,
+      metsTotal,
+      kcal,
       weight,
-      measuredMuscleMass,
-      estimatedMuscleMass,
-      walkingSpeed,
-      handGripStrength,
-      muscleMassIndex,
-      calfCircumference,
-      hasSarcopenia,
+      time,
+      handgripStrength,
+      imc,
+      score,
     } = parsedFields;
 
-    const returnedValues: GetSarcopeniaDto = {
+    const returnedValues: GetFragilityDTO = {
       id,
       name,
       date,
+      looseWeight,
+      activityDifficultLastWeekFrequency,
+      KeepGoingDifficultLastWeekFrequency,
+      walkingDays,
+      walkingMinutesPerDay,
+      moderateActivityDays,
+      moderateActivityMinutesPerDay,
+      vigorousActivityDays,
+      vigorousActivityMinutesPerDay,
+      mets1,
+      mets2,
+      mets3,
+      metsTotal,
+      kcal,
       weight,
+      time,
+      handgripStrength,
+      imc,
+      score,
       result,
-      measuredMuscleMass,
-      estimatedMuscleMass,
-      walkingSpeed,
-      handGripStrength,
-      muscleMassIndex,
-      calfCircumference,
-      hasSarcopenia,
       createdAt,
       updatedAt,
       deletedAt,
@@ -85,13 +107,12 @@ export class SarcopeniaFactory {
   }
 
   async create(
-    input: CreateSarcopeniaDTO,
+    input: CreateFragilityDTO,
     user: User,
     type: string,
     student: Student,
-  ): Promise<GetSarcopeniaDto> {
+  ): Promise<GetFragilityDTO> {
     const { result, ...rest } = input;
-
     const arrayOfFields = this.parseFieldsToString(rest);
 
     let evaluation = this.evaluationRepository.create({
@@ -126,19 +147,17 @@ export class SarcopeniaFactory {
       relations: ['fields'],
     });
 
-    return this.parseFieldsToCorrectType(evaluation);
+    return this.parseFieldToCorrectType(evaluation);
   }
 
   async update(
     id: string,
     type: string,
-    input: UpdateSarcopeniaDTO,
+    input: UpdateFragilityDTO,
     evaluation: Evaluation,
-  ): Promise<GetSarcopeniaDto> {
+  ): Promise<GetFragilityDTO> {
     const { result, ...rest } = input;
-
     const arrayOfFields = this.parseFieldsToString(rest);
-
     const { fields } = evaluation;
 
     await Promise.all(
@@ -158,19 +177,19 @@ export class SarcopeniaFactory {
 
     evaluation.save();
 
-    return this.parseFieldsToCorrectType(evaluation);
+    return this.parseFieldToCorrectType(evaluation);
   }
 
   async getAll(
     orderBy: EvaluationOrderBy,
     paginationParams: PaginationParams,
     studentID: string,
-  ): Promise<GetSarcopeniaDto[]> {
+  ): Promise<GetFragilityDTO[]> {
     const { page, limit } = paginationParams;
 
     const evaluations = await this.evaluationRepository.find({
       where: {
-        name: 'sarcopenia',
+        name: 'fragilidade',
         deletedAt: null,
         student: { id: studentID },
       },
@@ -180,14 +199,14 @@ export class SarcopeniaFactory {
       order: { [orderBy]: 'DESC' },
     });
 
-    const parsedEvaluations: GetSarcopeniaDto[] = evaluations.map((item) => {
-      return this.parseFieldsToCorrectType(item);
+    const parsedEvaluations: GetFragilityDTO[] = evaluations.map((item) => {
+      return this.parseFieldToCorrectType(item);
     });
 
     return parsedEvaluations;
   }
 
-  async getOne(evaluation: Evaluation): Promise<GetSarcopeniaDto> {
-    return this.parseFieldsToCorrectType(evaluation);
+  async getOne(evaluation: Evaluation): Promise<GetFragilityDTO> {
+    return this.parseFieldToCorrectType(evaluation);
   }
 }
