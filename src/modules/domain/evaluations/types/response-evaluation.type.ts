@@ -14,6 +14,5 @@ export type ResponseEvaluation =
   | GetFunctionalBatteryDto
   | GetAvdDto
   | GetBalanceDto
-  | GetBodyCompositionDto
   | GetDepressionDto
   | GetMiniCognitionDto;

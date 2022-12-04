@@ -195,7 +195,6 @@ export class EvaluationService {
         studentID,
       );
 
-    const amountOfEvaluation = countBodyEvaluation + countCardioEvaluation + countBatteryEvalution;
     const { evaluations: balanceEvaluation, count: countBalanceEvaluation } =
       await this.balanceStrategy.getAll(
         orderBy as EvaluationOrderBy,
@@ -220,6 +219,7 @@ export class EvaluationService {
 
     const amountOfEvaluations =
       countSarcopeniaEvaluation +
+      countBatteryEvalution +
       countBodyEvaluation +
       countCardioEvaluation +
       countAvdEvaluation +

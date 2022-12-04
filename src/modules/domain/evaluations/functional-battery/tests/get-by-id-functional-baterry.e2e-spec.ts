@@ -58,7 +58,8 @@ beforeAll(async () => {
       emergencyContact: '449994484848',
       contact: '449994484848',
       address: 'Rua 123',
-      birthDate: '1960-10-12T03:00:00.000Z',
+      birthDate: '1980-10-12T03:00:00.000Z',
+      weight: 97.6,
       note: 'sdfasd',
       flag: true,
     })
