@@ -33,6 +33,10 @@ import { CreateSarcopeniaDTO } from './sarcopenia/dto/create-sarcopenia.dto';
 import { UpdateSarcopeniaDTO } from './sarcopenia/dto/update-sarcopenia.dto';
 import { SarcopeniaStrategy } from './sarcopenia/sarcopenia.strategy';
 import { ResponseEvaluation } from './types/response-evaluation.type';
+import { FunctionalBatteryStrategy } from './functional-battery/functional-battery.strategy';
+import { CreateFunctionalBatteryDto } from './functional-battery/dto/create-functional-battery.dto';
+import { UpdateFunctionalBatteryDto } from './functional-battery/dto/update-functional-battery.dto';
+
 import { MiniCognitionStrategy } from './mini-cognition/mini-cognition.strategy';
 import { CreateMiniCognitionDto } from './mini-cognition/dto/create-mini-cognition.dto';
 import { UpdateMiniCognitionDto } from './mini-cognition/dto/update-mini-cognition.dto';
@@ -51,6 +55,7 @@ export class EvaluationService {
   constructor(
     private readonly bodyCompositionStrategy: BodyCompositionStrategy,
     private readonly cardiorespiratoryCapacityStrategy: CardiorespiratoryCapacityStrategy,
+    private readonly functionalBatteryStrategy: FunctionalBatteryStrategy,
     private readonly minicognitionStrategy: MiniCognitionStrategy,
     private readonly sarcopeniaStrategy: SarcopeniaStrategy,
     private readonly avdStrategy: avdStrategy,
@@ -77,6 +82,13 @@ export class EvaluationService {
     }
 
     switch (type) {
+      case 'functionalBattery':
+        return await this.functionalBatteryStrategy.create(
+          data as CreateFunctionalBatteryDto,
+          user,
+          type,
+          student,
+        )
       case 'sarcopenia':
         return await this.sarcopeniaStrategy.create(
           data as CreateSarcopeniaDTO,
@@ -173,6 +185,13 @@ export class EvaluationService {
         studentID,
       );
 
+    const { evaluations: batteryEvalution, count: countBatteryEvalution } =
+    await this.functionalBatteryStrategy.getAll(
+      orderBy as EvaluationOrderBy,
+      paginationParams,
+      studentID,
+    );
+
     const {
       evaluations: sarcopeniaEvaluation,
       count: countSarcopeniaEvaluation,
@@ -225,6 +244,7 @@ export class EvaluationService {
 
     const amountOfEvaluations =
       countSarcopeniaEvaluation +
+      countBatteryEvalution +
       countBodyEvaluation +
       countCardioEvaluation +
       countAvdEvaluation +
@@ -246,6 +266,7 @@ export class EvaluationService {
         ...cardioEvaluation,
         ...sarcopeniaEvaluation,
         ...bodyEvaluation,
+        ...batteryEvalution,
         ...balanceEvaluation,
         ...MiniCognitionEvaluation,
         ...avdEvaluation,
@@ -269,6 +290,8 @@ export class EvaluationService {
         return await this.cardiorespiratoryCapacityStrategy.getByID(id);
       case 'bodyComposition':
         return await this.bodyCompositionStrategy.getByID(id);
+      case 'functionalBattery':
+        return await this.functionalBatteryStrategy.getByID(id);
       case 'AVD':
         return await this.avdStrategy.getByID(id);
       case 'AEQ':
@@ -315,6 +338,12 @@ export class EvaluationService {
           id,
           type,
           data as UpdateBodyCompositionDto,
+        );
+      case 'functionalBattery':
+        return await this.functionalBatteryStrategy.update(
+          id,
+          type,
+          data as UpdateFunctionalBatteryDto,
         );
       case 'AVD':
         return await this.avdStrategy.update(id, type, data as UpdateAvdDto);
