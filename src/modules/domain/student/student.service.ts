@@ -59,6 +59,7 @@ export class StudentService {
     if (!student) {
       throw new BadRequestException(`Id do aluno ${id} inválido.`);
     }
+
     const {
       name,
       breed,

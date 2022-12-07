@@ -17,7 +17,7 @@ import { CreateMiniCognitionDto } from './dto/create-mini-cognition.dto';
 import { GetMiniCognitionDto } from './dto/get-mini-cognition.dto';
 import { GetAllMiniCognitionDto } from './dto/get-all-mini-cognition.dto';
 import { UpdateMiniCognitionDto } from './dto/update-mini-cognition.dto';
-import { IMiniCognition } from './interface/miniCognition.interface'
+import { IMiniCognition } from './interface/miniCognition.interface';
 import { validateResult } from './helper/validade-result-mini-cognition';
 
 @Injectable()
@@ -25,15 +25,11 @@ export class MiniCognitionStrategy {
   @InjectRepository(Evaluation)
   private readonly evaluationRepository: Repository<Evaluation>;
 
-  constructor(
-    private readonly MiniCognitionFactory: MiniCognitionFactory,
-  ) {}
+  constructor(private readonly miniCognitionFactory: MiniCognitionFactory) {}
 
-  private parseFieldsToCorrectType(
-    data: Evaluation,
-  ): GetMiniCognitionDto{
+  private parseFieldsToCorrectType(data: Evaluation): GetMiniCognitionDto {
     const { id, name, createdAt, updatedAt, result, deletedAt, fields } = data;
-    let parsedFields: Partial<IMiniCognition> = {};
+    const parsedFields: Partial<IMiniCognition> = {};
     fields.forEach(({ name, value, dataType }) => {
       parsedFields[name] = parseType(dataType, value) === 'true';
     });
@@ -44,7 +40,7 @@ export class MiniCognitionStrategy {
       createdAt,
       updatedAt,
       deletedAt,
-      ...parsedFields as CreateMiniCognitionDto,
+      ...(parsedFields as CreateMiniCognitionDto),
     };
     return returnedValues;
   }
@@ -58,7 +54,9 @@ export class MiniCognitionStrategy {
     const validation = MiniCognitionSchema.validate(input);
 
     if (validation?.error) {
-      throw new BadRequestException(validation.error.message);
+      throw new BadRequestException(
+        `Bad Request:\n${validation.error.message}`,
+      );
     }
 
     const validationResult = validateResult(input);
@@ -66,7 +64,7 @@ export class MiniCognitionStrategy {
       throw new NotFoundException(`Avaliação com o resultado errado`);
     }
 
-    return await this.MiniCognitionFactory.create(input, user, type, student);
+    return await this.miniCognitionFactory.create(input, user, type, student);
   }
 
   async update(
@@ -105,7 +103,7 @@ export class MiniCognitionStrategy {
     paginationParams: PaginationParams,
     studentID: string,
   ): Promise<GetAllMiniCognitionDto> {
-    const evaluations = await this.MiniCognitionFactory.getAll(
+    const evaluations = await this.miniCognitionFactory.getAll(
       orderBy,
       paginationParams,
       studentID,
@@ -128,7 +126,6 @@ export class MiniCognitionStrategy {
     if (!evaluation) {
       throw new NotFoundException(`Avaliação com id ${id} não encontrada`);
     }
-    
-    return this.MiniCognitionFactory.getOne(evaluation);
+    return this.miniCognitionFactory.getOne(evaluation);
   }
 }
