@@ -13,8 +13,11 @@ import {
   import { UsersService } from './user.service';
   import { JwtAuthGuard } from 'src/modules/infrastructure/auth/auth.guard';
   import { AuthUser } from 'src/common/decorators/auth-user.decorator';
+  import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
-@Controller("users")
+@ApiBearerAuth()
+@ApiTags('users')
+@Controller('users')
 @UseGuards(JwtAuthGuard)
 export class UserController {
   constructor(private userService: UsersService) {}
@@ -25,9 +28,6 @@ export class UserController {
   ): Promise<User> {
     return this.userService.findOne(user.id);
   }
-  // findOne(@Param('id') id: string): Promise<User> {
-  //   return this.userService.findOne(id)
-  // }
 
   @Patch('editMe/:id')
   updateUser(
@@ -38,9 +38,8 @@ export class UserController {
     return this.userService.updateUser(updateUserDto, user.id);
   }
 
-    @Delete("delete/:id")
-    async remove(
-      @Param('id') id: string) {
-        return await this.userService.remove(id);
-      }
+  @Delete('delete/:id')
+  async remove(@Param('id') id: string) {
+    return await this.userService.remove(id);
   }
+}
