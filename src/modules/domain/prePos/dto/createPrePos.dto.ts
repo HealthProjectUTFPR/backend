@@ -2,7 +2,7 @@ import * as Joi from 'joi';
 import { JoiSchema } from 'nestjs-joi';
 import { User } from 'src/modules/infrastructure/user/entities/user.entity';
 
-export class CreatePrePosDto{
+export class CreatePrePosDto {
   @JoiSchema(['CREATE'], Joi.date().required())
   date: Date;
 
@@ -41,23 +41,10 @@ export class CreatePrePosDto{
 
   @JoiSchema(['CREATE'], Joi.string().optional())
   observacao: string;
-  
+
   @JoiSchema(['CREATE'], Joi.string().uuid().required())
   studentId: string;
 
   @JoiSchema(['CREATE'], Joi.forbidden())
   createdBy: User;
-
 }
-
-
-
-
-
-
-
-
-
-
-
-

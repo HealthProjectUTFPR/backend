@@ -47,5 +47,4 @@ export class UpdatePrePosDto {
 
   @JoiSchema(['UPDATE'], Joi.forbidden())
   createdBy: User;
-
 }

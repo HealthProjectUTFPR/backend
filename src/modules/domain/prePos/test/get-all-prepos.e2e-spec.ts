@@ -15,11 +15,11 @@ let studentId: string;
 beforeAll(async () => {
   const module = await Test.createTestingModule({
     imports: [
-      DatabaseTestModule, 
-      AuthModule, 
-      StudentModule, 
+      DatabaseTestModule,
+      AuthModule,
+      StudentModule,
       PrePosModule,
-      UserModule
+      UserModule,
     ],
   }).compile();
   app = module.createNestApplication();
@@ -57,7 +57,7 @@ beforeAll(async () => {
       emergencyContact: '44999499994',
       contact: '44999499994',
       address: 'Rua Lorem Ipsum',
-      note:			'teste',
+      note: 'teste',
       birthDate: '1960-06-12T03:00:00.000Z',
       flag: true,
     })
@@ -69,4 +69,3 @@ beforeAll(async () => {
 afterAll(async () => {
   await app.close();
 });
-
