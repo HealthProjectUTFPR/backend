@@ -16,14 +16,14 @@ export class User extends BaseEntity {
   @Column()
   password: string;
 
-  @OneToMany(() => PrePos, (PrePos) => PrePos.createdBy)
-  prepos: PrePos[];
-
   @OneToMany(() => Student, (student) => student.user)
   students: Student[];
 
   @OneToMany(() => Evaluation, (evaluation) => evaluation.createdBy)
   evaluations: Evaluation[];
+
+  @OneToMany(() => PrePos, (PrePos) => PrePos.createdBy)
+  prepos: PrePos[];
 
   @BeforeInsert()
   @BeforeUpdate()
