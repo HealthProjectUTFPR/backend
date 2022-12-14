@@ -22,7 +22,7 @@ export class User extends BaseEntity {
   @OneToMany(() => Evaluation, (evaluation) => evaluation.createdBy)
   evaluations: Evaluation[];
 
-  @OneToMany(() => PrePos, (prePos) => prePos.createdByuser)
+  @OneToMany(() => PrePos, (prePos) => prePos.createdBy)
   prepos: PrePos[];
 
   @BeforeInsert()
