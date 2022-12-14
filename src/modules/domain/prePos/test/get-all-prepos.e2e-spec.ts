@@ -74,7 +74,7 @@ describe('Buscar monitoramentos', () => {
   it(`/list (GET) deve receber um array vazio como resultado`, async () => {
     return await server
       .get(
-        `/list`,
+        `/prepos/list`,
       )
       .set('Authorization', `Bearer ${token}`)
       .expect((res) => {
@@ -107,7 +107,7 @@ describe('Buscar monitoramentos', () => {
     
     return await server
       .get(
-        `/list`,
+        `/prepos/list`,
       )
       .set('Authorization', `Bearer ${token}`)
       .expect((res) => {

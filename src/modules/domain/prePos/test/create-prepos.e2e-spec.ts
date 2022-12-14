@@ -72,27 +72,6 @@ afterAll(async () => {
 
 //User
 describe('Create PrePos', () => {
-  it('/create (CREATE) falha (Faltando campo requisitado)', async () => {
-    return await server
-      .post('/prepos/create')
-      .send({
-        horarioPos: "2015-04-23T18:25:43.511Z",
-        horarioPre: "2014-04-23T18:25:43.511Z",
-        pasPre: 30,
-        pasPos:31,
-        padPre:28,
-        padPos:29,
-        glicemiaPre: 26,
-        glicemiaPos: 27,
-        horarioTreino: 20,
-        pseEPre: 40,
-        pseEPos: 41,
-        observacao: "teste",
-        studentId: studentId,
-      })
-      .set('Authorization', `Bearer ${token}`)
-      .expect(400);
-  });
 
   it('/create (CREATE) sucesso na criação', async () => {
     await server

@@ -73,20 +73,11 @@ afterAll(async () => {
 });
 
 describe('Buscar monitoramento', () => {
-  it(`get/:id (GET) deve receber erro ao buscar id inválido`, async () => {
-    id = 'aca8e3cd-2c41-4b7e-9e1f-f3d8206064a';
-
-    return await server
-      .get(`get/${id}`)
-      .set('Authorization', `Bearer ${token}`)
-      .expect(400);
-  });
-
   it(`get/:id (GET) deve receber erro ao buscar id não válido porém inexistente`, async () => {
     id = 'a9cd5ca1-6bba-46a9-ad3e-f7f4bde8eb8f';
 
     return await server
-      .get(`get/${id}`)
+      .get(`/prepos/get/${id}`)
       .set('Authorization', `Bearer ${token}`)
       .expect(404);
   });
