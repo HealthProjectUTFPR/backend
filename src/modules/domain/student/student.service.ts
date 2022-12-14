@@ -66,6 +66,7 @@ export class StudentService {
       stature,
       contact,
       healthPlan,
+      sex,
       emergencyContact,
       address,
       birthDate,
@@ -77,6 +78,7 @@ export class StudentService {
     student.breed = breed ? breed : student.breed;
     student.stature = stature ? stature : student.stature;
     student.contact = contact ? contact : student.contact;
+    student.sex = sex ? sex : student.sex;
     student.healthPlan = healthPlan ? healthPlan : student.healthPlan;
     student.emergencyContact = emergencyContact
       ? emergencyContact
