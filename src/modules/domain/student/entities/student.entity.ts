@@ -51,5 +51,7 @@ export class Student extends BaseEntity {
   evaluations: Evaluation[];
 
   @OneToMany(() => PrePos, (prepos) => prepos.student)
+  @JoinColumn()
+  @Exclude()
   prepos: PrePos[];
 }
