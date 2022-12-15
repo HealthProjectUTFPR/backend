@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { MiniCognitionFactory }from './mini-cognition.factory';
+import { MiniCognitionFactory } from './mini-cognition.factory';
 describe('MiniCognitionFactory', () => {
   let service: MiniCognitionFactory;
 
@@ -8,9 +8,7 @@ describe('MiniCognitionFactory', () => {
       providers: [MiniCognitionFactory],
     }).compile();
 
-    service = module.get<MiniCognitionFactory>(
-        MiniCognitionFactory,
-    );
+    service = module.get<MiniCognitionFactory>(MiniCognitionFactory);
   });
 
   it('should be defined', () => {

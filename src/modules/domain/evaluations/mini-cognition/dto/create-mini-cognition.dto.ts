@@ -4,150 +4,154 @@ import { JoiSchema } from 'nestjs-joi';
 
 export class CreateMiniCognitionDto {
   @ApiProperty()
+  @JoiSchema(Joi.date().required())
+  date: Date;
+
+  @ApiProperty()
   @JoiSchema(Joi.number().required())
-  scholarity: Number;
+  scholarity: number;
 
   @ApiProperty()
   @JoiSchema(Joi.boolean().required())
-  checked1_1: Boolean;
+  checked1_1: boolean;
 
   @ApiProperty()
   @JoiSchema(Joi.boolean().required())
-  checked1_2: Boolean;
+  checked1_2: boolean;
 
   @ApiProperty()
   @JoiSchema(Joi.boolean().required())
-  checked1_3: Boolean;
+  checked1_3: boolean;
 
   @ApiProperty()
   @JoiSchema(Joi.boolean().required())
-  checked1_4: Boolean;
+  checked1_4: boolean;
 
   @ApiProperty()
   @JoiSchema(Joi.boolean().required())
-  checked1_5: Boolean;
+  checked1_5: boolean;
 
   @ApiProperty()
   @JoiSchema(Joi.boolean().required())
-  checked2_1: Boolean;
+  checked2_1: boolean;
 
   @ApiProperty()
   @JoiSchema(Joi.boolean().required())
-  checked2_2: Boolean;
+  checked2_2: boolean;
 
   @ApiProperty()
   @JoiSchema(Joi.boolean().required())
-  checked2_3: Boolean;
+  checked2_3: boolean;
 
   @ApiProperty()
   @JoiSchema(Joi.boolean().required())
-  checked2_4: Boolean;
+  checked2_4: boolean;
 
   @ApiProperty()
   @JoiSchema(Joi.boolean().required())
-  checked2_5: Boolean;
+  checked2_5: boolean;
 
   @ApiProperty()
   @JoiSchema(Joi.boolean().required())
-  checked3_1: Boolean;
+  checked3_1: boolean;
 
   @ApiProperty()
   @JoiSchema(Joi.boolean().required())
-  checked3_2: Boolean;
+  checked3_2: boolean;
 
   @ApiProperty()
   @JoiSchema(Joi.boolean().required())
-  checked3_3: Boolean;
+  checked3_3: boolean;
 
   @ApiProperty()
   @JoiSchema(Joi.boolean().required())
-  checked4_1: Boolean;
+  checked4_1: boolean;
 
   @ApiProperty()
   @JoiSchema(Joi.boolean().required())
-  checked4_2: Boolean;
+  checked4_2: boolean;
 
   @ApiProperty()
   @JoiSchema(Joi.boolean().required())
-  checked4_3: Boolean;
+  checked4_3: boolean;
 
   @ApiProperty()
   @JoiSchema(Joi.boolean().required())
-  checked4_4: Boolean;
+  checked4_4: boolean;
 
   @ApiProperty()
   @JoiSchema(Joi.boolean().required())
-  checked4_5: Boolean;
+  checked4_5: boolean;
 
   @ApiProperty()
   @JoiSchema(Joi.boolean().required())
-  checked5_1: Boolean;
+  checked5_1: boolean;
 
   @ApiProperty()
   @JoiSchema(Joi.boolean().required())
-  checked5_2: Boolean;
+  checked5_2: boolean;
 
   @ApiProperty()
   @JoiSchema(Joi.boolean().required())
-  checked5_3: Boolean;
+  checked5_3: boolean;
 
   @ApiProperty()
   @JoiSchema(Joi.boolean().required())
-  checked5_4: Boolean;
+  checked5_4: boolean;
 
   @ApiProperty()
   @JoiSchema(Joi.boolean().required())
-  checked5_5: Boolean;
+  checked5_5: boolean;
 
   @ApiProperty()
   @JoiSchema(Joi.boolean().required())
-  checked6_1: Boolean;
+  checked6_1: boolean;
 
   @ApiProperty()
   @JoiSchema(Joi.boolean().required())
-  checked6_2: Boolean;
+  checked6_2: boolean;
 
   @ApiProperty()
   @JoiSchema(Joi.boolean().required())
-  checked6_3: Boolean;
+  checked6_3: boolean;
 
   @ApiProperty()
   @JoiSchema(Joi.boolean().required())
-  checked7_1: Boolean;
+  checked7_1: boolean;
 
   @ApiProperty()
   @JoiSchema(Joi.boolean().required())
-  checked7_2: Boolean;
+  checked7_2: boolean;
 
   @ApiProperty()
   @JoiSchema(Joi.boolean().required())
-  checked8_1: Boolean;
+  checked8_1: boolean;
 
   @ApiProperty()
   @JoiSchema(Joi.boolean().required())
-  checked9_2: Boolean;
+  checked9_2: boolean;
 
   @ApiProperty()
   @JoiSchema(Joi.boolean().required())
-  checked9_1: Boolean;
+  checked9_1: boolean;
 
   @ApiProperty()
   @JoiSchema(Joi.boolean().required())
-  checked9_3: Boolean;
+  checked9_3: boolean;
 
   @ApiProperty()
   @JoiSchema(Joi.boolean().required())
-  checked10_1: Boolean;
+  checked10_1: boolean;
 
   @ApiProperty()
   @JoiSchema(Joi.boolean().required())
-  checked11_1: Boolean;
+  checked11_1: boolean;
 
   @ApiProperty()
   @JoiSchema(Joi.boolean().required())
-  checked12_1: Boolean;
+  checked12_1: boolean;
 
   @ApiProperty()
   @JoiSchema(Joi.string().required())
-  result: String;
+  result: string;
 }

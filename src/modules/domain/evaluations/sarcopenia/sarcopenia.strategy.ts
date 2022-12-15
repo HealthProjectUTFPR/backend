@@ -1,7 +1,7 @@
 import {
   BadRequestException,
   Injectable,
-  NotFoundException,
+  NotFoundException
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import dayjs from 'dayjs';
@@ -43,7 +43,7 @@ export class SarcopeniaStrategy {
     } = input;
 
     let muscleMassIndex: number;
-    const heightInMeters = height / 100;
+    const heightInMeters = height;
 
     if (measuredMuscleMass) {
       muscleMassIndex = calculateIndexOfMeasuredMuscleMassPerStature({
