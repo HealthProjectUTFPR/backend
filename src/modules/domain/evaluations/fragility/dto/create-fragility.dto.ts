@@ -5,7 +5,7 @@ import { JoiSchema } from 'nestjs-joi';
 export class CreateFragilityDTO {
   @ApiProperty()
   @JoiSchema(Joi.string().required())
-  date: string;
+  date: Date;
 
   @ApiProperty()
   @JoiSchema(Joi.number().required())

@@ -77,7 +77,7 @@ export class FragilityFactory {
     const returnedValues: GetFragilityDTO = {
       id,
       name,
-      date,
+      date: new Date(date),
       looseWeight,
       activityDifficultLastWeekFrequency,
       KeepGoingDifficultLastWeekFrequency,
